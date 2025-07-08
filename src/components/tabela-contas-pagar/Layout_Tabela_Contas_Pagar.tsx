@@ -1,12 +1,12 @@
 "use client";
 
 import { HeaderDashboard } from "@/components/Header";
-import { TabelaNotasFiscais } from "./Tabela_Contas_Pagar";
+import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
-import { NotaFiscalProps } from "./Colunas_Tabela_Contas_Pagar";
+import { ContasPagarProps } from "./Colunas_Tabela_Contas_Pagar";
 
-const dadosFicticios: NotaFiscalProps[] = [
+const dadosFicticios: ContasPagarProps[] = [
   {
     status: "Pendente",
     numero_nf: 10234,
@@ -102,25 +102,37 @@ const dadosFicticios: NotaFiscalProps[] = [
 export function LayoutContasPagar() {
   const total = dadosFicticios.length;
   const pagas = dadosFicticios.filter((n) => n.status === "Pago").length;
-  const pendentes = dadosFicticios.filter((n) => n.status === "Pendente").length;
+  const pendentes = dadosFicticios.filter(
+    (n) => n.status === "Pendente"
+  ).length;
   const vencidas = dadosFicticios.filter((n) => n.status === "Vencido").length;
 
   return (
-    <main className="min-h-screen bg-gray-100 dark:bg-gray-950 pt-40 px-4 md:px-8">
-      <HeaderDashboard />
+    <main className="relative min-h-screen bg-emerald-100 overflow-x-hidden">
+      {/* Header (z-10, padrão) */}
+      <div className="relative z-10">
+        <HeaderDashboard titulo="Contas a Pagar" />
+      </div>
 
-      <section className="max-w-7xl mx-auto">
-        <FiltrosTabelaContasPagar />
+      {/* Filtros + Cards fixos com fundo branco opaco e z-30 */}
+      <div className="fixed top-20 md:top-32 lg:mt-10 w-full z-30 bg-emerald-100">
+        <section className="max-w-7xl mx-auto space-y-4 p-2 md:p-4 lg:p-6">
+          <FiltrosTabelaContasPagar />
+          <CardsTabelaContasPagar
+            total={total}
+            pagas={pagas}
+            pendentes={pendentes}
+            vencidas={vencidas}
+          />
+        </section>
+      </div>
 
-        <CardsTabelaContasPagar
-          total={total}
-          pagas={pagas}
-          pendentes={pendentes}
-          vencidas={vencidas}
-        />
-
-        <TabelaNotasFiscais dados={dadosFicticios} />
-      </section>
+      {/* Área com a tabela (z-0) */}
+      <div className="px-4 md:px-4 lg:p-6 max-w-7xl mx-auto relative z-0">
+        <div className="mt-32 md:mt-40 lg:mt-[388px]">
+          <TabelaContasPagar dados={dadosFicticios} />
+        </div>
+      </div>
     </main>
   );
 }

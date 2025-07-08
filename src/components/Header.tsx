@@ -1,8 +1,13 @@
 import Image from "next/image";
 import { LogOut } from "lucide-react";
 import { MenuNavegacao } from "@/components/Menu";
+import { MenuNavegacaoMobile } from "./Menu_Mobile";
 
-export function HeaderDashboard() {
+interface HeaderProps {
+  titulo: string;
+}
+
+export function HeaderDashboard({titulo}: HeaderProps) {
   return (
     <header
       className="
@@ -13,7 +18,7 @@ export function HeaderDashboard() {
         backdrop-blur-sm
       "
     >
-      {/* Imagem de fundo com efeito dinâmico */}
+      {/* Imagem de fundo */}
       <div className="absolute inset-0">
         <Image
           src="/imagem-cabecalho.jpg"
@@ -22,18 +27,8 @@ export function HeaderDashboard() {
           priority
           fill
           quality={100}
-          style={{
-            transform: "scale(1.01)",
-            transition: "transform 0.5s ease",
-          }}
         />
       </div>
-
-      {/* Gradiente com opacidade reduzida */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/40 via-teal-800/30 to-cyan-900/20" />
-
-      {/* Ruído sutil */}
-      <div className="absolute inset-0 opacity-5 mix-blend-overlay" />
 
       {/* Conteúdo do header */}
       <div className="relative z-10 h-full flex items-center justify-between px-6 md:px-8 lg:px-12 w-full">
@@ -49,7 +44,7 @@ export function HeaderDashboard() {
             quality={100}
           />
           <span className="ml-4 text-white font-bold text-xl md:text-2xl lg:text-3xl border-l-2 border-emerald-400 pl-4 hidden md:block">
-            Painel de Controle
+            {titulo}
           </span>
         </div>
 
@@ -60,19 +55,27 @@ export function HeaderDashboard() {
 
         {/* Área direita (widgets) */}
         <div className="flex items-center space-x-4 ml-4">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20 hidden md:flex items-center">
-            <div className="w-3 h-3 rounded-full bg-emerald-400 mr-2 animate-pulse"></div>
-            <span className="text-white text-sm font-medium">Sistema Online</span>
+          {/* Menu mobile - só aparece em telas menores que md */}
+          <div className="flex md:hidden">
+            <MenuNavegacaoMobile />
           </div>
 
-          <button className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
+          {/* Status Online - só aparece em md+ */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20 hidden md:flex items-center">
+            <div className="w-3 h-3 rounded-full bg-emerald-400 mr-2 animate-pulse"></div>
+            <span className="text-white text-sm font-medium">
+              Sistema Online
+            </span>
+          </div>
+
+          {/* Botão Logout - só aparece em md+ */}
+          <button className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/40 transition-all hidden md:block">
             <LogOut className="w-5 h-5 text-white" />
           </button>
         </div>
       </div>
 
       {/* Efeito de brilho sutil */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 opacity-80"></div>
     </header>
   );
 }

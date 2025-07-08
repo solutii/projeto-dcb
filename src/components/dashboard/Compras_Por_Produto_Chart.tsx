@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -9,11 +12,15 @@ import {
   Cell,
 } from "recharts";
 
+import { useScreenSize } from "@/hooks/useScreenSize";
+
 export function ComprasPorProdutoChart({
   data,
 }: {
   data: { produto: string; valor: number }[];
 }) {
+  const screen = useScreenSize();
+
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -23,31 +30,44 @@ export function ComprasPorProdutoChart({
   const colors = ["#00E096", "#00C897", "#00B4A0", "#00A0A8", "#008CAB"];
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[500px] flex flex-col">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">Compras por Produto</h3>
+    <div className="bg-white p-3 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[500px] flex flex-col">
+      <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 mb-2 sm:mb-3 lg:mb-4">
+        Compras por Produto
+      </h3>
       <div className="flex-grow">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{ top: 5, right: 20, bottom: 40, left: 0 }}
-            barSize={38}
+            margin={{ top: 5, right: 10, bottom: 60, left: 10 }}
+            barSize={screen.isMobile ? 24 : screen.isTablet ? 30 : 38}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="#f0f0f0"
+            />
             <XAxis
               dataKey="produto"
-              tick={{ fontSize: 12, fill: "#6b7280" }}
+              tick={{
+                fontSize: screen.isMobile ? 9 : screen.isTablet ? 10 : 12,
+                fill: "#6b7280",
+              }}
               axisLine={false}
               tickLine={false}
               angle={-45}
               textAnchor="end"
-              height={60}
+              height={80}
+              interval={0}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: "#6b7280" }}
+              tick={{
+                fontSize: screen.isMobile ? 9 : screen.isTablet ? 10 : 12,
+                fill: "#6b7280",
+              }}
               axisLine={false}
               tickLine={false}
               tickFormatter={formatCurrency}
-              width={80}
+              width={screen.isMobile ? 60 : screen.isTablet ? 70 : 80}
             />
             <Tooltip
               cursor={{ fill: "rgba(0, 184, 160, 0.1)" }}
@@ -55,6 +75,7 @@ export function ComprasPorProdutoChart({
                 borderRadius: "12px",
                 border: "none",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+                fontSize: screen.legendFontSize,
               }}
               formatter={(value) => [formatCurrency(Number(value)), "Valor"]}
               itemStyle={{ color: "#00B4A0", fontWeight: "bold" }}
@@ -74,16 +95,22 @@ export function ComprasPorProdutoChart({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-center mt-4 space-x-2">
-        {data.map((item, index) => (
-          <div key={`legend-${index}`} className="flex items-center">
-            <div
-              className="w-3 h-3 rounded-full mr-1"
-              style={{ backgroundColor: colors[index % colors.length] }}
-            />
-            <span className="text-xs text-gray-600">{item.produto}</span>
-          </div>
-        ))}
+
+      {/* Legenda responsiva */}
+      <div className="mt-2 sm:mt-3 lg:mt-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:justify-center lg:flex-wrap gap-1 sm:gap-2">
+          {data.map((item, index) => (
+            <div key={`legend-${index}`} className="flex items-center min-w-0">
+              <div
+                className="w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-1 flex-shrink-0"
+                style={{ backgroundColor: colors[index % colors.length] }}
+              />
+              <span className="text-xs sm:text-sm text-gray-600 truncate">
+                {item.produto}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
