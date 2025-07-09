@@ -17,18 +17,15 @@ interface CardsProps {
 
 function CardResumo({ titulo, valor, cor, Icon }: CardsProps) {
   return (
-    <div
-      className={`flex items-center gap-4 bg-gradient-to-br ${cor} rounded-lg p-2 text-black shadow-md shadow-black`}
-    >
-      <div className="bg-white/30 p-2 rounded-full">
-        <Icon
-          className="w-5 h-5 text-black font-semibold"
-          aria-label={titulo}
-        />
-      </div>
-      <div>
-        <div className="text-xl font-semibold italic">{valor}</div>
-        <div className="text-base font-semibold italic">{titulo}</div>
+    <div className={`rounded-lg p-4 shadow-md shadow-black ${cor}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col mb-1">
+          <span className="text-lg font-semibold text-black italic">{titulo}</span>
+          <span className="text-2xl font-bold text-black italic">{valor}</span>
+        </div>
+        <div className={`rounded-lg bg-white/40 p-3`}>
+          <Icon className="h-6 w-6 text-black" />
+        </div>
       </div>
     </div>
   );
@@ -41,29 +38,29 @@ export function CardsTabelaContasPagar({
   vencidas,
 }: ResumoNotasFiscaisProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <CardResumo
-        titulo="Total contas"
+        titulo="Total"
         valor={total}
-        cor="from-blue-400 to-blue-500"
+        cor="bg-blue-500"
         Icon={FileText}
       />
       <CardResumo
         titulo="Contas pagas"
         valor={pagas}
-        cor="from-green-400 to-green-500"
+        cor="bg-green-500"
         Icon={CheckCircle}
       />
       <CardResumo
         titulo="Contas pendentes"
         valor={pendentes}
-        cor="from-yellow-400 to-yellow-500"
+        cor="bg-yellow-500"
         Icon={Clock}
       />
       <CardResumo
         titulo="Contas vencidas"
         valor={vencidas}
-        cor="from-red-400 to-red-500"
+        cor="bg-red-500"
         Icon={AlertTriangle}
       />
     </div>

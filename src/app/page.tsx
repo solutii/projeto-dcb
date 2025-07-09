@@ -6,6 +6,8 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold text-gray-800">
             Bem-vindo a Página Home
           </h1>
+          <p className="font-orbitron">Teste Orbitron</p>
+          <p className="font-kodchasan">Teste Kodchasan</p>
         </div>
       </div>
     </>

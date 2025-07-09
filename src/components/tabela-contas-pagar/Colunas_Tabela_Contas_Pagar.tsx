@@ -21,19 +21,19 @@ export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
     PAGO: {
       icon: CheckCircle,
-      style: "bg-gradient-to-r from-emerald-500 to-green-600 text-white",
+      style: "bg-green-400 text-black",
       bgMobile: "bg-emerald-50 border-emerald-200",
       textMobile: "text-emerald-700",
     },
     PENDENTE: {
       icon: Clock,
-      style: "bg-gradient-to-r from-amber-500 to-orange-600 text-white",
+      style: "bg-yellow-400 text-black",
       bgMobile: "bg-amber-50 border-amber-200",
       textMobile: "text-amber-700",
     },
     VENCIDO: {
       icon: AlertTriangle,
-      style: "bg-gradient-to-r from-red-500 to-rose-600 text-white",
+      style: "bg-red-400 text-black",
       bgMobile: "bg-red-50 border-red-200",
       textMobile: "text-red-700",
     },
@@ -74,7 +74,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     accessorKey: "numero_nf",
     header: "Nota Fiscal",
     cell: ({ getValue }) => (
-      <div className="font-mono font-bold">#{String(getValue())}</div>
+      <div className="font-bold text-gray-600 italic">#{String(getValue())}</div>
     ),
   },
   {
@@ -83,7 +83,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     cell: ({ getValue }) => {
       const date = getValue() as string;
       const [year, month, day] = date.split("T")[0].split("-");
-      return <div className="font-mono">{`${day}/${month}/${year}`}</div>;
+      return <div className="font-bold text-gray-600 italic">{`${day}/${month}/${year}`}</div>;
     },
   },
   {
@@ -94,9 +94,9 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
       const [year, month, day] = date.split("T")[0].split("-");
       const isOverdue = new Date(date) < new Date();
       return (
-        <div className={`font-mono ${isOverdue ? "text-red-600 font-bold" : ""}`}>
+        <div className={`${isOverdue ? "text-red-500 font-bold italic" : ""}`}>
           {`${day}/${month}/${year}`}
-          {isOverdue && <div className="text-xs text-red-500">Vencido</div>}
+          {isOverdue && <div className="text-xs text-red-500 italic font-semibold">Vencido</div>}
         </div>
       );
     },
@@ -105,7 +105,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     accessorKey: "valor",
     header: "Valor",
     cell: ({ getValue }) => (
-      <div className="font-bold text-green-600">
+      <div className="font-bold text-green-500 italic">
         R$ {Number(getValue()).toFixed(2)}
       </div>
     ),
@@ -116,7 +116,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     cell: ({ getValue }) => {
       const valor = Number(getValue());
       return (
-        <div className={`font-semibold ${valor > 0 ? "text-yellow-600" : "text-gray-400"}`}>
+        <div className={`font-bold italic ${valor > 0 ? "text-purple-500" : "text-gray-600"}`}>
           R$ {valor.toFixed(2)}
         </div>
       );
@@ -128,7 +128,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     cell: ({ getValue }) => {
       const valor = Number(getValue());
       return (
-        <div className={`font-semibold ${valor > 0 ? "text-red-600" : "text-gray-400"}`}>
+        <div className={`font-bold italic ${valor > 0 ? "text-red-500" : "text-gray-600"}`}>
           R$ {valor.toFixed(2)}
         </div>
       );
@@ -142,16 +142,16 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
         <Button
           variant="ghost"
           size="sm"
-          className="text-green-600 hover:bg-green-50"
+          className="text-green-700 hover:bg-green-200"
         >
-          <PiMicrosoftExcelLogoFill className="w-4 h-4" />
+          <PiMicrosoftExcelLogoFill className="w-6 h-6" />
         </Button>
         <Button
           variant="ghost"
           size="sm"
-          className="text-red-600 hover:bg-red-50"
+          className="text-red-700 hover:bg-red-200"
         >
-          <SiAdobeacrobatreader className="w-4 h-4" />
+          <SiAdobeacrobatreader className="w-6 h-6" />
         </Button>
       </div>
     ),

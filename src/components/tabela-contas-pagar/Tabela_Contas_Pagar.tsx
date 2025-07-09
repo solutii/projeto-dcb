@@ -1,4 +1,3 @@
-// components/TabelaContasPagar.tsx
 "use client";
 
 import React from "react";
@@ -7,12 +6,18 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { DollarSign, AlertTriangle } from "lucide-react";
+import {
+  DollarSign,
+  AlertTriangle,
+  AlertOctagon,
+  AlertCircle,
+  ArrowUp,
+} from "lucide-react";
 import {
   colunasTabelaContasPagar,
   ContasPagarProps,
 } from "./Colunas_Tabela_Contas_Pagar";
-import { MobileCard } from "./MobileCard"; // Certifique-se de mover MobileCard para um arquivo separado
+import { MobileCard } from "./MobileCard";
 
 interface TabelaContasPagarProps {
   dados: ContasPagarProps[];
@@ -31,136 +36,198 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
 
   return (
     <>
-      <div className="bg-white rounded-t-2xl">
-        <div className="p-4 md:p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Contas a Pagar
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Gestão financeira • {dados.length} registros
-              </p>
-            </div>
+      {/* TABELA */}
+      <div className="flex flex-col h-[60vh] overflow-hidden rounded-lg  bg-white shadow-md shadow-black">
+        {/* Cabeçalho da tabela */}
+        <div className="bg-black p-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-white tracking-wide">
+              Contas a Pagar
+            </h3>
           </div>
         </div>
-      </div>
-      {/* ------------------------------ */}
 
-      <div className="hidden lg:block">
-        <div className="bg-white shadow overflow-hidden rounded-b-lg">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="bg-gray-900 text-white">
-                    {headerGroup.headers.map((header) => (
-                      <th
-                        key={header.id}
-                        className="px-6 py-4 text-center text-sm font-semibold"
-                      >
+        {/* Corpo com rolagem interna */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <table className="w-full border-separate border-spacing-0 text-sm">
+            <thead className="sticky top-0 z-10">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header, index) => (
+                    <th
+                      key={header.id}
+                      className={`p-3 bg-purple-800 text-white font-semibold text-left ${
+                        index === 0 ? "pl-20" : "text-center"
+                      } ${
+                        header.isPlaceholder ? "bg-gray-200" : "bg-gray-100"
+                      } border-b border-gray-200`}
+                    >
+                      <div className="flex items-center space-x-2">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {table.getRowModel().rows.map((row, rowIndex) => {
-                  const isLastRow =
-                    rowIndex === table.getRowModel().rows.length - 1;
-                  const cells = row.getVisibleCells();
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
 
-                  return (
-                    <tr
-                      key={row.id}
-                      className={`${
-                        rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-blue-50 transition-colors`}
+            <tbody className="divide-y divide-gray-200">
+              {table.getRowModel().rows.map((row, rowIndex) => (
+                <tr
+                  key={row.id}
+                  className={`group transition-all duration-200 ease-in-out hover:bg-blue-100 ${
+                    rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
+                  } cursor-pointer`}
+                >
+                  {row.getVisibleCells().map((cell, cellIndex) => (
+                    <td
+                      key={cell.id}
+                      className={`p-2 text-gray-600 ${
+                        cellIndex === 0
+                          ? "font-semibold text-left pl-20"
+                          : "text-center"
+                      } ${
+                        rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
+                      }`}
                     >
-                      {cells.map((cell, i) => {
-                        const isFirstCell = i === 0;
-                        const isLastCell = i === cells.length - 1;
-
-                        return (
-                          <td
-                            key={cell.id}
-                            className={`
-                      px-6 py-4 text-sm text-center
-                      ${isLastRow && isFirstCell ? "rounded-bl-lg" : ""}
-                      ${isLastRow && isLastCell ? "rounded-br-lg" : ""}
-                    `}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      <div className="flex items-center space-x-2">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div className="lg:hidden space-y-4">
+      {/* MobileCard (caso use em dispositivos pequenos) */}
+      <div className="lg:hidden mt-6 space-y-4">
         {table.getRowModel().rows.map((row) => (
           <MobileCard key={row.id} row={row} />
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-xl p-4 border border-green-200 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <DollarSign className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-green-600">
-                R$ {totalValor.toFixed(2)}
+      {/* CARDS DE TOTAIS - fora da rolagem da tabela */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Card Total Valor */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 relative group">
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-400 to-teal-500"></div>
+          <div className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1 tracking-wide">
+                  VALOR TOTAL
+                </p>
+                <p className="text-2xl font-bold text-gray-800">
+                  R${" "}
+                  {totalValor.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">Total Valor</div>
+              <div className="p-3 rounded-lg bg-gradient-to-br from-green-50 to-teal-50 text-teal-600 shadow-sm">
+                <DollarSign className="w-6 h-6" strokeWidth={2} />
+              </div>
+            </div>
+            <div className="mt-5 pt-4 border-t border-gray-100 flex items-center">
+              <span className="inline-flex items-center text-xs font-semibold tracking-wide text-teal-600">
+                <ArrowUp className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
+                Valor total das contas
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-yellow-200 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-yellow-100 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-yellow-600" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-yellow-600">
-                R$ {totalJuros.toFixed(2)}
+        {/* Card Total Juros */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 relative group">
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 to-orange-400"></div>
+          <div className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1 tracking-wide">
+                  JUROS ACUMULADOS
+                </p>
+                <p className="text-2xl font-bold text-gray-800">
+                  R${" "}
+                  {totalJuros.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">Total Juros</div>
+              <div className="p-3 rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 text-amber-600 shadow-sm">
+                <AlertTriangle className="w-6 h-6" strokeWidth={2} />
+              </div>
+            </div>
+            <div className="mt-5 pt-4 border-t border-gray-100 flex items-center">
+              <span className="inline-flex items-center text-xs font-semibold tracking-wide text-amber-600">
+                <AlertCircle className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
+                Taxas e encargos
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-red-200 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-100 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-red-600">
-                R$ {totalMulta.toFixed(2)}
+        {/* Card Total Multa */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 relative group">
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rose-400 to-pink-500"></div>
+          <div className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1 tracking-wide">
+                  MULTAS APLICADAS
+                </p>
+                <p className="text-2xl font-bold text-gray-800">
+                  R${" "}
+                  {totalMulta.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">Total Multa</div>
+              <div className="p-3 rounded-lg bg-gradient-to-br from-rose-50 to-pink-50 text-rose-600 shadow-sm">
+                <AlertOctagon className="w-6 h-6" strokeWidth={2} />
+              </div>
+            </div>
+            <div className="mt-5 pt-4 border-t border-gray-100 flex items-center">
+              <span className="inline-flex items-center text-xs font-semibold tracking-wide text-rose-600">
+                <AlertOctagon className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
+                Penalidades por atraso
+              </span>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Estilos customizados */}
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #c1c1c1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #a1a1a1;
+        }
+      `}</style>
     </>
   );
 }

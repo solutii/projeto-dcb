@@ -1,81 +1,152 @@
 "use client";
 
-import React, { useState } from "react";
-import { CalendarDays, PackageSearch, Filter } from "lucide-react";
+import { useState } from "react";
+import { CalendarDays, Filter, FileCode } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 export function FiltrosTabelaContasPagar() {
-  const [dataInicio, setDataInicio] = useState("");
-  const [dataFim, setDataFim] = useState("");
+  const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
+  const [dataFim, setDataFim] = useState<Date | undefined>(undefined);
   const [produto, setProduto] = useState("");
   const [status, setStatus] = useState("");
 
   return (
-    <div className="rounded-lg border border-slate-300 p-2 bg-white shadow-xs shadow-black">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="space-y-4">
+      {/* Título e Data Atual */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl italic font-bold text-gray-600">
+          Filtros - Dashboard
+        </h2>
+        <span className="text-xl italic font-bold text-gray-600">
+          {new Date().toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+      </div>
+
+      {/* Campos de Filtro */}
+      <div className="grid grid-cols-6 gap-4">
         {/* Data Inicial */}
-        <div>
-          <label className="text-sm font-semibold text-gray-700 italic mb-2 flex items-center gap-1">
-            <CalendarDays className="w-4 h-4" />
+        <div className="col-span-1 flex flex-col">
+          <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
+            <CalendarDays className="w-5 h-5 " />
             Data Inicial
           </label>
-          <input
-            type="date"
-            value={dataInicio}
-            onChange={(e) => setDataInicio(e.target.value)}
-            className="w-full p-2 border border-slate-300 rounded-lg text-sm text-gray-700 font-semibold shadow-xs hover:shadow-md hover:shadow-black shadow-black focus:ring-0 focus:outline-none"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-semibold text-gray-600 cursor-pointer italic shadow-xs shadow-black hover:shadow-md hover:shadow-black"
+              >
+                {dataInicio
+                  ? format(dataInicio, "dd/MM/yyyy", { locale: ptBR })
+                  : "Selecionar data"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 bg-white shadow-md shadow-black"
+              align="start"
+            >
+              <Calendar
+                mode="single"
+                selected={dataInicio}
+                onSelect={setDataInicio}
+                locale={ptBR}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Data Final */}
-        <div>
-          <label className="text-sm font-semibold text-gray-700 italic mb-2 flex items-center gap-1">
-            <CalendarDays className="w-4 h-4" />
+        <div className="col-span-1 flex flex-col">
+          <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
+            <CalendarDays className="w-5 h-5" />
             Data Final
           </label>
-          <input
-            type="date"
-            value={dataFim}
-            onChange={(e) => setDataFim(e.target.value)}
-            className="w-full p-2 border border-slate-300 rounded-lg text-sm text-gray-700 font-semibold shadow-xs hover:shadow-md hover:shadow-black shadow-black focus:ring-0 focus:outline-none"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-semibold text-gray-600 cursor-pointer italic shadow-xs shadow-black hover:shadow-md hover:shadow-black"
+              >
+                {dataFim
+                  ? format(dataFim, "dd/MM/yyyy", { locale: ptBR })
+                  : "Selecionar data"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 bg-white shadow-md shadow-black"
+              align="start"
+            >
+              <Calendar
+                mode="single"
+                selected={dataFim}
+                onSelect={setDataFim}
+                locale={ptBR}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
 
-        {/* Nota Fiscal */}
-        <div>
-          <label className="text-sm font-semibold text-gray-700 italic mb-2 flex items-center gap-1">
-            <PackageSearch className="w-4 h-4" />
+        {/* Produto */}
+        <div className="col-span-1 flex flex-col">
+          <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
+            <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
-          <select
-            value={produto}
-            onChange={(e) => setProduto(e.target.value)}
-            className="w-full p-2 border border-slate-300 rounded-lg text-sm text-gray-700 font-semibold shadow-xs hover:shadow-md hover:shadow-black shadow-black focus:ring-0 focus:outline-none"
-          >
-            <option value="">Todas</option>
-            <option value="Luvas Nitrílicas">Luvas Nitrílicas</option>
-            <option value="Seringas 10ml">Seringas 10ml</option>
-            <option value="Máscaras N95">Máscaras N95</option>
-            <option value="Cateteres">Cateteres</option>
-            <option value="Gazes Estéreis">Gazes Estéreis</option>
-            <option value="Termômetros">Termômetros</option>
-          </select>
+          <Select value={produto} onValueChange={setProduto}>
+            <SelectTrigger className="w-full cursor-pointer text-gray-600 font-semibold italic shadow-xs shadow-black hover:shadow-md hover:shadow-black">
+              <SelectValue placeholder="Todas" />
+            </SelectTrigger>
+            <SelectContent className="bg-white shadow-md shadow-black">
+              <SelectItem value="all">Todas</SelectItem>
+              <SelectItem value="Luvas Nitrílicas">Luvas Nitrílicas</SelectItem>
+              <SelectItem value="Seringas 10ml">Seringas 10ml</SelectItem>
+              <SelectItem value="Máscaras N95">Máscaras N95</SelectItem>
+              <SelectItem value="Cateteres">Cateteres</SelectItem>
+              <SelectItem value="Gazes Estéreis">Gazes Estéreis</SelectItem>
+              <SelectItem value="Termômetros">Termômetros</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Status */}
-        <div>
-          <label className="text-sm font-semibold text-gray-700 italic mb-2 flex items-center gap-1">
-            <Filter className="w-4 h-4" />
+        <div className="col-span-1 flex flex-col">
+          <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
+            <Filter className="w-5 h-5" />
             Status
           </label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full p-2 border border-slate-300 rounded-lg text-sm text-gray-700 font-semibold shadow-xs hover:shadow-md hover:shadow-black shadow-black focus:ring-0 focus:outline-none"
-          >
-            <option value="">Todos</option>
-            <option value="Pagas">Pagas</option>
-            <option value="Em Aberto">Em Aberto</option>
-          </select>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger className="w-full cursor-pointer text-gray-600 font-semibold italic shadow-xs shadow-black hover:shadow-md hover:shadow-black">
+              <SelectValue placeholder="Todos" />
+            </SelectTrigger>
+            <SelectContent className="bg-white shadow-md shadow-black">
+              <SelectItem value="all">Todos</SelectItem>
+              <SelectItem value="Pagas">Pagas</SelectItem>
+              <SelectItem value="Em Aberto">Em Aberto</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Kodchasan } from "next/font/google";
+import { Kodchasan, Orbitron } from "next/font/google";
 import "./globals.css";
 
 const kodchasan = Kodchasan({
@@ -7,6 +7,13 @@ const kodchasan = Kodchasan({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
 });
+
+const orbitron = Orbitron({
+  variable: '--font-orbitron',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${kodchasan.variable} antialiased`}
+        className={`${kodchasan.variable} ${orbitron.variable} antialiased`}
       >
         {children}
       </body>
