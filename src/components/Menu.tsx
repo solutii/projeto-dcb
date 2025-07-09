@@ -14,7 +14,7 @@ export function MenuNavegacao() {
       color: "from-blue-500 to-blue-700",
     },
     {
-      href: "/contas-a-pagar",
+      href: "/tabela-contas-pagar",
       label: "Contas a Pagar",
       icon: FileText,
       color: "from-purple-500 to-purple-700",

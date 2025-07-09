@@ -3,7 +3,7 @@
 import React from "react";
 import { StatCard } from "@/components/dashboard/Stat_Card";
 import { ChartCard } from "@/components/dashboard/Chart_Card";
-import { HeaderDashboard } from "@/components/Header";
+import { Header } from "@/components/Header";
 import { ComprasPorProdutoChart } from "@/components/dashboard/Compras_Por_Produto_Chart";
 import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_Chart";
 import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_Chart";
@@ -57,7 +57,7 @@ const contasAnuais = [
 export function HospitalDashboardLayout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50">
-      <HeaderDashboard />
+      <Header titulo="Dashboard" />
 
 
       {/* Espaço para header e filtros fixos com responsividade melhorada */}

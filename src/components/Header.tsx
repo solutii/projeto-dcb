@@ -7,7 +7,7 @@ interface HeaderProps {
   titulo: string;
 }
 
-export function HeaderDashboard({titulo}: HeaderProps) {
+export function Header({titulo}: HeaderProps) {
   return (
     <header
       className="

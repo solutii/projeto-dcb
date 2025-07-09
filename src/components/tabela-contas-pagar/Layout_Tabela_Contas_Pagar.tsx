@@ -1,6 +1,6 @@
 "use client";
 
-import { HeaderDashboard } from "@/components/Header";
+import { Header } from "@/components/Header";
 import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
@@ -111,7 +111,7 @@ export function LayoutContasPagar() {
     <main className="relative min-h-screen bg-emerald-100 overflow-x-hidden">
       {/* Header (z-10, padrão) */}
       <div className="relative z-10">
-        <HeaderDashboard titulo="Contas a Pagar" />
+        <Header titulo="Contas a Pagar" />
       </div>
 
       {/* Filtros + Cards fixos com fundo branco opaco e z-30 */}
