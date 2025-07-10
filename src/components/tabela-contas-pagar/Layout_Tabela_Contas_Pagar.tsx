@@ -5,161 +5,50 @@ import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
 import { ContasPagarProps } from "./Colunas_Tabela_Contas_Pagar";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { ContasAPagarStatus, ContasAPagarType } from "@/types/financeiro";
+import { set } from "date-fns";
 
-const dadosFicticios: ContasPagarProps[] = [
-  {
-    status: "Pendente",
-    numero_nf: 10234,
-    data_emissao: "2025-07-01T00:00:00Z",
-    data_vencimento: "2025-07-10T00:00:00Z",
-    valor: 1200.5,
-    juros: 15.75,
-    multa: 10.0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10234,
-    data_emissao: "2025-07-01T00:00:00Z",
-    data_vencimento: "2025-07-10T00:00:00Z",
-    valor: 1200.5,
-    juros: 15.75,
-    multa: 10.0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10234,
-    data_emissao: "2025-07-01T00:00:00Z",
-    data_vencimento: "2025-07-10T00:00:00Z",
-    valor: 1200.5,
-    juros: 15.75,
-    multa: 10.0,
-  },
-  {
-    status: "Pago",
-    numero_nf: 10235,
-    data_emissao: "2025-06-15T00:00:00Z",
-    data_vencimento: "2025-06-30T00:00:00Z",
-    valor: 850.0,
-    juros: 0,
-    multa: 0,
-  },
-  {
-    status: "Pago",
-    numero_nf: 10235,
-    data_emissao: "2025-06-15T00:00:00Z",
-    data_vencimento: "2025-06-30T00:00:00Z",
-    valor: 850.0,
-    juros: 0,
-    multa: 0,
-  },
-  {
-    status: "Pago",
-    numero_nf: 10235,
-    data_emissao: "2025-06-15T00:00:00Z",
-    data_vencimento: "2025-06-30T00:00:00Z",
-    valor: 850.0,
-    juros: 0,
-    multa: 0,
-  },
-  {
-    status: "Vencido",
-    numero_nf: 10236,
-    data_emissao: "2025-05-01T00:00:00Z",
-    data_vencimento: "2025-05-10T00:00:00Z",
-    valor: 1500.25,
-    juros: 50.0,
-    multa: 35.5,
-  },
-  {
-    status: "Vencido",
-    numero_nf: 10236,
-    data_emissao: "2025-05-01T00:00:00Z",
-    data_vencimento: "2025-05-10T00:00:00Z",
-    valor: 1500.25,
-    juros: 50.0,
-    multa: 35.5,
-  },
-  {
-    status: "Vencido",
-    numero_nf: 10236,
-    data_emissao: "2025-05-01T00:00:00Z",
-    data_vencimento: "2025-05-10T00:00:00Z",
-    valor: 1500.25,
-    juros: 50.0,
-    multa: 35.5,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pendente",
-    numero_nf: 10237,
-    data_emissao: "2025-07-05T00:00:00Z",
-    data_vencimento: "2025-07-15T00:00:00Z",
-    valor: 2200.75,
-    juros: 25.5,
-    multa: 0,
-  },
-  {
-    status: "Pago",
-    numero_nf: 10238,
-    data_emissao: "2025-06-20T00:00:00Z",
-    data_vencimento: "2025-07-01T00:00:00Z",
-    valor: 950.25,
-    juros: 0,
-    multa: 0,
-  },
-];
+
+enum  ContasAPagarStatusEnum {
+  'Título em Aberto',
+  'Título em Aberto e Atrasado',
+  'Título Baixado Parcialmente',
+  'Título Pago'
+}
 
 export function LayoutContasPagar() {
-  const total = dadosFicticios.length;
-  const pagas = dadosFicticios.filter((n) => n.status === "Pago").length;
-  const pendentes = dadosFicticios.filter(
-    (n) => n.status === "Pendente"
-  ).length;
-  const vencidas = dadosFicticios.filter((n) => n.status === "Vencido").length;
+
+  const [contasAPagar, setContasAPagar] = useState<ContasAPagarType[]>([]);
+
+  const total = contasAPagar.length;
+  const pagas = contasAPagar.filter((n) => n.STATUS === "3" ).length;
+  const pendentes = contasAPagar.filter((n) => n.STATUS === "1").length;
+  const vencidas = contasAPagar.filter((n) => n.STATUS === "2").length;
+
+
+  async function handleAccountsPayableData () {
+
+    const retorno = await axios.post('/api/accounts-payable', {
+      CLIENTE: "003364",
+      LOJA: "01",
+      DATAINI: "20240701",
+      DATAFIM: "20250731"
+    })
+
+    if (retorno.status !== 200) {
+      console.error("Erro ao buscar dados de contas a pagar");
+      return;
+    } 
+
+    setContasAPagar(retorno.data.dados);
+
+  }
+
+  useEffect(() => {
+    handleAccountsPayableData(); 
+  },[])
 
   return (
     <div className="flex h-screen">
@@ -180,7 +69,7 @@ export function LayoutContasPagar() {
                 pendentes={pendentes}
                 vencidas={vencidas}
               />
-              <TabelaContasPagar dados={dadosFicticios} />
+              <TabelaContasPagar dados={contasAPagar} />
             </div>
           </div>
         </div>

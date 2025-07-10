@@ -27,7 +27,7 @@ type CondicaoPagamentoType = {
 }
 
 export {
+    ContasAPagarStatus,
     type ContasAPagarType,
     type CondicaoPagamentoType,
-    ContasAPagarStatus
 }
