@@ -50,7 +50,7 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
                   {headerGroup.headers.map((header, index) => (
                     <th
                       key={header.id}
-                      className={`p-3 bg-purple-400 text-black font-extrabold text-left ${
+                      className={`p-3 bg-teal-500 text-black font-extrabold text-left ${
                         index === 0 ? "pl-20" : "text-center"
                       } ${
                         header.isPlaceholder ? "bg-gray-200" : "bg-gray-100"

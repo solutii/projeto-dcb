@@ -13,21 +13,42 @@ import {
   Shield,
   Activity,
   Sparkles,
+  Settings,
+  User,
+  Key,
+  LogOut,
+  ChevronDown,
+  Bell,
+  HelpCircle,
 } from "lucide-react";
 import { FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function SidebarNavegacao() {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Atualiza o horário a cada segundo
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Fecha o dropdown quando clica fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const links = [
@@ -39,7 +60,7 @@ export function SidebarNavegacao() {
       shadowColor: "shadow-emerald-500/30",
     },
     {
-      href: "/tabela-contas-pagar",
+      href: "/contas-pagar",
       label: "Contas a Pagar",
       icon: FileText,
       color: "from-purple-800 to-blue-800",
@@ -53,16 +74,56 @@ export function SidebarNavegacao() {
       shadowColor: "shadow-violet-500/30",
     },
     {
-      href: "/configuracoes",
-      label: "Configurações",
+      href: "/notas-fiscais",
+      label: "Notas Fiscais",
       icon: Receipt,
       color: "from-purple-800 to-blue-800",
       shadowColor: "shadow-black",
     },
   ];
 
+  const dropdownItems = [
+    {
+      icon: User,
+      label: "Perfil do Usuário",
+      description: "João Silva",
+      action: () => console.log("Perfil"),
+      color: "text-emerald-400",
+    },
+    {
+      icon: Key,
+      label: "Alterar Senha",
+      description: "Segurança da conta",
+      action: () => console.log("Alterar senha"),
+      color: "text-blue-400",
+    },
+    {
+      icon: Bell,
+      label: "Notificações",
+      description: "Configurar alertas",
+      action: () => console.log("Notificações"),
+      color: "text-yellow-400",
+    },
+    {
+      icon: HelpCircle,
+      label: "Suporte",
+      description: "Central de ajuda",
+      action: () => console.log("Suporte"),
+      color: "text-purple-400",
+    },
+    {
+      icon: LogOut,
+      label: "Fazer Logout",
+      description: "Sair do sistema",
+      action: () => console.log("Logout"),
+      color: "text-red-400",
+      isDanger: true,
+    },
+  ];
+
   const toggleCollapse = () => setIsCollapsed(!isCollapsed);
   const toggleMobile = () => setIsMobileOpen(!isMobileOpen);
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("pt-BR", {
@@ -253,6 +314,92 @@ export function SidebarNavegacao() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Dropdown de Configurações */}
+          <div className="px-4 pb-4" ref={dropdownRef}>
+            <div className="relative">
+              <button
+                onClick={toggleDropdown}
+                className={`
+                  group relative flex items-center w-full rounded-2xl text-sm font-semibold
+                  transition-all duration-700 ease-out transform hover:scale-[1.02] active:scale-95
+                  overflow-hidden backdrop-blur-sm
+                  ${isCollapsed ? "px-4 py-4 justify-center" : "px-6 py-4"}
+                  text-white/70 hover:text-white bg-gradient-to-r from-white/5 via-white/2 to-transparent hover:from-white/10 hover:via-white/5 hover:to-white/2 hover:shadow-xl border border-white/5 hover:border-white/20
+                `}
+              >
+                {/* Efeito de ondulação */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+
+                {/* Ícone */}
+                <div className="relative z-10 flex items-center">
+                  <Settings
+                    className={`
+                      transition-all duration-500 flex-shrink-0
+                      ${isCollapsed ? "w-6 h-6" : "w-5 h-5"}
+                      text-white/70 group-hover:text-white group-hover:drop-shadow-md group-hover:scale-105
+                    `}
+                  />
+                </div>
+
+                {/* Label */}
+                {!isCollapsed && (
+                  <div className="ml-4 relative z-10 flex items-center justify-between flex-1">
+                    <span className="tracking-wide whitespace-nowrap font-medium">
+                      Configurações
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                )}
+
+                {/* Tooltip para modo collapsed */}
+                {isCollapsed && (
+                  <div className="absolute left-20 bg-gradient-to-r from-slate-800/95 to-emerald-800/95 backdrop-blur-xl text-white px-4 py-3 rounded-xl text-sm font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 delay-500 border border-emerald-300/20 shadow-2xl whitespace-nowrap z-50">
+                    <div className="flex items-center space-x-2">
+                      <span>Configurações</span>
+                    </div>
+                    <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-gradient-to-r from-slate-800 to-emerald-800 rotate-45 border-l border-b border-emerald-300/20" />
+                  </div>
+                )}
+
+                {/* Borda interna */}
+                <div className="absolute inset-0 rounded-2xl transition-all duration-500 border border-emerald-300/5 group-hover:border-emerald-300/20" />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && !isCollapsed && (
+                <div className="absolute bottom-full left-0 right-0 mb-2 bg-gradient-to-br from-slate-800/95 to-emerald-800/95 backdrop-blur-xl rounded-2xl border border-emerald-300/20 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-2 duration-300">
+                  <div className="p-2">
+                    {dropdownItems.map(({ icon: Icon, label, description, action, color, isDanger }) => (
+                      <button
+                        key={label}
+                        onClick={action}
+                        className={`
+                          group w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300
+                          ${
+                            isDanger
+                              ? "hover:bg-red-500/20 text-red-400 hover:text-red-300"
+                              : "hover:bg-white/10 text-white/80 hover:text-white"
+                          }
+                          hover:scale-[1.02] active:scale-95
+                        `}
+                      >
+                        <Icon className={`w-4 h-4 mr-3 ${color} group-hover:scale-110 transition-transform duration-300`} />
+                        <div className="flex-1 text-left">
+                          <div className="text-sm font-medium">{label}</div>
+                          <div className="text-xs text-white/50">{description}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Footer aprimorado */}

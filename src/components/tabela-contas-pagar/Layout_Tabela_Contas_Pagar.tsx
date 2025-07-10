@@ -5,7 +5,6 @@ import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
 import { ContasPagarProps } from "./Colunas_Tabela_Contas_Pagar";
-import { MenuConfiguracoes } from "./Menu_Configuracoes";
 
 const dadosFicticios: ContasPagarProps[] = [
   {
@@ -170,9 +169,6 @@ export function LayoutContasPagar() {
       {/* Área principal com layout vertical */}
       <main className="flex-1 h-screen flex flex-col overflow-hidden">
         <div className="relative">
-          <div className="absolute top-0 right-0 p-4">
-            <MenuConfiguracoes />
-          </div>
         </div>
         <div className="flex-shrink-0 bg-white">
           <div className="px-4 md:px-6 lg:px-8 py-4">
