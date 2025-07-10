@@ -34,16 +34,17 @@ export function ContasPagarMesChart({ data }: { data: Conta[] }) {
   const outerRadius = screen.isMobile ? 80 : screen.isTablet ? 100 : 120;
 
   return (
-    <div className="bg-white p-3 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[500px] flex flex-col">
+    <div className="bg-white p-3 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[540px] flex flex-col">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 sm:mb-3 lg:mb-4">
         <div className="mb-2 sm:mb-0">
-          <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800">
-            Contas a Pagar
+          <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 uppercase italic tracking-wider">
+            Contas a Pagar/Mês
           </h3>
-          <p className="text-xs sm:text-sm text-gray-500">
+          <p className="text-base text-gray-600 font-semibold italic">
             Distribuição por categoria
           </p>
         </div>
+
         <div className="bg-emerald-50 text-emerald-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto">
           Total: {formatCurrency(total)}
         </div>
@@ -72,7 +73,9 @@ export function ContasPagarMesChart({ data }: { data: Conta[] }) {
                   stroke="#fff"
                   strokeWidth={2}
                   style={{
-                    filter: `drop-shadow(0px 2px 4px ${COLORS[index % COLORS.length]}33)`,
+                    filter: `drop-shadow(0px 2px 4px ${
+                      COLORS[index % COLORS.length]
+                    }33)`,
                     cursor: "pointer",
                     transition: "opacity 0.3s",
                   }}

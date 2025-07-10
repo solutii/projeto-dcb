@@ -1,14 +1,14 @@
 import React from "react";
 import { FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react";
 
-interface ResumoNotasFiscaisProps {
-  total: number;
-  pagas: number;
-  pendentes: number;
-  vencidas: number;
+interface ResumoPedidosProps {
+  emSeparacao: number;
+  faturados: number;
+  emRota: number;
+  entregues: number;
 }
 
-interface CardsProps {
+interface CardsPedidosProps {
   titulo: string;
   valor: number;
   cor: string;
@@ -16,7 +16,7 @@ interface CardsProps {
   styleIcon: string;
 }
 
-function CardResumo({ titulo, valor, cor, Icon }: CardsProps) {
+function CardResumo({ titulo, valor, cor, Icon }: CardsPedidosProps) {
   return (
     <div className={`rounded-lg p-4 shadow-md shadow-black ${cor}`}>
       <div className="flex items-center justify-between">
@@ -46,38 +46,38 @@ function CardResumo({ titulo, valor, cor, Icon }: CardsProps) {
   );
 }
 
-export function CardsTabelaContasPagar({
-  total,
-  pagas,
-  pendentes,
-  vencidas,
-}: ResumoNotasFiscaisProps) {
+export function CardsTabelaPedidos({
+  emSeparacao,
+  faturados,
+  emRota,
+  entregues,
+}: ResumoPedidosProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <CardResumo
-        titulo="Total"
-        valor={total}
+        titulo="Em separação"
+        valor={emSeparacao}
         cor="bg-blue-300"
         Icon={FileText}
         styleIcon="bg-blue-200 text-blue-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
-        titulo="Contas pagas"
-        valor={pagas}
+        titulo="Faturados"
+        valor={faturados}
         cor="bg-green-300"
         Icon={CheckCircle}
         styleIcon="bg-green-200 text-green-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
-        titulo="Contas pendentes"
-        valor={pendentes}
+        titulo="Em rota"
+        valor={emRota}
         cor="bg-yellow-300"
         Icon={Clock}
         styleIcon="bg-yellow-200 text-yellow-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
-        titulo="Contas vencidas"
-        valor={vencidas}
+        titulo="Entregues"
+        valor={entregues}
         cor="bg-red-300"
         Icon={AlertTriangle}
         styleIcon="bg-red-200 text-red-700 shadow-md shadow-black rounded-lg p-3"

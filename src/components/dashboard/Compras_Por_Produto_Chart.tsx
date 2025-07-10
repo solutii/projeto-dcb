@@ -30,10 +30,16 @@ export function ComprasPorProdutoChart({
   const colors = ["#00E096", "#00C897", "#00B4A0", "#00A0A8", "#008CAB"];
 
   return (
-    <div className="bg-white p-3 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[500px] flex flex-col">
-      <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 mb-2 sm:mb-3 lg:mb-4">
-        Compras por Produto
-      </h3>
+    <div className="bg-white p-4 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[540px] flex flex-col">
+      <div className="mb-2 sm:mb-0">
+        <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 uppercase italic tracking-wider">
+          Compras por Produto
+        </h3>
+        <p className="text-base text-gray-600 font-semibold italic">
+          Distribuição por produto
+        </p>
+      </div>
+
       <div className="flex-grow">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

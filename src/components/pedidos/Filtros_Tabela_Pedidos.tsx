@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-export function FiltrosTabelaContasPagar() {
+export function FiltrosTabelaPedidos() {
   const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
   const [dataFim, setDataFim] = useState<Date | undefined>(undefined);
   const [produto, setProduto] = useState("");
@@ -29,9 +29,7 @@ export function FiltrosTabelaContasPagar() {
     <div className="space-y-4">
       {/* Título e Data Atual */}
       <div className="flex items-center justify-between">
-        <h2 className="text-4xl italic font-bold text-gray-800">
-          Contas a Pagar
-        </h2>
+        <h2 className="text-4xl italic font-bold text-gray-800">Pedidos</h2>
       </div>
 
       {/* Campos de Filtro */}

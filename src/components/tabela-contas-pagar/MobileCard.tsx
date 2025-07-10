@@ -42,7 +42,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
               <div className="font-bold text-gray-900">
                 NF #{data.numero_nf}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-800">
                 {formatDate(data.data_emissao)}
               </div>
             </div>
@@ -70,8 +70,8 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
           }`}
         >
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-gray-600" />
-            <span className="text-sm font-medium text-gray-600">
+            <Calendar className="w-4 h-4 text-gray-800" />
+            <span className="text-sm font-medium text-gray-800">
               Vencimento
             </span>
           </div>
@@ -114,7 +114,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
           variant="ghost"
           size="sm"
           onClick={() => setExpanded(!expanded)}
-          className="w-full justify-center gap-2 text-gray-600"
+          className="w-full justify-center gap-2 text-gray-800"
         >
           {expanded ? (
             <EyeOff className="w-4 h-4" />
@@ -133,13 +133,13 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
           <div className="pt-3 border-t space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Emissão:</span>
+                <span className="text-gray-800">Emissão:</span>
                 <div className="font-medium">
                   {formatDate(data.data_emissao)}
                 </div>
               </div>
               <div>
-                <span className="text-gray-600">Total:</span>
+                <span className="text-gray-800">Total:</span>
                 <div className="font-bold text-green-600">
                   R$ {(data.valor + data.juros + data.multa).toFixed(2)}
                 </div>

@@ -5,42 +5,52 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { SiAdobeacrobatreader } from "react-icons/si";
-import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import { CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
 
-export interface ContasPagarProps {
-  status: string;
-  numero_nf: number;
-  data_emissao: string;
-  data_vencimento: string;
+export interface PedidosProps {
+  numero_pedido: string;
+  data_pedido: string;
   valor: number;
-  juros: number;
-  multa: number;
+  quantidade_itens: number;
+  status: string;
+  previsao_entrega: string;
+  emSeparacao: number;
+  faturado: number;
+  emRota: number;
+  entregue: number;
 }
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
-    PAGO: {
-      icon: CheckCircle,
-      style: "bg-green-400 text-black",
-      bgMobile: "bg-emerald-50 border-emerald-200",
-      textMobile: "text-emerald-700",
+    "EM SEPARACAO": {
+      icon: PackageOpen,
+      style: "bg-blue-500 text-white",
+      bgMobile: "bg-blue-50 border-blue-200",
+      textMobile: "text-blue-700",
     },
-    PENDENTE: {
+    FATURADO: {
       icon: Clock,
-      style: "bg-yellow-400 text-black",
-      bgMobile: "bg-amber-50 border-amber-200",
-      textMobile: "text-amber-700",
+      style: "bg-yellow-500 text-black",
+      bgMobile: "bg-yellow-50 border-yellow-200",
+      textMobile: "text-yellow-700",
     },
-    VENCIDO: {
-      icon: AlertTriangle,
-      style: "bg-red-400 text-black",
-      bgMobile: "bg-red-50 border-red-200",
-      textMobile: "text-red-700",
+    "EM ROTA": {
+      icon: Truck,
+      style: "bg-purple-500 text-white",
+      bgMobile: "bg-purple-50 border-purple-200",
+      textMobile: "text-purple-700",
+    },
+    ENTREGUE: {
+      icon: CircleCheck,
+      style: "bg-green-400 text-black",
+      bgMobile: "bg-green-50 border-green-200",
+      textMobile: "text-green-700",
     },
   };
 
   const config =
-    configs[status.toUpperCase() as keyof typeof configs] || configs.PENDENTE;
+    configs[status.toUpperCase() as keyof typeof configs] ||
+    configs["EM SEPARACAO"];
   const Icon = config.icon;
 
   return (
@@ -66,15 +76,10 @@ export const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
+export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
-  },
-  {
-    accessorKey: "numero_nf",
-    header: "Nota Fiscal",
+    accessorKey: "numero_pedido",
+    header: "Pedido nº",
     cell: ({ getValue }) => (
       <div className="font-bold text-gray-800 italic">
         #{String(getValue())}
@@ -82,32 +87,13 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     ),
   },
   {
-    accessorKey: "data_emissao",
-    header: "Emissão",
+    accessorKey: "data_pedido",
+    header: "Data Pedido",
     cell: ({ getValue }) => {
       const date = getValue() as string;
       const [year, month, day] = date.split("T")[0].split("-");
       return (
         <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "data_vencimento",
-    header: "Vencimento",
-    cell: ({ getValue }) => {
-      const date = getValue() as string;
-      const [year, month, day] = date.split("T")[0].split("-");
-      const isOverdue = new Date(date) < new Date();
-      return (
-        <div className={`${isOverdue ? "text-red-500 font-bold italic" : ""}`}>
-          {`${day}/${month}/${year}`}
-          {isOverdue && (
-            <div className="text-xs text-red-500 italic font-semibold">
-              Vencido
-            </div>
-          )}
-        </div>
       );
     },
   },
@@ -121,34 +107,30 @@ export const colunasTabelaContasPagar: ColumnDef<ContasPagarProps>[] = [
     ),
   },
   {
-    accessorKey: "juros",
-    header: "Juros",
+    accessorKey: "quantidade_itens",
+    header: "Itens",
     cell: ({ getValue }) => {
-      const valor = Number(getValue());
+      const quantidade = getValue() as number;
       return (
-        <div
-          className={`font-bold italic ${
-            valor > 0 ? "text-purple-500" : "text-gray-800"
-          }`}
-        >
-          R$ {valor.toFixed(2)}
+        <div className="font-bold text-gray-800 italic">
+          {quantidade} {quantidade > 1 ? "itens" : "item"}
         </div>
       );
     },
   },
   {
-    accessorKey: "multa",
-    header: "Multa",
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
+  },
+  {
+    accessorKey: "previsao_entrega",
+    header: "Previsão Entrega",
     cell: ({ getValue }) => {
-      const valor = Number(getValue());
+      const date = getValue() as string;
+      const [year, month, day] = date.split("T")[0].split("-");
       return (
-        <div
-          className={`font-bold italic ${
-            valor > 0 ? "text-red-500" : "text-gray-800"
-          }`}
-        >
-          R$ {valor.toFixed(2)}
-        </div>
+        <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
       );
     },
   },
