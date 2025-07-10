@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Lock, Mail, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
-import axios from "axios";
 import { Toaster }  from "@/components/ui/sonner";
 import { toast } from "sonner"
+
+import { useAuth } from "@/contexts/auth-context";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,29 +16,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { login } = useAuth();
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
+  e.preventDefault();
+  setIsLoading(true);
 
-    const result = await axios.post("api/authentication", {
-      LOGIN: '13894878000160',SENHA: password
-    })
+  try {
+    const userData = await login(email, password); // agora retorna User | null
 
-    if(result.data.sucesso === "F") {
-      toast("Erro ao realizar login", {
-        description: result.data.mensagem || "Verifique suas credenciais e tente novamente.",
-        duration: 5000,
-        icon: "❌",
-        style: {
-          backgroundColor: "#e53e3e",
-          color: "#fff",
-        },
-      });
-      setIsLoading(false);
-    }
-
-
-    if(result.data.sucesso === "T") {
+    if (userData) {
+      console.log("Login bem-sucedido:", userData);
       toast("Login realizado com sucesso", {
         description: "Bem-vindo(a) de volta!",
         duration: 3000,
@@ -45,11 +37,34 @@ export default function LoginPage() {
           color: "#fff",
         },
       });
-      // Redirecionar ou realizar outra ação após o login bem-sucedido
-      setIsLoading(false);
-    }
 
-  };
+     console.log("Usuário autenticado. Redirecionando para /dashboard...");
+      router.push("/dashboard");
+    } else {
+      toast("Erro ao realizar login", {
+        description: "Verifique suas credenciais e tente novamente.",
+        duration: 5000,
+        icon: "❌",
+        style: {
+          backgroundColor: "#e53e3e",
+          color: "#fff",
+        },
+      });
+    }
+  } catch {
+    toast("Erro ao realizar login", {
+      description: "Ocorreu um erro inesperado. Tente novamente.",
+      duration: 5000,
+      icon: "❌",
+      style: {
+        backgroundColor: "#e53e3e",
+        color: "#fff",
+      },
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
@@ -147,7 +162,7 @@ export default function LoginPage() {
                         <Mail className="h-5 w-5 text-emerald-400" />
                       </div>
                       <input
-                        type="email"
+                        type="number"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="block w-full pl-10 pr-3 py-4 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300 hover:bg-white/10 hover:border-white/30"

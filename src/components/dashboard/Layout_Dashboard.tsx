@@ -46,6 +46,7 @@ const contasAnuais = [
 ];
 
 export function HospitalDashboardLayout() {
+
   return (
     <div className="flex h-screen">
       {/* Sidebar fixa */}

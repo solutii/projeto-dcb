@@ -1,0 +1,8 @@
+### Teste da API interna (Next.js)
+POST http://localhost:3000/api/authentication
+Content-Type: application/json
+
+{
+  "LOGIN": "13894878000160",
+  "SENHA": "XPTO"
+}

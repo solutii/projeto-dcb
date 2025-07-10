@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Kodchasan, Orbitron } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const kodchasan = Kodchasan({
   variable: '--font-kodchasan',
@@ -30,7 +31,11 @@ export default function RootLayout({
       <body
         className={`${kodchasan.variable} ${orbitron.variable} antialiased`}
       >
+        <AuthProvider>
+
         {children}
+        </AuthProvider>
+
       </body>
     </html>
   );

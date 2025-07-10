@@ -1,4 +1,5 @@
-// components/SidebarNavegacao.tsx
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -20,17 +21,23 @@ import {
   ChevronDown,
   Bell,
   HelpCircle,
+  Loader2,
 } from "lucide-react";
 import { FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { logoutClient } from "@/lib/logout";
 
 export function SidebarNavegacao() {
   const pathname = usePathname();
+  const router = useRouter();
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [loadingLink, setLoadingLink] = useState<string | null>(null);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Atualiza o horário a cada segundo
@@ -42,7 +49,10 @@ export function SidebarNavegacao() {
   // Fecha o dropdown quando clica fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -50,6 +60,12 @@ export function SidebarNavegacao() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Quando a rota muda, reseta o loadingLink e fecha menu mobile
+  useEffect(() => {
+    setLoadingLink(null);
+    setIsMobileOpen(false);
+  }, [pathname]);
 
   const links = [
     {
@@ -115,7 +131,7 @@ export function SidebarNavegacao() {
       icon: LogOut,
       label: "Fazer Logout",
       description: "Sair do sistema",
-      action: () => console.log("Logout"),
+      action: () => logoutClient(),
       color: "text-red-400",
       isDanger: true,
     },
@@ -144,7 +160,7 @@ export function SidebarNavegacao() {
 
   return (
     <>
-      {/* Botão do menu mobile com animação aprimorada */}
+      {/* Botão do menu mobile */}
       <button
         onClick={toggleMobile}
         className="fixed top-4 left-4 z-50 md:hidden group bg-gradient-to-r from-emerald-900/95 to-emerald-800/95 backdrop-blur-xl border border-emerald-300/30 rounded-2xl p-3 text-white hover:from-emerald-800/95 hover:to-emerald-700/95 transition-all duration-500 shadow-2xl hover:shadow-emerald-500/20 hover:scale-105 active:scale-95"
@@ -155,7 +171,7 @@ export function SidebarNavegacao() {
         </div>
       </button>
 
-      {/* Overlay para mobile com efeito blur */}
+      {/* Overlay para mobile */}
       {isMobileOpen && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 md:hidden animate-in fade-in duration-300"
@@ -185,7 +201,7 @@ export function SidebarNavegacao() {
 
         {/* Conteúdo da sidebar */}
         <div className="relative h-full flex flex-col">
-          {/* Header aprimorado */}
+          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-emerald-300/10">
             {!isCollapsed && (
               <div className="flex items-center space-x-3">
@@ -221,7 +237,7 @@ export function SidebarNavegacao() {
             </button>
           </div>
 
-          {/* Informações de status */}
+          {/* Status */}
           {!isCollapsed && (
             <div className="px-6 py-4 border-b border-emerald-300/10">
               <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-xl p-4 border border-emerald-300/20">
@@ -244,16 +260,21 @@ export function SidebarNavegacao() {
             </div>
           )}
 
-          {/* Links de navegação aprimorados */}
+          {/* Links de navegação */}
           <div className="flex-1 flex flex-col gap-4 p-4 mt-2">
             {links.map(({ href, label, icon: Icon, color, shadowColor }) => {
               const isActive = pathname === href;
+              const isLoading = loadingLink === href;
 
               return (
                 <Link
                   key={href}
                   href={href}
-                  onClick={() => setIsMobileOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLoadingLink(href);
+                    router.push(href);
+                  }}
                   className={`
                     group relative flex items-center rounded-2xl text-sm font-semibold
                     transition-all duration-700 ease-out transform hover:scale-[1.02] active:scale-95
@@ -266,10 +287,10 @@ export function SidebarNavegacao() {
                     }
                   `}
                 >
-                  {/* Efeito de ondulação */}
+                  {/* Efeito ondulação */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
 
-                  {/* Ícone aprimorado */}
+                  {/* Ícone */}
                   <div className="relative z-10 flex items-center">
                     <Icon
                       className={`
@@ -284,16 +305,19 @@ export function SidebarNavegacao() {
                     />
                   </div>
 
-                  {/* Label com animação */}
+                  {/* Label ou spinner */}
                   {!isCollapsed && (
                     <div className="ml-4 relative z-10 flex items-center justify-between flex-1">
                       <span className="tracking-wide whitespace-nowrap font-medium">
                         {label}
                       </span>
+                      {isLoading && (
+                        <Loader2 className="w-5 h-5 animate-spin text-white" />
+                      )}
                     </div>
                   )}
 
-                  {/* Tooltip melhorado para modo collapsed */}
+                  {/* Tooltip no modo collapsed */}
                   {isCollapsed && (
                     <div className="absolute left-20 bg-gradient-to-r from-slate-800/95 to-emerald-800/95 backdrop-blur-xl text-white px-4 py-3 rounded-xl text-sm font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 delay-500 border border-emerald-300/20 shadow-2xl whitespace-nowrap z-50">
                       <div className="flex items-center space-x-2">
@@ -303,7 +327,7 @@ export function SidebarNavegacao() {
                     </div>
                   )}
 
-                  {/* Borda interna com efeito neon */}
+                  {/* Borda interna */}
                   <div
                     className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
                       isActive
@@ -375,11 +399,19 @@ export function SidebarNavegacao() {
               {isDropdownOpen && !isCollapsed && (
                 <div className="absolute bottom-full left-0 right-0 mb-2 bg-gradient-to-br from-slate-800/95 to-emerald-800/95 backdrop-blur-xl rounded-2xl border border-emerald-300/20 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-2 duration-300">
                   <div className="p-2">
-                    {dropdownItems.map(({ icon: Icon, label, description, action, color, isDanger }) => (
-                      <button
-                        key={label}
-                        onClick={action}
-                        className={`
+                    {dropdownItems.map(
+                      ({
+                        icon: Icon,
+                        label,
+                        description,
+                        action,
+                        color,
+                        isDanger,
+                      }) => (
+                        <button
+                          key={label}
+                          onClick={action}
+                          className={`
                           group w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300
                           ${
                             isDanger
@@ -388,14 +420,19 @@ export function SidebarNavegacao() {
                           }
                           hover:scale-[1.02] active:scale-95
                         `}
-                      >
-                        <Icon className={`w-4 h-4 mr-3 ${color} group-hover:scale-110 transition-transform duration-300`} />
-                        <div className="flex-1 text-left">
-                          <div className="text-sm font-medium">{label}</div>
-                          <div className="text-xs text-white/50">{description}</div>
-                        </div>
-                      </button>
-                    ))}
+                        >
+                          <Icon
+                            className={`w-4 h-4 mr-3 ${color} group-hover:scale-110 transition-transform duration-300`}
+                          />
+                          <div className="flex-1 text-left">
+                            <div className="text-sm font-medium">{label}</div>
+                            <div className="text-xs text-white/50">
+                              {description}
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               )}
