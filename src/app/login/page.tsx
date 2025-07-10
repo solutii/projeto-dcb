@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { Lock, Mail, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
+import axios from "axios";
+import { Toaster }  from "@/components/ui/sonner";
+import { toast } from "sonner"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,15 +13,47 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulação de login
-    setTimeout(() => setIsLoading(false), 2000);
+
+    const result = await axios.post("api/authentication", {
+      LOGIN: '13894878000160',SENHA: password
+    })
+
+    if(result.data.sucesso === "F") {
+      toast("Erro ao realizar login", {
+        description: result.data.mensagem || "Verifique suas credenciais e tente novamente.",
+        duration: 5000,
+        icon: "❌",
+        style: {
+          backgroundColor: "#e53e3e",
+          color: "#fff",
+        },
+      });
+      setIsLoading(false);
+    }
+
+
+    if(result.data.sucesso === "T") {
+      toast("Login realizado com sucesso", {
+        description: "Bem-vindo(a) de volta!",
+        duration: 3000,
+        icon: "✅",
+        style: {
+          backgroundColor: "#38a169",
+          color: "#fff",
+        },
+      });
+      // Redirecionar ou realizar outra ação após o login bem-sucedido
+      setIsLoading(false);
+    }
+
   };
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
+      <Toaster />
       {/* Background com imagem e efeitos */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0">
