@@ -4,69 +4,34 @@ import { SidebarNavegacao } from "../Sidebar";
 import { TabelaPedidos } from "./Tabela_Pedidos";
 import { FiltrosTabelaPedidos } from "./Filtros_Tabela_Pedidos";
 // import { CardsTabelaPedidos } from "./Cards_Tabela_Pedidos";
-import { PedidosProps } from "./Colunas_Tabela_Pedidos";
-
-const dadosFicticios: PedidosProps[] = [
-  {
-    numero_pedido: "12345",
-    data_pedido: "2023-10-01",
-    valor: 150.0,
-    quantidade_itens: 3,
-    status: "Em separação",
-    previsao_entrega: "2023-10-05",
-    emSeparacao: 1,
-    faturado: 0,
-    emRota: 0,
-    entregue: 0,
-  },
-  {
-    numero_pedido: "12346",
-    data_pedido: "2023-10-02",
-    valor: 200.0,
-    quantidade_itens: 5,
-    status: "Faturado",
-    previsao_entrega: "2023-10-06",
-    emSeparacao: 0,
-    faturado: 1,
-    emRota: 0,
-    entregue: 0,
-  },
-  {
-    numero_pedido: "12347",
-    data_pedido: "2023-10-03",
-    valor: 300.0,
-    quantidade_itens: 2,
-    status: "Em rota",
-    previsao_entrega: "2023-10-07",
-    emSeparacao: 0,
-    faturado: 0,
-    emRota: 1,
-    entregue: 0,
-  },
-  {
-    numero_pedido: "12348",
-    data_pedido: "2023-10-04",
-    valor: 120.0,
-    quantidade_itens: 1,
-    status: "Entregue",
-    previsao_entrega: "2023-10-08",
-    emSeparacao: 0,
-    faturado: 0,
-    emRota: 0,
-    entregue: 1,
-  },
-];
+import { PedidoStatusType, PedidoType } from "@/types/pedido";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function LayoutPedidos() {
-  // const emSeparacao = dadosFicticios.filter(
-  //   (n) => n.status === "Em separação"
-  // ).length;
+  
+  const [pedido, setPedidos] = useState<PedidoType[]>([]);
+  
+  async function handleAccountsPayableData () {
+    const retorno = await axios.post('/api/order', {
+      CLIENTE: "003364",
+      LOJA: "01",
+      DATAINI: "20240701",
+      DATAFIM: "20250731"
+    })
 
-  // const faturado = dadosFicticios.filter((n) => n.status === "Faturado").length;
+    if (retorno.status !== 200) {
+      console.error("Erro ao buscar dados de contas a pagar");
+      return;
+    } 
 
-  // const emRota = dadosFicticios.filter((n) => n.status === "Em rota").length;
+    setPedidos(retorno.data.dados);
 
-  // const entregue = dadosFicticios.filter((n) => n.status === "Entregue").length;
+  }
+
+  useEffect(() => {
+    handleAccountsPayableData();
+  }, [])
 
   return (
     <div className="flex h-screen">
@@ -85,7 +50,7 @@ export function LayoutPedidos() {
                 emRota={emRota}
                 entregues={entregue}
               /> */}
-              <TabelaPedidos dados={dadosFicticios} />
+              <TabelaPedidos dados={pedido} />
             </div>
           </div>
         </div>

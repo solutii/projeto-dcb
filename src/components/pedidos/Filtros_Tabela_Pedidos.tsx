@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { PedidoStatusLabel } from "@/types/pedido";
 
 export function FiltrosTabelaPedidos() {
   const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
@@ -131,9 +132,13 @@ export function FiltrosTabelaPedidos() {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="Pagas">Pagas</SelectItem>
-              <SelectItem value="Em Aberto">Em Aberto</SelectItem>
+              {
+                Object.entries(PedidoStatusLabel).map(([key, value]) => 
+                  <SelectItem key={key} value={key}>
+                    {value}
+                  </SelectItem>
+                )
+              }
             </SelectContent>
           </Select>
         </div>

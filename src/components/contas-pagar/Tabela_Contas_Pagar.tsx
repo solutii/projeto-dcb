@@ -12,9 +12,10 @@ import {
   ContasPagarProps,
 } from "./Colunas_Tabela_Contas_Pagar";
 import { MobileCard } from "./MobileCard";
+import { ContasAPagarType } from "@/types/financeiro";
 
 interface TabelaContasPagarProps {
-  dados: ContasPagarProps[];
+  dados: ContasAPagarType[];
 }
 
 export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
@@ -24,9 +25,9 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const totalValor = dados.reduce((acc, item) => acc + item.valor, 0);
-  const totalJuros = dados.reduce((acc, item) => acc + item.juros, 0);
-  const totalMulta = dados.reduce((acc, item) => acc + item.multa, 0);
+  const totalValor = dados.reduce((acc, item) => acc + item.E1_VALOR, 0);
+  const totalJuros = dados.reduce((acc, item) => acc + item.E1_JUROS, 0);
+  const totalMulta = dados.reduce((acc, item) => acc + item.E1_MULTA, 0);
 
   return (
     <>

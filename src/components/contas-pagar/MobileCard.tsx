@@ -16,19 +16,22 @@ import { Button } from "@/components/ui/button";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { StatusBadge } from "./Colunas_Tabela_Contas_Pagar";
+import { ContasAPagarType } from "@/types/financeiro";
 
-export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
+export const MobileCard = ({ row }: { row: Row<ContasAPagarType> }) => {
   const [expanded, setExpanded] = useState(false);
   const data = row.original;
 
   const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split("T")[0].split("-");
+    const match = dateString.match(/(\d{4})(\d{2})(\d{2})/);
+    if (!match) return dateString;
+    const [_, year, month, day] = match;
     return `${day}/${month}/${year}`;
   };
 
-  const isOverdue = new Date(data.data_vencimento) < new Date();
-  const hasJuros = data.juros > 0;
-  const hasMulta = data.multa > 0;
+  const isOverdue = new Date(data.E1_VENCREA.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3 00:00")) < new Date();
+  const hasJuros = data.E1_JUROS > 0;
+  const hasMulta = data.E1_MULTA > 0;
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -40,14 +43,14 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
             </div>
             <div>
               <div className="font-bold text-gray-900">
-                NF #{data.numero_nf}
+                NF #{data.E1_NUM}
               </div>
               <div className="text-sm text-gray-800">
-                {formatDate(data.data_emissao)}
+                {formatDate(data.E1_EMISSAO)}
               </div>
             </div>
           </div>
-          <StatusBadge status={data.status} />
+          <StatusBadge status={data.STATUS} />
         </div>
       </div>
 
@@ -58,7 +61,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
             <span className="text-sm font-medium text-green-600">Valor</span>
           </div>
           <div className="text-2xl font-bold text-green-700">
-            R$ {data.valor.toFixed(2)}
+            R$ {data.E1_VALOR.toFixed(2)}
           </div>
         </div>
 
@@ -80,7 +83,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
               isOverdue ? "text-red-700" : "text-blue-700"
             }`}
           >
-            {formatDate(data.data_vencimento)}
+            {formatDate(data.E1_VENCREA)}
             {isOverdue && <span className="ml-2 text-sm">(Vencido)</span>}
           </div>
         </div>
@@ -93,7 +96,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
                   Juros
                 </div>
                 <div className="text-lg font-bold text-yellow-700">
-                  R$ {data.juros.toFixed(2)}
+                  R$ {data.E1_JUROS.toFixed(2)}
                 </div>
               </div>
             )}
@@ -103,7 +106,7 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
                   Multa
                 </div>
                 <div className="text-lg font-bold text-red-700">
-                  R$ {data.multa.toFixed(2)}
+                  R$ {data.E1_MULTA.toFixed(2)}
                 </div>
               </div>
             )}
@@ -135,13 +138,13 @@ export const MobileCard = ({ row }: { row: Row<ContasPagarProps> }) => {
               <div>
                 <span className="text-gray-800">Emissão:</span>
                 <div className="font-medium">
-                  {formatDate(data.data_emissao)}
+                  {formatDate(data.E1_EMISSAO)}
                 </div>
               </div>
               <div>
                 <span className="text-gray-800">Total:</span>
                 <div className="font-bold text-green-600">
-                  R$ {(data.valor + data.juros + data.multa).toFixed(2)}
+                  R$ {(data.E1_VALOR + data.E1_JUROS + data.E1_MULTA).toFixed(2)}
                 </div>
               </div>
             </div>
