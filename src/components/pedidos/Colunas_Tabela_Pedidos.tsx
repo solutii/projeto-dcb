@@ -6,41 +6,29 @@ import { Button } from "@/components/ui/button";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import { CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
-
-export interface PedidosProps {
-  numero_pedido: string;
-  data_pedido: string;
-  valor: number;
-  quantidade_itens: number;
-  status: string;
-  previsao_entrega: string;
-  emSeparacao: number;
-  faturado: number;
-  emRota: number;
-  entregue: number;
-}
+import { PedidoType } from "@/types/pedido";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
-    "EM SEPARACAO": {
+    "1": {
       icon: PackageOpen,
       style: "bg-blue-500 text-white",
       bgMobile: "bg-blue-50 border-blue-200",
       textMobile: "text-blue-700",
     },
-    FATURADO: {
+    "2": {
       icon: Clock,
       style: "bg-yellow-500 text-black",
       bgMobile: "bg-yellow-50 border-yellow-200",
       textMobile: "text-yellow-700",
     },
-    "EM ROTA": {
+    "3": {
       icon: Truck,
       style: "bg-purple-500 text-white",
       bgMobile: "bg-purple-50 border-purple-200",
       textMobile: "text-purple-700",
     },
-    ENTREGUE: {
+    "4": {
       icon: CircleCheck,
       style: "bg-green-400 text-black",
       bgMobile: "bg-green-50 border-green-200",
@@ -50,7 +38,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
 
   const config =
     configs[status.toUpperCase() as keyof typeof configs] ||
-    configs["EM SEPARACAO"];
+    configs['1'];
   const Icon = config.icon;
 
   return (
@@ -76,9 +64,9 @@ export const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
+export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
   {
-    accessorKey: "numero_pedido",
+    accessorKey: "C5_NUM",
     header: "Pedido nº",
     cell: ({ getValue }) => (
       <div className="font-bold text-gray-800 italic">
@@ -87,18 +75,19 @@ export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
     ),
   },
   {
-    accessorKey: "data_pedido",
+    accessorKey: "C5_EMISSAO",
     header: "Data Pedido",
     cell: ({ getValue }) => {
-      const date = getValue() as string;
-      const [year, month, day] = date.split("T")[0].split("-");
+      const date: any = getValue() as string;
+
+      const [year, month, day] = date.split("/").reverse();
       return (
         <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
       );
     },
   },
   {
-    accessorKey: "valor",
+    accessorKey: "TOTAL",
     header: "Valor",
     cell: ({ getValue }) => (
       <div className="font-bold text-green-500 italic">
@@ -106,8 +95,8 @@ export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
       </div>
     ),
   },
-  {
-    accessorKey: "quantidade_itens",
+ /*  {
+    accessorKey: "C5_QTDE",
     header: "Itens",
     cell: ({ getValue }) => {
       const quantidade = getValue() as number;
@@ -117,14 +106,14 @@ export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
         </div>
       );
     },
-  },
+  }, */
   {
-    accessorKey: "status",
+    accessorKey: "STATUS",
     header: "Status",
     cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
   },
-  {
-    accessorKey: "previsao_entrega",
+  /* {
+    accessorKey: "C5_PREV_ENTREGA",
     header: "Previsão Entrega",
     cell: ({ getValue }) => {
       const date = getValue() as string;
@@ -133,7 +122,7 @@ export const colunasTabelaContasPagar: ColumnDef<PedidosProps>[] = [
         <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
       );
     },
-  },
+  }, */
   {
     id: "acoes",
     header: "Ações",

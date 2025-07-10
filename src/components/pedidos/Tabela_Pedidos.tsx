@@ -9,12 +9,12 @@ import {
 import { PackageOpen, Clock, Truck, CircleCheck } from "lucide-react";
 import {
   colunasTabelaContasPagar,
-  PedidosProps,
 } from "./Colunas_Tabela_Pedidos";
+import { PedidoType } from "@/types/pedido";
 // import { MobileCard } from "./Mobile_Card_Pedidos";
 
 interface TabelaContasPagarProps {
-  dados: PedidosProps[];
+  dados: PedidoType[];
 }
 
 export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
@@ -24,28 +24,27 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const totalEmSeparação = dados.reduce(
+  /* const totalEmSeparação = dados.reduce(
     (acc, item) => acc + item.emSeparacao,
     0
   );
   const totalFaturado = dados.reduce((acc, item) => acc + item.faturado, 0);
   const totalEmRota = dados.reduce((acc, item) => acc + item.emRota, 0);
-  const totalEntregue = dados.reduce((acc, item) => acc + item.entregue, 0);
+  const totalEntregue = dados.reduce((acc, item) => acc + item.entregue, 0); */
 
   return (
     <>
       {/* TABELA */}
-      <div className="flex flex-col h-[68vh] overflow-hidden rounded-lg  bg-white shadow-md shadow-black">
+      <div className="flex flex-col h-[82vh] overflow-hidden rounded-lg  bg-white shadow-md shadow-black">
         {/* Cabeçalho da tabela */}
         <div className="bg-black/80 p-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold text-white tracking-wide">
-              Contas a Pagar
+              Pedidos
             </h3>
           </div>
         </div>
 
-        {/* Corpo com rolagem interna */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           <table className="w-full border-separate border-spacing-0 text-sm">
             <thead className="sticky top-0 z-10">
@@ -114,8 +113,8 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
       </div> */}
 
       {/* CARDS TOTALIZADORES */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6 ">
-        {/* Card total em separação */}
+      {/* <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6 ">
+
         <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-500"></div>
           <div className="p-6">
@@ -135,7 +134,7 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
           </div>
         </div>
 
-        {/* Card Total Juros */}
+
         <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-yellow-500"></div>
           <div className="p-6">
@@ -155,7 +154,6 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
           </div>
         </div>
 
-        {/* Card Total Multa */}
         <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-purple-500"></div>
           <div className="p-6">
@@ -175,7 +173,6 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
           </div>
         </div>
 
-        {/* Card Total Entregue */}
         <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-green-500"></div>
           <div className="p-6">
@@ -194,7 +191,7 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

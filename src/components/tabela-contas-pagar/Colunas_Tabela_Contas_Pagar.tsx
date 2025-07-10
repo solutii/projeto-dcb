@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
-import { ContasAPagarType } from "@/types/financeiro";
+import { ContasAPagarType, ContasAPagarStatus } from "@/types/financeiro";
+
 
 export interface ContasPagarProps {
   status: string;
@@ -20,28 +21,34 @@ export interface ContasPagarProps {
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
-    PAGO: {
+    "3": {
       icon: CheckCircle,
       style: "bg-green-400 text-black",
       bgMobile: "bg-emerald-50 border-emerald-200",
       textMobile: "text-emerald-700",
     },
-    PENDENTE: {
+    "2": {
+      icon: CheckCircle,
+      style: "bg-green-400 text-black",
+      bgMobile: "bg-emerald-50 border-emerald-200",
+      textMobile: "text-emerald-700",
+    },
+    "0": {
       icon: Clock,
       style: "bg-yellow-400 text-black",
       bgMobile: "bg-amber-50 border-amber-200",
       textMobile: "text-amber-700",
     },
-    VENCIDO: {
+    "1": {
       icon: AlertTriangle,
       style: "bg-red-400 text-black",
       bgMobile: "bg-red-50 border-red-200",
       textMobile: "text-red-700",
-    },
+    }
   };
 
   const config =
-    configs[status.toUpperCase() as keyof typeof configs] || configs.PENDENTE;
+    configs[status.toUpperCase() as keyof typeof configs] || configs[1];
   const Icon = config.icon;
 
   return (
@@ -51,7 +58,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
           className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold ${config.style} shadow-lg`}
         >
           <Icon className="w-3 h-3" />
-          {status}
+          {ContasAPagarStatus[status] || "Status Desconhecido"}
         </div>
       </div>
 
@@ -60,7 +67,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
           <Icon className={`w-4 h-4 ${config.textMobile}`} />
         </div>
         <span className={`text-sm font-semibold ${config.textMobile}`}>
-          {status}
+          {ContasAPagarStatus[status] || "Status Desconhecido"}
         </span>
       </div>
     </>
@@ -71,7 +78,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasAPagarType>[] = [
   {
     accessorKey: "STATUS",
     header: "Status",
-    cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
+    cell: ({ getValue }) => <StatusBadge status={ getValue()  as string} />,
   },
   {
     accessorKey: "E1_NUM",

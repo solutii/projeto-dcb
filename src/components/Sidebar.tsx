@@ -73,23 +73,23 @@ export function SidebarNavegacao() {
       color: "from-purple-800 to-blue-800",
       shadowColor: "shadow-violet-500/30",
     },
-    {
+    /* {
       href: "/notas-fiscais",
       label: "Notas Fiscais",
       icon: Receipt,
       color: "from-purple-800 to-blue-800",
       shadowColor: "shadow-black",
-    },
+    }, */
   ];
 
   const dropdownItems = [
-    {
+    /* {
       icon: User,
       label: "Perfil do Usuário",
       description: "João Silva",
       action: () => console.log("Perfil"),
       color: "text-emerald-400",
-    },
+    }, */
     {
       icon: Key,
       label: "Alterar Senha",
@@ -97,20 +97,20 @@ export function SidebarNavegacao() {
       action: () => console.log("Alterar senha"),
       color: "text-blue-400",
     },
-    {
+    /* {
       icon: Bell,
       label: "Notificações",
       description: "Configurar alertas",
       action: () => console.log("Notificações"),
       color: "text-yellow-400",
-    },
-    {
+    }, */
+    /* {
       icon: HelpCircle,
       label: "Suporte",
       description: "Central de ajuda",
       action: () => console.log("Suporte"),
       color: "text-purple-400",
-    },
+    }, */
     {
       icon: LogOut,
       label: "Fazer Logout",
@@ -409,7 +409,8 @@ export function SidebarNavegacao() {
                 {/* Redes sociais aprimoradas */}
                 <div className="flex items-center justify-center gap-3">
                   <Link
-                    href="#"
+                    target="_blank"
+                    href="https://www.instagram.com/dcb_distribuidora/"
                     className="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center text-white hover:from-pink-600 hover:to-rose-600 transition-all duration-500 shadow-lg hover:shadow-pink-500/30 hover:scale-110 active:scale-95 group"
                   >
                     <FaInstagram
@@ -418,7 +419,8 @@ export function SidebarNavegacao() {
                     />
                   </Link>
                   <Link
-                    href="#"
+                    target="_blank"
+                    href="https://www.facebook.com/distribuidoracirurgicabrasileira/"
                     className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-500 shadow-lg hover:shadow-blue-500/30 hover:scale-110 active:scale-95 group"
                   >
                     <FaFacebook
@@ -427,7 +429,8 @@ export function SidebarNavegacao() {
                     />
                   </Link>
                   <Link
-                    href="#"
+                    target="_blank"
+                    href="https://www.linkedin.com/company/dcb-distribuidora-cirurgica-brasileira"
                     className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white hover:from-blue-600 hover:to-blue-700 transition-all duration-500 shadow-lg hover:shadow-blue-500/30 hover:scale-110 active:scale-95 group"
                   >
                     <FaLinkedin

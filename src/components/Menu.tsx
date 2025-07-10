@@ -25,12 +25,12 @@ export function MenuNavegacao() {
       icon: ShoppingCart,
       color: "from-green-500 to-green-700",
     },
-    {
+    /* {
       href: "/notas-fiscais",
       label: "Notas Fiscais",
       icon: Receipt,
       color: "from-orange-500 to-orange-700",
-    },
+    }, */
   ];
 
   return (

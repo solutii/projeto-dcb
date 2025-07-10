@@ -1,3 +1,16 @@
+type PedidoStatusType = '0' | '1' | '2' | '3' | '4' | '5' | '7' | '8'
+
+const PedidoStatusLabel: { [k in PedidoStatusType]: string} = {
+  "0": "Em Aberto",
+  "1": "Encerrado",
+  "2": "Liberado - Blq. Crédito/Estoque",
+  "3": "Liberado - Sem Bloqueio",
+  "4": "com Bloqueio de Regra",
+  "5": "com Bloqueio de Verba",
+  "7": "Parcialmente Faturado",
+  "8": "Totalmente Faturado"
+}
+
 type PedidoType = {
     C5_NUM: string
     C5_TIPO: string
@@ -33,5 +46,7 @@ type ItemPedidoType = {
 
 export {
     type PedidoType,
-    type ItemPedidoType
+    type PedidoStatusType,
+    type ItemPedidoType,
+    PedidoStatusLabel
 }

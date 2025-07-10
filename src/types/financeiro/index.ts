@@ -1,4 +1,4 @@
-const ContasAPagarStatus = {
+const ContasAPagarStatus: any = {
     '0': 'Título em Aberto',
     '1': 'Título em Aberto e Atrasado',
     '2': 'Título Baixado Parcialmente',
