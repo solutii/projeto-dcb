@@ -104,7 +104,7 @@ export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
 
       return (
         <div className="flex justify-center gap-2">
-          <ModalDetalhesPedidoAsync pedido={pedido} itens={[]} />
+          <ModalDetalhesPedidoAsync pedido={pedido} />
         </div>
       );
     },

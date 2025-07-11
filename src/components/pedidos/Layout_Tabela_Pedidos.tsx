@@ -4,7 +4,7 @@ import { SidebarNavegacao } from "../Sidebar";
 import { TabelaPedidos } from "./Tabela_Pedidos";
 import { FiltrosTabelaPedidos } from "./Filtros_Tabela_Pedidos";
 // import { CardsTabelaPedidos } from "./Cards_Tabela_Pedidos";
-import { PedidoStatusType, PedidoType } from "@/types/pedido";
+import { PedidoType } from "@/types/pedido";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -17,7 +17,8 @@ export function LayoutPedidos() {
       CLIENTE: "003364",
       LOJA: "01",
       DATAINI: "20240701",
-      DATAFIM: "20250731"
+      DATAFIM: "20250731",
+      FILIAL: "01",
     })
 
     if (retorno.status !== 200) {
