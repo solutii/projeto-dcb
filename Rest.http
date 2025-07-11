@@ -1,4 +1,4 @@
-### TESTAR LOGIN
+### REALIZAR LOGIN
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -7,7 +7,9 @@ Content-Type: application/json
   "SENHA": "XPTO"
 }
 
-### TESTAR TODOS OS PEDIDOS
+# ----------------------------------------------------------
+
+### BUSCAR TODOS OS PEDIDOS
 POST http://localhost:3000/api/order
 Content-Type: application/json
 
@@ -19,29 +21,10 @@ Content-Type: application/json
   "LOJA": "01"
 }
 
-###
-POST http://localhost:3000/api/accounts-payable
-Content-Type: application/json
+# ----------------------------------------------------------
 
-{
-  "CLIENTE": "003364",
-  "DATAINI": "20240701",
-  "DATAFIM": "20250731",
-  "FILIAL": "01",
-  "LOJA": "01"
-}
 
-### Buscar todos os itens
-GET http://localhost:3000/api/itens?cliente=003364&filial=01&loja=01
+### BUSCAR TODOS OS ITENS
+POST http://localhost:3000/api/itens-pedido?cliente=003364&filial=0101&loja=01
 
-###
-POST http://localhost:8076/REST
-Authorization: Basic base64(solutii.sistemas:Solutii@2025)
-Content-Type: application/json
-
-{
-  "PEDIDO": "072094",
-  "CLIENTE": "003364",
-  "FILIAL": "01",
-  "LOJA": "01"
-}
+# ----------------------------------------------------------

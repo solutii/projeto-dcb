@@ -1,4 +1,3 @@
-// components/ModalDetalhesPedidoAsync.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,7 +24,6 @@ import { buscarItensPedido, ItemPedido } from "../../lib/pedidoService";
 
 interface ModalDetalhesPedidoAsyncProps {
   pedido: PedidoType;
-  itens: ItemPedido[];
 }
 
 export const ModalDetalhesPedidoAsync = ({
@@ -37,26 +35,44 @@ export const ModalDetalhesPedidoAsync = ({
   const [error, setError] = useState<string | null>(null);
 
   const carregarItens = async () => {
-
-    console.log('Carregando itens para pedido:', pedido.C5_NUM);
-console.log('Parâmetros:', {
-  cliente: pedido.C5_CLIENTE,
-  filial: pedido.C5_FILIAL,
-  loja: pedido.C5_LOJACLI,
-});
     try {
       setLoading(true);
       setError(null);
 
-      // Passa os dados necessários para o serviço
-      const itensCarregados = await buscarItensPedido(
-        pedido.C5_NUM,
-        pedido.C5_CLIENTE,
-        pedido.C5_FILIAL, // Assumindo que existe este campo
-        pedido.C5_LOJACLI
-      );
-      
-      setItens(itensCarregados);
+      console.log("==== Debug: carregando itens para pedido ====");
+      console.log("Pedido recebido:", pedido);
+
+      console.log("Parâmetros usados para buscar itens:", {
+  numeroPedido: pedido.C5_NUM,
+  cliente: pedido.C5_CLIENTE,
+  filial: pedido.C5_FILIAL, // <- corrigido
+  loja: pedido.C5_LOJACLI,
+});
+
+      const filialCorrigida = pedido.C5_FILIAL.padStart(4, "0");
+
+const itensBrutos = await buscarItensPedido(
+  pedido.C5_NUM,
+  pedido.C5_CLIENTE,
+  filialCorrigida,  // ← corrigido aqui
+  pedido.C5_LOJACLI
+);
+
+      console.log("Itens brutos recebidos do service:", itensBrutos);
+
+      const itensFormatados: ItemPedido[] = itensBrutos.map((item: any) => ({
+        item: item.numeroItem || item.C6_ITEM || "—",
+        codigoProduto: item.codigoProduto || item.C6_PRODUTO || "—",
+        quantidade:
+          Number(item.quantidade) || Number(item.quantidadeVendida) || 0,
+        valorUnitario:
+          Number(item.valorUnitario) || Number(item.precoUnitario) || 0,
+        total: Number(item.total) || Number(item.valorTotal) || 0,
+      }));
+
+      console.log("Itens formatados para exibição:", itensFormatados);
+
+      setItens(itensFormatados);
     } catch (err) {
       setError("Erro ao carregar itens do pedido");
       console.error("Erro ao carregar itens:", err);
@@ -76,13 +92,11 @@ console.log('Parâmetros:', {
 
   const formatarData = (data: string) => {
     if (!data || data.includes(" / / ")) return "Data não informada";
-    
-    // Se a data já estiver no formato DD/MM/YYYY, retorna como está
+
     if (data.includes("/") && data.length === 10) {
       return data;
     }
-    
-    // Se estiver em outro formato, tenta converter
+
     const [day, month, year] = data.split("/");
     return `${day}/${month}/${year}`;
   };
@@ -94,6 +108,7 @@ console.log('Parâmetros:', {
           variant="ghost"
           size="sm"
           className="text-blue-500 hover:bg-blue-100 hover:text-blue-700 transition-colors"
+          aria-label={`Detalhes do pedido ${pedido.C5_NUM}`}
         >
           <Eye className="w-4 h-4" />
         </Button>
@@ -145,6 +160,10 @@ console.log('Parâmetros:', {
                 </Button>
               </div>
             </div>
+          ) : itens.length === 0 ? (
+            <div className="text-center py-8 text-gray-500 font-medium">
+              Nenhum item encontrado para este pedido
+            </div>
           ) : (
             <>
               {/* Tabela de itens */}
@@ -153,67 +172,41 @@ console.log('Parâmetros:', {
                   <TableHeader>
                     <TableRow className="bg-gray-50">
                       <TableHead className="font-semibold">Item</TableHead>
-                      <TableHead className="font-semibold">
-                        Código Produto
-                      </TableHead>
-                      <TableHead className="text-right font-semibold">
-                        Quantidade
-                      </TableHead>
-                      <TableHead className="text-right font-semibold">
-                        Valor Unitário
-                      </TableHead>
-                      <TableHead className="text-right font-semibold">
-                        Total
-                      </TableHead>
+                      <TableHead className="font-semibold">Código Produto</TableHead>
+                      <TableHead className="text-right font-semibold">Quantidade</TableHead>
+                      <TableHead className="text-right font-semibold">Valor Unitário</TableHead>
+                      <TableHead className="text-right font-semibold">Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {itens.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                          Nenhum item encontrado para este pedido
+                    {itens.map((item, index) => (
+                      <TableRow key={index} className="hover:bg-gray-50">
+                        <TableCell className="font-medium text-gray-800">{item.item}</TableCell>
+                        <TableCell className="text-gray-600">{item.codigoProduto}</TableCell>
+                        <TableCell className="text-right text-gray-800">{item.quantidade}</TableCell>
+                        <TableCell className="text-right text-gray-800">
+                          R$ {item.valorUnitario.toFixed(2)}
+                        </TableCell>
+                        <TableCell className="text-right font-semibold text-green-600">
+                          R$ {item.total.toFixed(2)}
                         </TableCell>
                       </TableRow>
-                    ) : (
-                      itens.map((item, index) => (
-                        <TableRow key={index} className="hover:bg-gray-50">
-                          <TableCell className="font-medium text-gray-800">
-                            {item.item}
-                          </TableCell>
-                          <TableCell className="text-gray-600">
-                            {item.codigoProduto}
-                          </TableCell>
-                          <TableCell className="text-right text-gray-800">
-                            {item.quantidade}
-                          </TableCell>
-                          <TableCell className="text-right text-gray-800">
-                            R$ {item.valorUnitario.toFixed(2)}
-                          </TableCell>
-                          <TableCell className="text-right font-semibold text-green-600">
-                            R$ {item.total.toFixed(2)}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
+                    ))}
                   </TableBody>
                 </Table>
               </div>
 
               {/* Card com valor total */}
-              {itens.length > 0 && (
-                <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-semibold text-green-800">
-                        Total do Pedido:
-                      </span>
-                      <span className="text-3xl font-bold text-green-600">
-                        R$ {valorTotalPedido.toFixed(2)}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-semibold text-green-800">Total do Pedido:</span>
+                    <span className="text-3xl font-bold text-green-600">
+                      R$ {valorTotalPedido.toFixed(2)}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
             </>
           )}
         </div>

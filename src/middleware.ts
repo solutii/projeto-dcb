@@ -23,6 +23,5 @@ export const config = {
     // "/dashboard",
     // "/contas-pagar",
     // "/pedidos",
-    // Adicione outras rotas protegidas aqui
   ],
 };

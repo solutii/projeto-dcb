@@ -7,7 +7,7 @@ import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_C
 import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_Chart";
 
 // import { TrendingUp, Package, Calendar } from "lucide-react";
-import { SidebarNavegacao } from "../Sidebar";
+import { SidebarNavegacao } from "../../components/sidebar/Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
 
 // Mock Data

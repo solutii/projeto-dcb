@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarNavegacao } from "../Sidebar";
+import { SidebarNavegacao } from "../../components/sidebar/Sidebar";
 import { TabelaPedidos } from "./Tabela_Pedidos";
 import { FiltrosTabelaPedidos } from "./Filtros_Tabela_Pedidos";
 // import { CardsTabelaPedidos } from "./Cards_Tabela_Pedidos";
