@@ -25,6 +25,7 @@ type PedidoType = {
     C5_EMISSAO: string
     C5_FECENT: string
     E4_DESCRI: string
+    C5_FILIAL: string
     TOTAL: number
     FATURADO: number
     STATUS: string

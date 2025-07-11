@@ -6,3 +6,43 @@ Content-Type: application/json
   "LOGIN": "13894878000160",
   "SENHA": "XPTO"
 }
+
+###
+POST http://localhost:3000/api/order
+Content-Type: application/json
+
+{
+  "CLIENTE": "003364",
+  "DATAINI": "20240701",
+  "DATAFIM": "20250731",
+  "FILIAL": "01",
+  "LOJA": "01"
+}
+
+###
+POST http://localhost:3000/api/accounts-payable
+Content-Type: application/json
+
+{
+  "CLIENTE": "003364",
+  "DATAINI": "20240701",
+  "DATAFIM": "20250731",
+  "FILIAL": "01",
+  "LOJA": "01"
+}
+
+###
+### Buscar itens do pedido
+GET http://localhost:3000/api/order/072094?cliente=003364&filial=01&loja=01
+
+###
+POST http://localhost:8076/REST
+Authorization: Basic base64(solutii.sistemas:Solutii@2025)
+Content-Type: application/json
+
+{
+  "PEDIDO": "072094",
+  "CLIENTE": "003364",
+  "FILIAL": "01",
+  "LOJA": "01"
+}

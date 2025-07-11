@@ -9,10 +9,23 @@ export interface ItemPedido {
 }
 
 // Função para buscar itens do pedido
-export const buscarItensPedido = async (numeroPedido: string): Promise<ItemPedido[]> => {
+export const buscarItensPedido = async (
+  numeroPedido: string,
+  cliente?: string,
+  filial?: string,
+  loja?: string
+): Promise<ItemPedido[]> => {
   try {
-    // Substitua pela sua API real
-    const response = await fetch(`/api/pedidos/${numeroPedido}/itens`);
+    // Constrói a URL com os parâmetros necessários
+    const params = new URLSearchParams();
+    if (cliente) params.append('cliente', cliente);
+    if (filial) params.append('filial', filial);
+    if (loja) params.append('loja', loja);
+    
+    const queryString = params.toString();
+    const url = `/api/order/${numeroPedido}${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url);
     
     if (!response.ok) {
       throw new Error('Erro ao buscar itens do pedido');
@@ -25,21 +38,11 @@ export const buscarItensPedido = async (numeroPedido: string): Promise<ItemPedid
     
     // Retorna dados mock em caso de erro (remova em produção)
     return [
-      {
-        item: "001",
-        codigoProduto: "PROD001",
-        quantidade: 2,
-        valorUnitario: 25.50,
-        total: 51.00,
-      },
-      {
-        item: "002",
-        codigoProduto: "PROD002",
-        quantidade: 1,
-        valorUnitario: 15.00,
-        total: 15.00,
-      },
     ];
   }
 };
 
+// Função auxiliar para formatar números com zeros à esquerda
+export const formatarComZeros = (valor: string | number, tamanho: number): string => {
+  return String(valor).padStart(tamanho, '0');
+};

@@ -37,14 +37,25 @@ export const ModalDetalhesPedidoAsync = ({
   const [error, setError] = useState<string | null>(null);
 
   const carregarItens = async () => {
+
+    console.log('Carregando itens para pedido:', pedido.C5_NUM);
+console.log('Parâmetros:', {
+  cliente: pedido.C5_CLIENTE,
+  filial: pedido.C5_FILIAL,
+  loja: pedido.C5_LOJACLI,
+});
     try {
       setLoading(true);
       setError(null);
 
-      // Simula um delay para mostrar o loading
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const itensCarregados = await buscarItensPedido(pedido.C5_NUM);
+      // Passa os dados necessários para o serviço
+      const itensCarregados = await buscarItensPedido(
+        pedido.C5_NUM,
+        pedido.C5_CLIENTE,
+        pedido.C5_FILIAL, // Assumindo que existe este campo
+        pedido.C5_LOJACLI
+      );
+      
       setItens(itensCarregados);
     } catch (err) {
       setError("Erro ao carregar itens do pedido");
@@ -64,7 +75,15 @@ export const ModalDetalhesPedidoAsync = ({
   const valorTotalPedido = itens.reduce((acc, item) => acc + item.total, 0);
 
   const formatarData = (data: string) => {
-    const [year, month, day] = data.split("/").reverse();
+    if (!data || data.includes(" / / ")) return "Data não informada";
+    
+    // Se a data já estiver no formato DD/MM/YYYY, retorna como está
+    if (data.includes("/") && data.length === 10) {
+      return data;
+    }
+    
+    // Se estiver em outro formato, tenta converter
+    const [day, month, year] = data.split("/");
     return `${day}/${month}/${year}`;
   };
 
@@ -79,7 +98,7 @@ export const ModalDetalhesPedidoAsync = ({
           <Eye className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-800">
             Detalhes do Pedido #{pedido.C5_NUM}
@@ -88,12 +107,16 @@ export const ModalDetalhesPedidoAsync = ({
 
         <div className="space-y-6">
           {/* Informações do pedido */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
             <div>
               <p className="text-sm text-gray-600 mb-1">Data do Pedido:</p>
               <p className="font-semibold text-gray-800">
                 {formatarData(pedido.C5_EMISSAO)}
               </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Cliente:</p>
+              <p className="font-semibold text-gray-800">{pedido.C5_CLIENTE}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600 mb-1">Status:</p>
@@ -145,42 +168,52 @@ export const ModalDetalhesPedidoAsync = ({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {itens.map((item, index) => (
-                      <TableRow key={index} className="hover:bg-gray-50">
-                        <TableCell className="font-medium text-gray-800">
-                          {item.item}
-                        </TableCell>
-                        <TableCell className="text-gray-600">
-                          {item.codigoProduto}
-                        </TableCell>
-                        <TableCell className="text-right text-gray-800">
-                          {item.quantidade}
-                        </TableCell>
-                        <TableCell className="text-right text-gray-800">
-                          R$ {item.valorUnitario.toFixed(2)}
-                        </TableCell>
-                        <TableCell className="text-right font-semibold text-green-600">
-                          R$ {item.total.toFixed(2)}
+                    {itens.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                          Nenhum item encontrado para este pedido
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      itens.map((item, index) => (
+                        <TableRow key={index} className="hover:bg-gray-50">
+                          <TableCell className="font-medium text-gray-800">
+                            {item.item}
+                          </TableCell>
+                          <TableCell className="text-gray-600">
+                            {item.codigoProduto}
+                          </TableCell>
+                          <TableCell className="text-right text-gray-800">
+                            {item.quantidade}
+                          </TableCell>
+                          <TableCell className="text-right text-gray-800">
+                            R$ {item.valorUnitario.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right font-semibold text-green-600">
+                            R$ {item.total.toFixed(2)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
 
               {/* Card com valor total */}
-              <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold text-green-800">
-                      Total do Pedido:
-                    </span>
-                    <span className="text-3xl font-bold text-green-600">
-                      R$ {valorTotalPedido.toFixed(2)}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
+              {itens.length > 0 && (
+                <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-semibold text-green-800">
+                        Total do Pedido:
+                      </span>
+                      <span className="text-3xl font-bold text-green-600">
+                        R$ {valorTotalPedido.toFixed(2)}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </>
           )}
         </div>

@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   FileText,
   ShoppingCart,
-  Receipt,
   Menu,
   X,
   ChevronRight,
@@ -15,18 +14,32 @@ import {
   Activity,
   Sparkles,
   Settings,
-  User,
   Key,
   LogOut,
   ChevronDown,
-  Bell,
-  HelpCircle,
   Loader2,
 } from "lucide-react";
 import { FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { logoutClient } from "@/lib/logout";
+import ModalAlterarSenha from "./Modal_Alterar_Senha";
+
+// Interfaces para tipagem
+interface PasswordChangeData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+interface DropdownItem {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  label: string;
+  description: string;
+  action: () => void;
+  color: string;
+  isDanger?: boolean;
+}
 
 export function SidebarNavegacao() {
   const pathname = usePathname();
@@ -37,6 +50,8 @@ export function SidebarNavegacao() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loadingLink, setLoadingLink] = useState<string | null>(null);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] =
+    useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -89,44 +104,16 @@ export function SidebarNavegacao() {
       color: "from-purple-800 to-blue-800",
       shadowColor: "shadow-violet-500/30",
     },
-    /* {
-      href: "/notas-fiscais",
-      label: "Notas Fiscais",
-      icon: Receipt,
-      color: "from-purple-800 to-blue-800",
-      shadowColor: "shadow-black",
-    }, */
   ];
 
-  const dropdownItems = [
-    /* {
-      icon: User,
-      label: "Perfil do Usuário",
-      description: "João Silva",
-      action: () => console.log("Perfil"),
-      color: "text-emerald-400",
-    }, */
+  const dropdownItems: DropdownItem[] = [
     {
       icon: Key,
       label: "Alterar Senha",
       description: "Segurança da conta",
-      action: () => console.log("Alterar senha"),
+      action: () => setIsPasswordModalOpen(true),
       color: "text-blue-400",
     },
-    /* {
-      icon: Bell,
-      label: "Notificações",
-      description: "Configurar alertas",
-      action: () => console.log("Notificações"),
-      color: "text-yellow-400",
-    }, */
-    /* {
-      icon: HelpCircle,
-      label: "Suporte",
-      description: "Central de ajuda",
-      action: () => console.log("Suporte"),
-      color: "text-purple-400",
-    }, */
     {
       icon: LogOut,
       label: "Fazer Logout",
@@ -156,6 +143,37 @@ export function SidebarNavegacao() {
       month: "long",
       year: "numeric",
     });
+  };
+
+  // Função para alteração de senha
+  const handlePasswordChange = async (
+    passwordData: PasswordChangeData
+  ): Promise<void> => {
+    try {
+      // Substitua pela sua chamada de API
+      const response = await fetch("/api/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${yourToken}`,
+        },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao alterar senha");
+      }
+
+      // Sucesso - você pode mostrar uma notificação aqui
+      console.log("Senha alterada com sucesso!");
+    } catch (error) {
+      // Re-throw para que o modal possa capturar e mostrar
+      throw error;
+    }
   };
 
   return (
@@ -436,6 +454,13 @@ export function SidebarNavegacao() {
                   </div>
                 </div>
               )}
+
+              {/* Modal de Alteração de Senha */}
+              <ModalAlterarSenha
+                isOpen={isPasswordModalOpen}
+                onClose={() => setIsPasswordModalOpen(false)}
+                onSubmit={handlePasswordChange}
+              />
             </div>
           </div>
 
@@ -485,11 +510,6 @@ export function SidebarNavegacao() {
                   <p className="text-emerald-200/60 text-xs">
                     Cirúrgica Brasileira • Desde 1978
                   </p>
-                  <div className="flex items-center justify-center mt-2 space-x-1">
-                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                    <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse delay-300" />
-                    <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse delay-600" />
-                  </div>
                 </div>
               </div>
             ) : (
