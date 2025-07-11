@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kodchasan, Orbitron } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
+import QueryClienteProviderComponent from "@/components/query-cliente/Query_Cliente_Provider";
 
 const kodchasan = Kodchasan({
   variable: '--font-kodchasan',
@@ -26,18 +27,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon_dcb.png" type="image/png" />
       </head>
       <body
-        className={`${kodchasan.variable} ${orbitron.variable} antialiased`}
-      >
-        <AuthProvider>
-
-        {children}
-        </AuthProvider>
+        className={`${kodchasan.variable} ${orbitron.variable} antialiased`}>
+        <QueryClienteProviderComponent>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </QueryClienteProviderComponent>
 
       </body>
     </html>

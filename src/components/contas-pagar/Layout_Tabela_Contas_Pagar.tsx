@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import { ContasAPagarType } from "@/types/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
+import { useQuery } from "@tanstack/react-query";
 
 export function LayoutContasPagar() {
-
 
   const { user } = useAuth();
   const {
@@ -20,36 +20,43 @@ export function LayoutContasPagar() {
     notaFiscal,
     status,
   } = useFiltrosFinanceiro();
+  
+  const {
+    data: contasAPagar,
+    isError,
+    isLoading,
+    isFetching
 
-  const [contasAPagar, setContasAPagar] = useState<ContasAPagarType[]>([]);
+  } = useQuery({
+    queryKey: ['contasAPagar'],
+    queryFn: async () => {
+      const { data } = await axios.post('/api/accounts-payable', {
+        CLIENTE: user?.cod,
+        LOJA: user?.loja,
+        DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
+        DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
+        NOTAFISCAL: notaFiscal
+      });
+      return data.dados ?? [] as ContasAPagarType[];
+    },
+    refetchOnWindowFocus: false,
+  })
+  
 
-  const total = contasAPagar.length;
-  const pagas = contasAPagar.filter((n) => n.STATUS === "3" ).length;
-  const pendentes = contasAPagar.filter((n) => n.STATUS === "1").length;
-  const vencidas = contasAPagar.filter((n) => n.STATUS === "2").length;
+  const total = contasAPagar?.length||0;
+  const pagas = contasAPagar?.filter((n: ContasAPagarType) => n.STATUS === "3" ).length||0;
+  const pendentes = contasAPagar?.filter((n: ContasAPagarType) => n.STATUS === "1").length||0;
+  const vencidas = contasAPagar?.filter((n: ContasAPagarType) => n.STATUS === "2").length||0;
 
 
-  async function handleAccountsPayableData () {
+  function filtrarPorStatus(contas: ContasAPagarType[]):ContasAPagarType[] {
 
-    const retorno = await axios.post('/api/accounts-payable', {
-      CLIENTE: user?.cod,
-      LOJA: user?.loja,
-      DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
-      DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
-    })
-
-    if (retorno.status !== 200) {
-      console.error("Erro ao buscar dados de contas a pagar");
-      return;
-    } 
-
-    setContasAPagar(retorno.data.dados);
-
+    return status == "0" ? contas : contas.filter((cpg) => cpg.STATUS === status);
   }
 
-  useEffect(() => {
-    handleAccountsPayableData(); 
-  },[])
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Carregando...</div>;
+  }
 
   return (
     <div className="flex h-screen">

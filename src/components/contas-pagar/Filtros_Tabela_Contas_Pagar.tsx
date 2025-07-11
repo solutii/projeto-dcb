@@ -147,9 +147,9 @@ export function FiltrosTabelaContasPagar() {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="Pagas">Pagas</SelectItem>
-              <SelectItem value="Em Aberto">Em Aberto</SelectItem>
+              <SelectItem value="0">Todos</SelectItem>
+              <SelectItem value="1">Pagas</SelectItem>
+              <SelectItem value="2">Em Aberto</SelectItem>
             </SelectContent>
           </Select>
         </div>

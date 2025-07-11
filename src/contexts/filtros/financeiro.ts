@@ -20,7 +20,7 @@ export const useFiltrosFinanceiro = create<FiltrosFinanceiroState>(set => ({
     dataInicio: dataInicioDefault,
     dataFim: dataFimDefault,
     notaFiscal: '',
-    status: '',
+    status: '0',
     setDataInicio: (dataInicio: Date) => set({ dataInicio }),
     setDataFim: (dataFim: Date) => set({ dataFim }),
     setNotaFiscal: (notaFiscal: string) => set({ notaFiscal }),
