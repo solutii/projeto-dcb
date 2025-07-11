@@ -1,4 +1,4 @@
-### Teste da API interna (Next.js)
+### TESTAR LOGIN
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -7,7 +7,7 @@ Content-Type: application/json
   "SENHA": "XPTO"
 }
 
-###
+### TESTAR TODOS OS PEDIDOS
 POST http://localhost:3000/api/order
 Content-Type: application/json
 
@@ -31,9 +31,8 @@ Content-Type: application/json
   "LOJA": "01"
 }
 
-###
-### Buscar itens do pedido
-GET http://localhost:3000/api/order/072094?cliente=003364&filial=01&loja=01
+### Buscar todos os itens
+GET http://localhost:3000/api/itens?cliente=003364&filial=01&loja=01
 
 ###
 POST http://localhost:8076/REST
