@@ -12,8 +12,10 @@ import { useRouter } from "next/navigation";
 type User = {
   cgc: string;
   cod: string;
+  loja: string;
   nome: string;
   nomeReduzido: string;
+
 };
 
 type AuthContextType = {
@@ -64,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const user: User = {
           cgc: userData.A1_CGC,
           cod: userData.A1_COD,
+          loja: userData.A1_LOJA,
           nome: userData.A1_NOME,
           nomeReduzido: userData.A1_NREDUZ,
         };

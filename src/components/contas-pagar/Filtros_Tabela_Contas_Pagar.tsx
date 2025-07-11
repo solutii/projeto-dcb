@@ -17,13 +17,26 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+
+import {
+  Input
+} from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
+import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 
 export function FiltrosTabelaContasPagar() {
-  const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
-  const [dataFim, setDataFim] = useState<Date | undefined>(undefined);
-  const [produto, setProduto] = useState("");
-  const [status, setStatus] = useState("");
+
+  const {
+    dataInicio,
+    setDataInicio,
+    dataFim,
+    setDataFim,
+    notaFiscal,
+    setNotaFiscal,
+    status,
+    setStatus,
+  } = useFiltrosFinanceiro();
 
   return (
     <div className="space-y-4">
@@ -60,7 +73,7 @@ export function FiltrosTabelaContasPagar() {
               <Calendar
                 mode="single"
                 selected={dataInicio}
-                onSelect={setDataInicio}
+                onSelect={(data) => setDataInicio(data || new Date())}
                 locale={ptBR}
                 initialFocus
               />
@@ -92,7 +105,7 @@ export function FiltrosTabelaContasPagar() {
               <Calendar
                 mode="single"
                 selected={dataFim}
-                onSelect={setDataFim}
+                onSelect={(data) => setDataFim(data || new Date())}
                 locale={ptBR}
                 initialFocus
               />
@@ -106,7 +119,8 @@ export function FiltrosTabelaContasPagar() {
             <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
-          <Select value={produto} onValueChange={setProduto}>
+          <Input className="bg-white shadow-md shadow-black" onChange={(event) => setNotaFiscal(event.target.value)}/>
+          {/* <Select value={produto} onValueChange={setProduto}>
             <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
@@ -118,8 +132,8 @@ export function FiltrosTabelaContasPagar() {
               <SelectItem value="Cateteres">Cateteres</SelectItem>
               <SelectItem value="Gazes Estéreis">Gazes Estéreis</SelectItem>
               <SelectItem value="Termômetros">Termômetros</SelectItem>
-            </SelectContent>
-          </Select>
+            </SelectContent> 
+          </Select>*/}
         </div>
 
         {/* Status */}

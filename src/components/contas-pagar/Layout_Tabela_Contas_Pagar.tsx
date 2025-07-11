@@ -1,24 +1,25 @@
 "use client";
 
+import axios from "axios";
 import { SidebarNavegacao } from "../Sidebar";
 import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
-import { ContasPagarProps } from "./Colunas_Tabela_Contas_Pagar";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { ContasAPagarStatus, ContasAPagarType } from "@/types/financeiro";
-import { set } from "date-fns";
-
-
-enum  ContasAPagarStatusEnum {
-  'Título em Aberto',
-  'Título em Aberto e Atrasado',
-  'Título Baixado Parcialmente',
-  'Título Pago'
-}
+import { ContasAPagarType } from "@/types/financeiro";
+import { useAuth } from "@/contexts/auth-context";
+import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 
 export function LayoutContasPagar() {
+
+
+  const { user } = useAuth();
+  const {
+    dataInicio,
+    dataFim,
+    notaFiscal,
+    status,
+  } = useFiltrosFinanceiro();
 
   const [contasAPagar, setContasAPagar] = useState<ContasAPagarType[]>([]);
 
@@ -31,10 +32,10 @@ export function LayoutContasPagar() {
   async function handleAccountsPayableData () {
 
     const retorno = await axios.post('/api/accounts-payable', {
-      CLIENTE: "003364",
-      LOJA: "01",
-      DATAINI: "20240701",
-      DATAFIM: "20250731"
+      CLIENTE: user?.cod,
+      LOJA: user?.loja,
+      DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
+      DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
     })
 
     if (retorno.status !== 200) {

@@ -38,7 +38,7 @@ export default function LoginPage() {
         },
       });
 
-     console.log("Usuário autenticado. Redirecionando para /dashboard...");
+      console.log("Usuário autenticado. Redirecionando para /dashboard...");
       router.push("/dashboard");
     } else {
       toast("Erro ao realizar login", {
