@@ -6,10 +6,8 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { PackageOpen, Clock, Truck, CircleCheck } from "lucide-react";
-import {
-  colunasTabelaContasPagar,
-} from "./Colunas_Tabela_Pedidos";
+// import { PackageOpen, Clock, Truck, CircleCheck } from "lucide-react";
+import { colunasTabelaContasPagar } from "./Colunas_Tabela_Pedidos";
 import { PedidoType } from "@/types/pedido";
 // import { MobileCard } from "./Mobile_Card_Pedidos";
 

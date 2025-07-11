@@ -18,11 +18,11 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
-    "/login",
-    "/dashboard",
-    "/contas-pagar",
-    "/pedidos",
+    // "/",
+    // "/login",
+    // "/dashboard",
+    // "/contas-pagar",
+    // "/pedidos",
     // Adicione outras rotas protegidas aqui
   ],
 };

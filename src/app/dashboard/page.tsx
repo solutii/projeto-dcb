@@ -1,11 +1,11 @@
 // import { AuthGuard } from "@/components/AuthGuard";
 import { HospitalDashboardLayout } from "@/components/dashboard/Layout_Dashboard";
-import ProtectedRoute from '../../components/ProtectedRouter';
+// import ProtectedRoute from "../../components/ProtectedRouter";
 
 export default function DashboardPage() {
   return (
-    <ProtectedRoute>
-      <HospitalDashboardLayout />
-    </ProtectedRoute>
+    // <ProtectedRoute>
+    <HospitalDashboardLayout />
+    // </ProtectedRoute>
   );
 }
