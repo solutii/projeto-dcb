@@ -3,12 +3,11 @@
 import { useState } from "react";
 import { Lock, Mail, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { Toaster }  from "@/components/ui/sonner";
-import { toast } from "sonner"
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,29 +19,40 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    const userData = await login(email, password); // agora retorna User | null
+    try {
+      const userData = await login(email, password); // agora retorna User | null
 
-    if (userData) {
-      console.log("Login bem-sucedido:", userData);
-      toast("Login realizado com sucesso", {
-        description: "Bem-vindo(a) de volta!",
-        duration: 3000,
-        icon: "✅",
-        style: {
-          backgroundColor: "#38a169",
-          color: "#fff",
-        },
-      });
+      if (userData) {
+        console.log("Login bem-sucedido:", userData);
+        toast("Login realizado com sucesso", {
+          description: "Bem-vindo(a) de volta!",
+          duration: 3000,
+          icon: "✅",
+          style: {
+            backgroundColor: "#38a169",
+            color: "#fff",
+          },
+        });
 
-      console.log("Usuário autenticado. Redirecionando para /dashboard...");
-      router.push("/dashboard");
-    } else {
+        console.log("Usuário autenticado. Redirecionando para /dashboard...");
+        router.push("/dashboard");
+      } else {
+        toast("Erro ao realizar login", {
+          description: "Verifique suas credenciais e tente novamente.",
+          duration: 5000,
+          icon: "❌",
+          style: {
+            backgroundColor: "#e53e3e",
+            color: "#fff",
+          },
+        });
+      }
+    } catch {
       toast("Erro ao realizar login", {
-        description: "Verifique suas credenciais e tente novamente.",
+        description: "Ocorreu um erro inesperado. Tente novamente.",
         duration: 5000,
         icon: "❌",
         style: {
@@ -50,21 +60,10 @@ export default function LoginPage() {
           color: "#fff",
         },
       });
+    } finally {
+      setIsLoading(false);
     }
-  } catch {
-    toast("Erro ao realizar login", {
-      description: "Ocorreu um erro inesperado. Tente novamente.",
-      duration: 5000,
-      icon: "❌",
-      style: {
-        backgroundColor: "#e53e3e",
-        color: "#fff",
-      },
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
@@ -116,7 +115,7 @@ export default function LoginPage() {
           <div className="w-full max-w-md transition-all duration-700 hover:scale-105">
             {/* Formulário com header e logo */}
             <div className="bg-white/5 backdrop-blur-2xl rounded-2xl shadow-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-teal-400"></div>
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-teal-400"></div>
               {/* Header com logo incluso */}
               <div className="relative bg-gradient-to-r from-emerald-600/20 via-cyan-600/20 to-purple-600/20 backdrop-blur-sm pt-8 pb-4 px-6">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-t-3xl"></div>
@@ -131,7 +130,9 @@ export default function LoginPage() {
                       className="w-20 h-20 object-cover"
                     />
                   </div>
-                  <h2 className="text-emerald-950 text-4xl font-bold font-orbitron">DCB</h2>
+                  <h2 className="text-emerald-950 text-4xl font-bold font-orbitron">
+                    DCB
+                  </h2>
                   <p className="text-emerald-950 text-xl font-semibold">
                     Distribuidora Cirúrgica Brasileira
                   </p>

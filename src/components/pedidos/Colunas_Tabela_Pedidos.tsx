@@ -2,11 +2,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
-import { SiAdobeacrobatreader } from "react-icons/si";
 import { CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
 import { PedidoType } from "@/types/pedido";
+import { ModalDetalhesPedidoAsync } from "./Modal_Detalhes_Pedido";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
@@ -37,8 +35,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
   };
 
   const config =
-    configs[status.toUpperCase() as keyof typeof configs] ||
-    configs['1'];
+    configs[status.toUpperCase() as keyof typeof configs] || configs["1"];
   const Icon = config.icon;
 
   return (
@@ -78,8 +75,7 @@ export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
     accessorKey: "C5_EMISSAO",
     header: "Data Pedido",
     cell: ({ getValue }) => {
-      const date: any = getValue() as string;
-
+      const date: string = getValue() as string;
       const [year, month, day] = date.split("/").reverse();
       return (
         <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
@@ -95,54 +91,22 @@ export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
       </div>
     ),
   },
- /*  {
-    accessorKey: "C5_QTDE",
-    header: "Itens",
-    cell: ({ getValue }) => {
-      const quantidade = getValue() as number;
-      return (
-        <div className="font-bold text-gray-800 italic">
-          {quantidade} {quantidade > 1 ? "itens" : "item"}
-        </div>
-      );
-    },
-  }, */
   {
     accessorKey: "STATUS",
     header: "Status",
     cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
   },
-  /* {
-    accessorKey: "C5_PREV_ENTREGA",
-    header: "Previsão Entrega",
-    cell: ({ getValue }) => {
-      const date = getValue() as string;
-      const [year, month, day] = date.split("T")[0].split("-");
-      return (
-        <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
-      );
-    },
-  }, */
   {
     id: "acoes",
     header: "Ações",
-    cell: () => (
-      <div className="flex justify-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-green-700 hover:bg-green-200"
-        >
-          <PiMicrosoftExcelLogoFill className="w-6 h-6" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-red-700 hover:bg-red-200"
-        >
-          <SiAdobeacrobatreader className="w-6 h-6" />
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const pedido = row.original;
+
+      return (
+        <div className="flex justify-center gap-2">
+          <ModalDetalhesPedidoAsync pedido={pedido} itens={[]} />
+        </div>
+      );
+    },
   },
 ];
