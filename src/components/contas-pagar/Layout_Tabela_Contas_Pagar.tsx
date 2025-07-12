@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 import { ContasAPagarType } from "@/types/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function LayoutContasPagar() {
 
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const {
     dataInicio,
@@ -54,9 +55,22 @@ export function LayoutContasPagar() {
     return status == "0" ? contas : contas.filter((cpg) => cpg.STATUS === status);
   }
 
+  useEffect(() => {
+
+    console.log("passou por aqui")
+    queryClient.invalidateQueries({ queryKey: ['contasAPagar']});
+  }, [
+    dataInicio,
+    dataFim,
+    notaFiscal,
+    status])
+
+
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Carregando...</div>;
   }
+
+  
 
   return (
     <div className="flex h-screen">

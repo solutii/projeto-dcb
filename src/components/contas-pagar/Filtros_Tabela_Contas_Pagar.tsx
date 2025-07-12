@@ -105,9 +105,10 @@ export function FiltrosTabelaContasPagar() {
               <Calendar
                 mode="single"
                 selected={dataFim}
-                onSelect={(data) => setDataFim(data || new Date())}
+                onSelect={(data) => { 
+                  setDataFim(data || new Date());
+                }}
                 locale={ptBR}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
@@ -119,7 +120,7 @@ export function FiltrosTabelaContasPagar() {
             <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
-          <Input className="bg-white shadow-md shadow-black" onChange={(event) => setNotaFiscal(event.target.value)}/>
+          <Input className="bg-white shadow-md shadow-black" value={notaFiscal} onChange={(event) => setNotaFiscal(event.target.value)}/>
           {/* <Select value={produto} onValueChange={setProduto}>
             <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
               <SelectValue placeholder="Todas" />

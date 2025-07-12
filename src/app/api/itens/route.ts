@@ -5,6 +5,7 @@ export async function GET(request: Request) {
   try {
     // Pegar parâmetros da query string
     const url = new URL(request.url);
+
     const cliente = url.searchParams.get("cliente");
     const filial = url.searchParams.get("filial");
     const loja = url.searchParams.get("loja");
@@ -27,7 +28,9 @@ export async function GET(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: authHeader,
+        "tenantid": "01,0101",
+        "connection": "keep-alive",
+        Authorization: authHeader
       },
       body: JSON.stringify({
         CLIENTE: cliente || "",
@@ -35,6 +38,12 @@ export async function GET(request: Request) {
         LOJA: loja || "",
       }),
     });
+
+    console.log(JSON.stringify({
+        CLIENTE: cliente || "",
+        FILIAL: filial || "",
+        LOJA: loja || "",
+      }))
 
     console.log("Status da resposta:", response.status);
 
@@ -45,6 +54,9 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
+
+    return NextResponse.json(data);
+
     console.log("Resposta da API Protheus:", {
       sucesso: data.sucesso,
       totalItens: data.dados?.length || 0,

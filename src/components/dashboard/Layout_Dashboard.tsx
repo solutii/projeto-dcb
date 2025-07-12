@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CardsMetricas } from "@/components/dashboard/Cards_Metricas_Dashboard";
 import { ComprasPorProdutoChart } from "@/components/dashboard/Compras_Por_Produto_Chart";
 import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_Chart";
@@ -9,13 +9,12 @@ import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_C
 // import { TrendingUp, Package, Calendar } from "lucide-react";
 import { SidebarNavegacao } from "../Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
+import { useAuth } from "@/contexts/auth-context";
+import axios from "axios";
+import { ContasAPagarType } from "@/types/financeiro";
 
-// Mock Data
-const cardData = {
-  totalCompras: 145780.5,
-  comprasPagas: 98240.3,
-  comprasAberto: 47540.2,
-};
 
 const comprasPorProduto = [
   { produto: "Luvas Nitrílicas", valor: 25400 },
@@ -25,10 +24,7 @@ const comprasPorProduto = [
   { produto: "Gazes Estéreis", valor: 12300 },
 ];
 
-const contasAPagar = [
-  { name: "Pagas", value: 67.4, count: 89 },
-  { name: "Em aberto", value: 32.6, count: 43 },
-];
+
 
 const contasAnuais = [
   { mes: "Jan", pagas: 12400, aberto: 8200 },
@@ -47,6 +43,73 @@ const contasAnuais = [
 
 export function HospitalDashboardLayout() {
 
+
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const {
+    dataInicio,
+    dataFim,
+    notaFiscal,
+    status,
+  } = useFiltrosFinanceiro();
+  
+  const {
+    data: contasAPagar,
+    isError,
+    isLoading,
+    isFetching
+
+  } = useQuery({
+    queryKey: ['contasAPagar'],
+    queryFn: async () => {
+      const { data } = await axios.post('/api/accounts-payable', {
+        CLIENTE: user?.cod,
+        LOJA: user?.loja,
+        DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
+        DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
+        NOTAFISCAL: notaFiscal
+      });
+      return data.dados ?? [] as ContasAPagarType[];
+    },
+    refetchOnWindowFocus: false,
+  })
+
+  const [cardData, setCardData] = useState({
+    totalCompras: 0,
+    comprasPagas: 0,
+    comprasAberto:0,
+  })
+
+  const [contasAPagarTot, setContasAPagarTot] = useState([
+  { name: "Pagas", value: 67.4, count: 89 },
+  { name: "Em aberto", value: 32.6, count: 43 },
+  ])
+
+  useEffect(() => {
+
+    if (contasAPagar?.length) {
+
+      const totalComprasReducer = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+
+      setCardData({
+        totalCompras: totalComprasReducer,
+        //comprasPagas: contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0),
+        comprasPagas: 25,
+        //comprasAberto:contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0)
+        comprasAberto:15
+      })
+    
+      setContasAPagarTot([
+        { name: "Pagas", value: 67.4, count: 89 },
+        { name: "Em aberto", value: 32.6, count: 43 },
+      ])
+    
+    
+    }
+
+
+  }, contasAPagar)
+
   return (
     <div className="flex h-screen">
       {/* Sidebar fixa */}
@@ -62,7 +125,7 @@ export function HospitalDashboardLayout() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 <ComprasPorProdutoChart data={comprasPorProduto} />
 
-                <ContasPagarMesChart data={contasAPagar} />
+                <ContasPagarMesChart data={contasAPagarTot} />
 
                 <ContasPagarAnoChart data={contasAnuais} />
               </div>
