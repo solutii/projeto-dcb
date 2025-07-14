@@ -13,8 +13,8 @@ interface FiltrosFinanceiroState {
 }
 
 const now = new Date();
-const dataInicioDefault = new Date(now.getFullYear(), now.getMonth(), 1);
-const dataFimDefault = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+const dataInicioDefault = new Date(now.getFullYear(), now.getMonth(), -90);
+const dataFimDefault = new Date(now.getFullYear(), now.getMonth(), 0);
 
 export const useFiltrosFinanceiro = create<FiltrosFinanceiroState>(set => ({
     dataInicio: dataInicioDefault,

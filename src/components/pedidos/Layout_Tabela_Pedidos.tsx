@@ -43,7 +43,7 @@ export function LayoutPedidos() {
       <SidebarNavegacao />
 
       {/* Área principal com layout vertical */}
-      <main className="flex-1 h-screen flex flex-col overflow-hidden">
+      <main className="flex-1 h-screen flex flex-col">
         <div className="flex-shrink-0 bg-white">
           <div className="px-4 md:px-6 lg:px-8 py-4">
             <div className="space-y-4">

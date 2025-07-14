@@ -65,7 +65,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden">
+    <div className="min-h-screen flex relative">
       {/* Background com imagem e efeitos */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0">
