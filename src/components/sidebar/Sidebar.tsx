@@ -28,13 +28,12 @@ export function SidebarNavegacao() {
   const toggleCollapse = () => setIsCollapsed(!isCollapsed);
   const toggleMobile = () => setIsMobileOpen(!isMobileOpen);
 
-
   return (
     <>
       {/* Botão Mobile */}
       <button
         onClick={toggleMobile}
-        className="fixed top-4 left-4 z-50 md:hidden group bg-gradient-to-r from-emerald-900/95 to-emerald-800/95 backdrop-blur-xl border border-emerald-300/30 rounded-2xl p-3 text-white hover:from-emerald-800/95 hover:to-emerald-700/95 transition-all duration-500 shadow-2xl hover:shadow-emerald-500/20 hover:scale-105 active:scale-95"
+        className="fixed top-6 right-6 z-50 md:hidden group bg-gradient-to-r from-emerald-900/95 to-emerald-800/95 backdrop-blur-xl border border-emerald-300/30 rounded-2xl p-3 text-white hover:from-emerald-800/95 hover:to-emerald-700/95 transition-all duration-500 shadow-2xl hover:shadow-emerald-500/20 hover:scale-105 active:scale-95"
       >
         <div className="relative">
           {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -77,12 +76,14 @@ export function SidebarNavegacao() {
             currentTime={currentTime}
           />
 
-
           {/* Links de navegação */}
           <SidebarLinks isCollapsed={isCollapsed} />
 
           {/* Botões de ações (Alterar senha / Logout) */}
-          <SidebarActions isCollapsed={isCollapsed} />
+          <SidebarActions
+            isCollapsed={isCollapsed}
+            expandSidebar={() => setIsCollapsed(false)}
+          />
 
           {/* Rodapé com redes sociais */}
           <SidebarFooter isCollapsed={isCollapsed} />

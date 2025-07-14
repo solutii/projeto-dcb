@@ -3,39 +3,37 @@
 import { SidebarNavegacao } from "../../components/sidebar/Sidebar";
 import { TabelaPedidos } from "./Tabela_Pedidos";
 import { FiltrosTabelaPedidos } from "./Filtros_Tabela_Pedidos";
-// import { CardsTabelaPedidos } from "./Cards_Tabela_Pedidos";
 import { PedidoType } from "@/types/pedido";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { PedidosMobileFooter } from "./Pedidos_Mobile_Footer ";
 
 export function LayoutPedidos() {
-  
   const [pedido, setPedidos] = useState<PedidoType[]>([]);
-  
-  async function handleAccountsPayableData () {
-    const retorno = await axios.post('/api/order', {
+
+  async function handleAccountsPayableData() {
+    const retorno = await axios.post("/api/order", {
       CLIENTE: "003364",
       LOJA: "01",
       DATAINI: "20240701",
       DATAFIM: "20250731",
       FILIAL: "01",
-    })
+    });
 
     if (retorno.status !== 200) {
       console.error("Erro ao buscar dados de contas a pagar");
       return;
-    } 
+    }
 
     setPedidos(retorno.data.dados);
-
   }
 
   useEffect(() => {
     handleAccountsPayableData();
-  }, [])
+  }, []);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen space-y-5">
       {/* Sidebar fixa */}
       <SidebarNavegacao />
 
@@ -56,6 +54,8 @@ export function LayoutPedidos() {
           </div>
         </div>
       </main>
+      {/* Footer para dispositivos móveis */}
+      <PedidosMobileFooter />
     </div>
   );
 }
