@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CalendarDays, Filter, FileCode } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -17,16 +16,11 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-
-import {
-  Input
-} from "@/components/ui/input";
-
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 
 export function FiltrosTabelaContasPagar() {
-
   const {
     dataInicio,
     setDataInicio,
@@ -39,17 +33,25 @@ export function FiltrosTabelaContasPagar() {
   } = useFiltrosFinanceiro();
 
   return (
+    // CONTAINER PRINCIPAL
     <div className="space-y-4">
-      {/* Título e Data Atual */}
-      <div className="flex items-center justify-between">
+      {/* TÍTULO MOBILE */}
+      <div className="md:hidden bg-emerald-700 p-4 rounded-md shadow-md shadow-black">
+        <h2 className="text-2xl italic font-bold text-white text-left">
+          Contas a Pagar
+        </h2>
+      </div>
+
+      {/* TÍTULO DESKTOP */}
+      <div className="hidden md:flex items-center justify-between">
         <h2 className="text-4xl italic font-bold text-gray-800">
           Contas a Pagar
         </h2>
       </div>
 
-      {/* Campos de Filtro */}
-      <div className="grid grid-cols-6 gap-4">
-        {/* Data Inicial */}
+      {/* FILTRO */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        {/* DATA INICIAL */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <CalendarDays className="w-5 h-5 " />
@@ -81,7 +83,7 @@ export function FiltrosTabelaContasPagar() {
           </Popover>
         </div>
 
-        {/* Data Final */}
+        {/* DATA FINAL */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <CalendarDays className="w-5 h-5" />
@@ -105,7 +107,7 @@ export function FiltrosTabelaContasPagar() {
               <Calendar
                 mode="single"
                 selected={dataFim}
-                onSelect={(data) => { 
+                onSelect={(data) => {
                   setDataFim(data || new Date());
                 }}
                 locale={ptBR}
@@ -114,30 +116,20 @@ export function FiltrosTabelaContasPagar() {
           </Popover>
         </div>
 
-        {/* Produto */}
+        {/* NOTA FISCAL */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
-          <Input className="bg-white shadow-md shadow-black" value={notaFiscal} onChange={(event) => setNotaFiscal(event.target.value)}/>
-          {/* <Select value={produto} onValueChange={setProduto}>
-            <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent className="bg-white shadow-md shadow-black">
-              <SelectItem value="all">Todas</SelectItem>
-              <SelectItem value="Luvas Nitrílicas">Luvas Nitrílicas</SelectItem>
-              <SelectItem value="Seringas 10ml">Seringas 10ml</SelectItem>
-              <SelectItem value="Máscaras N95">Máscaras N95</SelectItem>
-              <SelectItem value="Cateteres">Cateteres</SelectItem>
-              <SelectItem value="Gazes Estéreis">Gazes Estéreis</SelectItem>
-              <SelectItem value="Termômetros">Termômetros</SelectItem>
-            </SelectContent> 
-          </Select>*/}
+          <Input
+            className="bg-white shadow-md shadow-black"
+            value={notaFiscal}
+            onChange={(event) => setNotaFiscal(event.target.value)}
+          />
         </div>
 
-        {/* Status */}
+        {/* STATUS */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <Filter className="w-5 h-5" />

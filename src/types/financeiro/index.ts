@@ -1,4 +1,4 @@
-const ContasAPagarStatus: any = {
+const ContasAPagarStatus: Record<string, string> = {
     '0': 'Título em Aberto',
     '1': 'Título em Aberto e Atrasado',
     '2': 'Título Baixado Parcialmente',

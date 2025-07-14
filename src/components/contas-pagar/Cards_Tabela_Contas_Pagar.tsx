@@ -13,33 +13,33 @@ interface CardsProps {
   valor: number;
   cor: string;
   Icon: React.ElementType;
-  styleIcon: string;
 }
 
 function CardResumo({ titulo, valor, cor, Icon }: CardsProps) {
+  const bgIcon =
+    Icon === CheckCircle
+      ? "bg-green-200 text-green-700"
+      : Icon === Clock
+      ? "bg-yellow-200 text-yellow-700"
+      : Icon === AlertTriangle
+      ? "bg-red-200 text-red-700"
+      : "bg-blue-200 text-blue-700";
+
   return (
-    <div className={`rounded-lg p-4 shadow-md shadow-black ${cor}`}>
+    <div
+      className={`rounded-xl p-3 sm:p-4 shadow-md shadow-black ${cor} text-xs sm:text-sm`}
+    >
       <div className="flex items-center justify-between">
-        <div className="flex flex-col mb-1">
-          <span className="text-lg font-semibold text-gray-800 italic">
-            {titulo}
-          </span>
-          <span className="text-2xl font-bold text-gray-800 italic">
+        <div className="flex flex-col mb-1 gap-1">
+          <span className="font-medium text-gray-800 italic">{titulo}</span>
+          <span className="text-lg sm:text-xl font-bold text-gray-900 italic">
             {valor}
           </span>
         </div>
         <div
-          className={`p-3 rounded-lg ${
-            Icon === CheckCircle
-              ? "bg-green-200 text-green-700"
-              : Icon === Clock
-              ? "bg-yellow-200 text-yellow-700"
-              : Icon === AlertTriangle
-              ? "bg-red-200 text-red-700"
-              : "bg-blue-200 text-blue-700"
-          } shadow-md shadow-black`}
+          className={`p-2 sm:p-3 rounded-lg ${bgIcon} shadow-md shadow-black`}
         >
-          <Icon className="h-6 w-6 text-black" />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
     </div>
@@ -53,34 +53,30 @@ export function CardsTabelaContasPagar({
   vencidas,
 }: ResumoNotasFiscaisProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2">
       <CardResumo
         titulo="Total"
         valor={total}
         cor="bg-blue-300"
         Icon={FileText}
-        styleIcon="bg-blue-200 text-blue-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
         titulo="Contas pagas"
         valor={pagas}
         cor="bg-green-300"
         Icon={CheckCircle}
-        styleIcon="bg-green-200 text-green-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
         titulo="Contas pendentes"
         valor={pendentes}
         cor="bg-yellow-300"
         Icon={Clock}
-        styleIcon="bg-yellow-200 text-yellow-700 shadow-md shadow-black rounded-lg p-3"
       />
       <CardResumo
         titulo="Contas vencidas"
         valor={vencidas}
         cor="bg-red-300"
         Icon={AlertTriangle}
-        styleIcon="bg-red-200 text-red-700 shadow-md shadow-black rounded-lg p-3"
       />
     </div>
   );

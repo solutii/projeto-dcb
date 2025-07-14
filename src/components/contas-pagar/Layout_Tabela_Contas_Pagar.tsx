@@ -5,11 +5,12 @@ import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
 import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
 import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ContasAPagarType } from "@/types/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { PedidosMobileFooter } from "./Mobile_Footer";
 
 export function LayoutContasPagar() {
   const queryClient = useQueryClient();
@@ -18,9 +19,9 @@ export function LayoutContasPagar() {
 
   const {
     data: contasAPagar,
-    isError,
+    // isError,
     isLoading,
-    isFetching,
+    // isFetching,
   } = useQuery({
     queryKey: ["contasAPagar"],
     queryFn: async () => {
@@ -53,7 +54,7 @@ export function LayoutContasPagar() {
   useEffect(() => {
     console.log("passou por aqui");
     queryClient.invalidateQueries({ queryKey: ["contasAPagar"] });
-  }, [dataInicio, dataFim, notaFiscal, status]);
+  }, [dataInicio, dataFim, notaFiscal, status, queryClient]);
 
   if (isLoading) {
     return (
@@ -86,6 +87,7 @@ export function LayoutContasPagar() {
           </div>
         </div>
       </main>
+      <PedidosMobileFooter />
     </div>
   );
 }

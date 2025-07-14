@@ -43,20 +43,20 @@ export const ModalDetalhesPedidoAsync = ({
       console.log("Pedido recebido:", pedido);
 
       console.log("Parâmetros usados para buscar itens:", {
-  numeroPedido: pedido.C5_NUM,
-  cliente: pedido.C5_CLIENTE,
-  filial: pedido.C5_FILIAL, // <- corrigido
-  loja: pedido.C5_LOJACLI,
-});
+        numeroPedido: pedido.C5_NUM,
+        cliente: pedido.C5_CLIENTE,
+        filial: pedido.C5_FILIAL, // <- corrigido
+        loja: pedido.C5_LOJACLI,
+      });
 
       const filialCorrigida = pedido.C5_FILIAL.padStart(4, "0");
 
-const itensBrutos = await buscarItensPedido(
-  pedido.C5_NUM,
-  pedido.C5_CLIENTE,
-  filialCorrigida,  // ← corrigido aqui
-  pedido.C5_LOJACLI
-);
+      const itensBrutos = await buscarItensPedido(
+        pedido.C5_NUM,
+        pedido.C5_CLIENTE,
+        filialCorrigida, // ← corrigido aqui
+        pedido.C5_LOJACLI
+      );
 
       console.log("Itens brutos recebidos do service:", itensBrutos);
 
@@ -172,18 +172,32 @@ const itensBrutos = await buscarItensPedido(
                   <TableHeader>
                     <TableRow className="bg-gray-50">
                       <TableHead className="font-semibold">Item</TableHead>
-                      <TableHead className="font-semibold">Código Produto</TableHead>
-                      <TableHead className="text-right font-semibold">Quantidade</TableHead>
-                      <TableHead className="text-right font-semibold">Valor Unitário</TableHead>
-                      <TableHead className="text-right font-semibold">Total</TableHead>
+                      <TableHead className="font-semibold">
+                        Código Produto
+                      </TableHead>
+                      <TableHead className="text-right font-semibold">
+                        Quantidade
+                      </TableHead>
+                      <TableHead className="text-right font-semibold">
+                        Valor Unitário
+                      </TableHead>
+                      <TableHead className="text-right font-semibold">
+                        Total
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {itens.map((item, index) => (
                       <TableRow key={index} className="hover:bg-gray-50">
-                        <TableCell className="font-medium text-gray-800">{item.item}</TableCell>
-                        <TableCell className="text-gray-600">{item.codigoProduto}</TableCell>
-                        <TableCell className="text-right text-gray-800">{item.quantidade}</TableCell>
+                        <TableCell className="font-medium text-gray-800">
+                          {item.item}
+                        </TableCell>
+                        <TableCell className="text-gray-600">
+                          {item.codigoProduto}
+                        </TableCell>
+                        <TableCell className="text-right text-gray-800">
+                          {item.quantidade}
+                        </TableCell>
                         <TableCell className="text-right text-gray-800">
                           R$ {item.valorUnitario.toFixed(2)}
                         </TableCell>
@@ -200,7 +214,9 @@ const itensBrutos = await buscarItensPedido(
               <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
                 <CardContent className="p-6">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold text-green-800">Total do Pedido:</span>
+                    <span className="text-lg font-semibold text-green-800">
+                      Total do Pedido:
+                    </span>
                     <span className="text-3xl font-bold text-green-600">
                       R$ {valorTotalPedido.toFixed(2)}
                     </span>

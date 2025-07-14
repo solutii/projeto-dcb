@@ -1,11 +1,11 @@
 import { Row, flexRender } from "@tanstack/react-table";
-import { PedidoType } from "@/types/pedido";
+import { ContasAPagarType } from "@/types/financeiro";
 
 interface Props {
-  row: Row<PedidoType>;
+  row: Row<ContasAPagarType>;
 }
 
-export function PedidosMobileTable({ row }: Props) {
+export function MobileTable({ row }: Props) {
   const allCells = row.getAllCells();
 
   const contentCells = allCells.filter((cell) => cell.column.id !== "acoes");

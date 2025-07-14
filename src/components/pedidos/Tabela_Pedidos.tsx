@@ -6,18 +6,18 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { colunasTabelaContasPagar } from "./Colunas_Tabela_Pedidos";
+import { colunasTabelaPedidos } from "./Colunas_Tabela_Pedidos";
 import { PedidoType } from "@/types/pedido";
-import { MobileCard } from "./Mobile_Table";
+import { PedidosMobileTable } from "./Mobile_Table";
 
-interface TabelaContasPagarProps {
+interface TabelaPedidosProps {
   dados: PedidoType[];
 }
 
-export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
+export function TabelaPedidos({ dados }: TabelaPedidosProps) {
   const table = useReactTable({
     data: dados,
-    columns: colunasTabelaContasPagar,
+    columns: colunasTabelaPedidos,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -25,7 +25,7 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
 
   return (
     <>
-      {/* DESKTOP – Tabela */}
+      {/* TABELA DESKTOP */}
       <div className="hidden md:block">
         <div className="flex flex-col h-[75vh] overflow-hidden rounded-lg bg-white shadow-md shadow-black overflow-y-auto">
           {/* Cabeçalho */}
@@ -103,8 +103,9 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
           </div>
         </div>
       </div>
+      {/* ------------------------------------------------------------ */}
 
-      {/* MOBILE – Cards com rolagem */}
+      {/* TABELA MOBILE */}
       <div className="block md:hidden mt-4 space-y-5 overflow-y-auto max-h-[75vh] px-2 pb-24 custom-scrollbar">
         {naoTemDados ? (
           <div className="text-center p-4">
@@ -115,7 +116,7 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
         ) : (
           table
             .getRowModel()
-            .rows.map((row) => <MobileCard key={row.id} row={row} />)
+            .rows.map((row) => <PedidosMobileTable key={row.id} row={row} />)
         )}
       </div>
     </>

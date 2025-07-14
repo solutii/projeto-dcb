@@ -298,10 +298,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
                   Alterando...
                 </>
               ) : (
-                <>
-                  <Lock className="w-4 h-4" />
-                  Alterar Senha
-                </>
+                <>Alterar</>
               )}
             </button>
           </div>

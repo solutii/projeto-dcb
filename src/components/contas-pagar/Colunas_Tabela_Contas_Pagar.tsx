@@ -2,12 +2,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
-import { SiAdobeacrobatreader } from "react-icons/si";
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { ContasAPagarType, ContasAPagarStatus } from "@/types/financeiro";
-
 
 export interface ContasPagarProps {
   status: string;
@@ -44,7 +40,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
       style: "bg-red-400 text-black",
       bgMobile: "bg-red-50 border-red-200",
       textMobile: "text-red-700",
-    }
+    },
   };
 
   const config =
@@ -78,7 +74,7 @@ export const colunasTabelaContasPagar: ColumnDef<ContasAPagarType>[] = [
   {
     accessorKey: "STATUS",
     header: "Status",
-    cell: ({ getValue }) => <StatusBadge status={ getValue()  as string} />,
+    cell: ({ getValue }) => <StatusBadge status={getValue() as string} />,
   },
   {
     accessorKey: "E1_NUM",
@@ -93,9 +89,14 @@ export const colunasTabelaContasPagar: ColumnDef<ContasAPagarType>[] = [
     accessorKey: "E1_EMISSAO",
     header: "Emissão",
     cell: ({ getValue }) => {
-      const date: any = getValue() as string;
-      const [_, year, month, day] = date.match(/(\d{4})(\d{2})(\d{2})/);
-      //const [year, month, day] = date.split("T")[0].split("-");
+      const date: string = getValue() as string;
+      const match = date.match(/(\d{4})(\d{2})(\d{2})/);
+      if (!match) {
+        return (
+          <div className="font-bold text-gray-800 italic">Data Inválida</div>
+        );
+      }
+      const [, year, month, day] = match;
       return (
         <div className="font-bold text-gray-800 italic">{`${day}/${month}/${year}`}</div>
       );
@@ -105,9 +106,15 @@ export const colunasTabelaContasPagar: ColumnDef<ContasAPagarType>[] = [
     accessorKey: "E1_VENCREA",
     header: "Vencimento",
     cell: ({ getValue }) => {
-      const date: any = getValue() as string;
-      const [_,year, month, day] = date.match(/(\d{4})(\d{2})(\d{2})/);
-      const isOverdue = new Date(date) < new Date();
+      const date: string = getValue() as string;
+      const match = date.match(/(\d{4})(\d{2})(\d{2})/);
+      if (!match) {
+        return (
+          <div className="font-bold text-gray-800 italic">Data Inválida</div>
+        );
+      }
+      const [, year, month, day] = match;
+      const isOverdue = new Date(`${year}-${month}-${day}`) < new Date();
       return (
         <div className={`${isOverdue ? "text-red-500 font-bold italic" : ""}`}>
           {`${day}/${month}/${year}`}
