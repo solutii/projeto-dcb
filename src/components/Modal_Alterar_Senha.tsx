@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { X, Eye, EyeOff, Lock, Check, AlertCircle } from "lucide-react";
-
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuth } from "@/contexts/auth-context";
 // Interfaces
 interface PasswordData {
   currentPassword: string;
@@ -46,18 +48,36 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
 
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { user } = useAuth(); // Assuming you have a useAuth hook to get the user context
+
+  const mutation = useMutation({
+    mutationFn: async (passwordData: PasswordData) => 
+      axios.post("/api/auth/change-password",{
+        LOGIN: user?.cgc,
+        SENHA: passwordData.newPassword
+      })
+    ,
+    onSuccess: () => {
+      setErrors({});
+      onClose();
+    },
+    onError: (error: Error) => {
+      setErrors({ submit: error.message });
+    },
+  })
+
 
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
-    if (!formData.currentPassword) {
+    /* if (!formData.currentPassword) {
       newErrors.currentPassword = "Senha atual é obrigatória";
-    }
+    } */
 
     if (!formData.newPassword) {
       newErrors.newPassword = "Nova senha é obrigatória";
-    } else if (formData.newPassword.length < 8) {
-      newErrors.newPassword = "Nova senha deve ter pelo menos 8 caracteres";
+    } else if (formData.newPassword.length < 5) {
+      newErrors.newPassword = "Nova senha deve ter pelo menos 5 caracteres";
     }
 
     if (!formData.confirmPassword) {
@@ -66,9 +86,9 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
       newErrors.confirmPassword = "As senhas não coincidem";
     }
 
-    if (formData.currentPassword === formData.newPassword) {
+    /* if (formData.currentPassword === formData.newPassword) {
       newErrors.newPassword = "A nova senha deve ser diferente da atual";
-    }
+    } */
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,24 +97,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
   const handleSubmit = async (): Promise<void> => {
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-
-    try {
-      await onSubmit(formData);
-      setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      setErrors({});
-      onClose();
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Erro ao alterar senha";
-      setErrors({ submit: errorMessage });
-    } finally {
-      setIsSubmitting(false);
-    }
+    mutation.mutate(formData);
   };
 
   const handleInputChange = (
@@ -147,7 +150,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
         {/* Form */}
         <div className="p-6 space-y-6">
           {/* Current Password */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label className="block text-sm font-medium text-white/90">
               Senha Atual
             </label>
@@ -179,7 +182,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
                 {errors.currentPassword}
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* New Password */}
           <div className="space-y-2">
@@ -194,7 +197,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
                   handleInputChange("newPassword", e.target.value)
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-emerald-300/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
-                placeholder="Digite sua nova senha"
+                placeholder="nova senha"
               />
               <button
                 type="button"
@@ -229,7 +232,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
                   handleInputChange("confirmPassword", e.target.value)
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-emerald-300/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
-                placeholder="Confirme sua nova senha"
+                placeholder="confirmar senha"
               />
               <button
                 type="button"
@@ -265,17 +268,17 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
             <ul className="text-xs text-white/60 space-y-1">
               <li className="flex items-center gap-2">
                 <Check className="w-3 h-3 text-emerald-400" />
-                Mínimo de 8 caracteres
+                Mínimo de 5 caracteres
               </li>
-              <li className="flex items-center gap-2">
+             {/*  <li className="flex items-center gap-2">
                 <Check className="w-3 h-3 text-emerald-400" />
                 Diferente da senha atual
-              </li>
+              </li> */}
             </ul>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col column gap-3 pt-4">
             <button
               type="button"
               onClick={handleClose}
