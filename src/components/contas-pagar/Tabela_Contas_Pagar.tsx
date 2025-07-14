@@ -113,7 +113,7 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
       {/* ------------------------------------------------------------ */}
 
       {/* TABELA MOBILE */}
-      <div className="block md:hidden mt-4 space-y-5 overflow-y-auto max-h-[75vh] px-2 pb-24 custom-scrollbar">
+      <div className="block md:hidden mt-4 space-y-5 overflow-y-auto max-h-[75vh] px-2 pb-12 custom-scrollbar">
         {naoTemDados ? (
           <div className="text-center p-4">
             <p className="text-gray-500 italic text-base">

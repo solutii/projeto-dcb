@@ -10,7 +10,7 @@ import { ContasAPagarType } from "@/types/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MobileFooter } from "./Mobile_Footer";
+import { PedidosMobileFooter } from "./Mobile_Footer";
 
 export function LayoutContasPagar() {
   const queryClient = useQueryClient();
@@ -87,7 +87,7 @@ export function LayoutContasPagar() {
           </div>
         </div>
       </main>
-      <MobileFooter />
+      <PedidosMobileFooter />
     </div>
   );
 }
