@@ -27,14 +27,21 @@ export function FiltrosTabelaPedidos() {
   const [status, setStatus] = useState("");
 
   return (
-    <div className="space-y-4">
-      {/* Título e Data Atual */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-5">
+      {/* TÍTULO MOBILE */}
+      <div className="md:hidden bg-emerald-700 p-4 rounded-md shadow-md shadow-black">
+        <h2 className="text-2xl italic font-bold text-white text-left">
+          Pedidos
+        </h2>
+      </div>
+
+      {/* TÍTULO DESKTOP */}
+      <div className="hidden md:flex items-center justify-between">
         <h2 className="text-4xl italic font-bold text-gray-800">Pedidos</h2>
       </div>
 
       {/* Campos de Filtro */}
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {/* Data Inicial */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
@@ -132,13 +139,11 @@ export function FiltrosTabelaPedidos() {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              {
-                Object.entries(PedidoStatusLabel).map(([key, value]) => 
-                  <SelectItem key={key} value={key}>
-                    {value}
-                  </SelectItem>
-                )
-              }
+              {Object.entries(PedidoStatusLabel).map(([key, value]) => (
+                <SelectItem key={key} value={key}>
+                  {value}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

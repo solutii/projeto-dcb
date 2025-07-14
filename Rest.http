@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
   "CLIENTE": "003364",
-  "DATAINI": "20240701",
+  "DATAINI": "20200101",
   "DATAFIM": "20250731",
   "FILIAL": "01",
   "LOJA": "01"
@@ -23,8 +23,20 @@ Content-Type: application/json
 
 # ----------------------------------------------------------
 
-
-### BUSCAR TODOS OS ITENS
+### BUSCAR TODOS OS ITENS DE UM CLIENTE
 POST http://localhost:3000/api/itens-pedido?cliente=003364&filial=0101&loja=01
 
 # ----------------------------------------------------------
+
+### BUSCAR TODOS OS PEDIDOS E SEUS ITENS
+POST http://localhost:3000/api/pedidos-itens
+Content-Type: application/json
+
+{
+  "CLIENTE": "003364",
+  "DATAINI": "20200101",
+  "DATAFIM": "20250731",
+  "FILIAL": "0101",
+  "LOJA": "01"
+}
+

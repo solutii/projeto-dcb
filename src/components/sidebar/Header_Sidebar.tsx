@@ -33,8 +33,8 @@ export function SidebarHeader({
             </div>
             <div className="flex items-center space-x-1">
               <Heart className="w-4 h-4 text-red-400 animate-pulse" />
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <Activity className="w-4 h-4 text-cyan-400" />
+              <Shield className="w-4 h-4 text-emerald-400 animate-pulse" />
+              <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
             </div>
           </div>
         )}
