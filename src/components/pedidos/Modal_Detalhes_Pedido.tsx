@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Eye, Loader2 } from "lucide-react";
+import { Eye, Loader2, ChevronDown } from "lucide-react";
 import { PedidoType } from "@/types/pedido";
 import { buscarItensPedido, ItemPedido } from "../../lib/pedidoService";
 
@@ -110,7 +110,7 @@ const itensBrutos = await buscarItensPedido(
           className="text-blue-500 hover:bg-blue-100 hover:text-blue-700 transition-colors"
           aria-label={`Detalhes do pedido ${pedido.C5_NUM}`}
         >
-          <Eye className="w-4 h-4" />
+          <Eye className="w-6 h-6" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">

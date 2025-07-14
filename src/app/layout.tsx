@@ -3,6 +3,7 @@ import { Kodchasan, Orbitron } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
 import QueryClienteProviderComponent from "@/components/query-cliente/Query_Cliente_Provider";
+import { Toaster } from "sonner";
 
 const kodchasan = Kodchasan({
   variable: '--font-kodchasan',
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body
         className={`${kodchasan.variable} ${orbitron.variable} antialiased`}>
         <QueryClienteProviderComponent>
+          <Toaster />
           <AuthProvider>
             {children}
           </AuthProvider>

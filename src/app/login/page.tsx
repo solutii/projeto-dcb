@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Lock, Mail, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 import { useAuth } from "@/contexts/auth-context";
@@ -67,7 +66,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
-      <Toaster />
       {/* Background com imagem e efeitos */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0">

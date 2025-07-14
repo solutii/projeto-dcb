@@ -1,6 +1,7 @@
-type PedidoStatusType = '0' | '1' | '2' | '3' | '4' | '5' | '7' | '8'
+type PedidoStatusType = ' ' | '0' | '1' | '2' | '3' | '4' | '5' | '7' | '8'
 
 const PedidoStatusLabel: { [k in PedidoStatusType]: string} = {
+  " ": "Todos",
   "0": "Em Aberto",
   "1": "Encerrado",
   "2": "Liberado - Blq. Crédito/Estoque",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import { CalendarDays, Filter, FileCode } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -19,29 +19,32 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { PedidoStatusLabel } from "@/types/pedido";
+import { useFiltrosPedido } from "@/contexts/filtros/pedidos";
+import { Input } from "@/components/ui/input";
 
 export function FiltrosTabelaPedidos() {
-  const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
-  const [dataFim, setDataFim] = useState<Date | undefined>(undefined);
-  const [produto, setProduto] = useState("");
-  const [status, setStatus] = useState("");
+  const {
+      dataInicio,
+      setDataInicio,
+      dataFim,
+      setDataFim,
+      numeroPedido,
+      setNumeroPedido,
+      status,
+      setStatus,
+    } = useFiltrosPedido();
 
   return (
-    <div className="space-y-5">
-      {/* TÍTULO MOBILE */}
-      <div className="md:hidden bg-emerald-700 p-4 rounded-md shadow-md shadow-black">
-        <h2 className="text-2xl italic font-bold text-white text-left">
+    <div className="space-y-4">
+      {/* Título e Data Atual */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-4xl italic font-bold text-gray-800">
           Pedidos
         </h2>
       </div>
 
-      {/* TÍTULO DESKTOP */}
-      <div className="hidden md:flex items-center justify-between">
-        <h2 className="text-4xl italic font-bold text-gray-800">Pedidos</h2>
-      </div>
-
       {/* Campos de Filtro */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-6 gap-4">
         {/* Data Inicial */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
@@ -66,9 +69,8 @@ export function FiltrosTabelaPedidos() {
               <Calendar
                 mode="single"
                 selected={dataInicio}
-                onSelect={setDataInicio}
+                onSelect={(data) => setDataInicio(data || new Date())}
                 locale={ptBR}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
@@ -98,9 +100,10 @@ export function FiltrosTabelaPedidos() {
               <Calendar
                 mode="single"
                 selected={dataFim}
-                onSelect={setDataFim}
+                onSelect={(data) => { 
+                  setDataFim(data || new Date());
+                }}
                 locale={ptBR}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
@@ -112,7 +115,8 @@ export function FiltrosTabelaPedidos() {
             <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
-          <Select value={produto} onValueChange={setProduto}>
+          <Input className="bg-white shadow-md shadow-black" value={numeroPedido} onChange={(event) => setNumeroPedido(event.target.value)}/>
+          {/* <Select value={produto} onValueChange={setProduto}>
             <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
@@ -124,8 +128,8 @@ export function FiltrosTabelaPedidos() {
               <SelectItem value="Cateteres">Cateteres</SelectItem>
               <SelectItem value="Gazes Estéreis">Gazes Estéreis</SelectItem>
               <SelectItem value="Termômetros">Termômetros</SelectItem>
-            </SelectContent>
-          </Select>
+            </SelectContent> 
+          </Select>*/}
         </div>
 
         {/* Status */}
@@ -139,11 +143,13 @@ export function FiltrosTabelaPedidos() {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              {Object.entries(PedidoStatusLabel).map(([key, value]) => (
-                <SelectItem key={key} value={key}>
-                  {value}
-                </SelectItem>
-              ))}
+              {
+                Object.entries(PedidoStatusLabel).map(([key, label]) => (
+                  <SelectItem key={key} value={key}>
+                    {label}
+                  </SelectItem>
+                ))  
+              }
             </SelectContent>
           </Select>
         </div>

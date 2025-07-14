@@ -7,17 +7,22 @@ import { PedidoType } from "@/types/pedido";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { PedidosMobileFooter } from "./Pedidos_Mobile_Footer ";
+import { useFiltrosPedido } from "@/contexts/filtros/pedidos";
+import { useAuth } from "@/contexts/auth-context";
 
 export function LayoutPedidos() {
   const [pedido, setPedidos] = useState<PedidoType[]>([]);
 
+  const { dataInicio, dataFim, numeroPedido, status } = useFiltrosPedido();
+  const { user } = useAuth();
+
   async function handleAccountsPayableData() {
     const retorno = await axios.post("/api/order", {
-      CLIENTE: "003364",
-      LOJA: "01",
-      DATAINI: "20240701",
-      DATAFIM: "20250731",
-      FILIAL: "01",
+      CLIENTE: user?.cod,
+      LOJA: user?.loja,
+      DATAINI: dataInicio,
+      DATAFIM: dataFim,
+      FILIAL: "0101",
     });
 
     if (retorno.status !== 200) {

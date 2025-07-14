@@ -2,9 +2,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
+import { ChevronDown, CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
 import { PedidoType } from "@/types/pedido";
 import { ModalDetalhesPedidoAsync } from "./Modal_Detalhes_Pedido";
+import DownloadXml from "./Download_XML";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
@@ -105,6 +106,7 @@ export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
       return (
         <div className="flex justify-center gap-2">
           <ModalDetalhesPedidoAsync pedido={pedido} />
+          <DownloadXml pedido={pedido} />
         </div>
       );
     },
