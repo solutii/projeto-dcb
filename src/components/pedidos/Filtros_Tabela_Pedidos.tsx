@@ -24,27 +24,27 @@ import { Input } from "@/components/ui/input";
 
 export function FiltrosTabelaPedidos() {
   const {
-      dataInicio,
-      setDataInicio,
-      dataFim,
-      setDataFim,
-      numeroPedido,
-      setNumeroPedido,
-      status,
-      setStatus,
-    } = useFiltrosPedido();
+    dataInicio,
+    setDataInicio,
+    dataFim,
+    setDataFim,
+    numeroPedido,
+    setNumeroPedido,
+    status,
+    setStatus,
+  } = useFiltrosPedido();
 
   return (
-    <div className="space-y-4">
-      {/* Título e Data Atual */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-4xl italic font-bold text-gray-800">
+    <div className="space-y-5">
+      {/* TÍTULO MOBILE */}
+      <div className="md:hidden bg-emerald-700 p-4 rounded-md shadow-md shadow-black">
+        <h2 className="text-2xl italic font-bold text-white text-left">
           Pedidos
         </h2>
       </div>
 
       {/* Campos de Filtro */}
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {/* Data Inicial */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
@@ -76,7 +76,7 @@ export function FiltrosTabelaPedidos() {
           </Popover>
         </div>
 
-        {/* Data Final */}
+        {/* DATA INICIAL */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <CalendarDays className="w-5 h-5" />
@@ -100,7 +100,7 @@ export function FiltrosTabelaPedidos() {
               <Calendar
                 mode="single"
                 selected={dataFim}
-                onSelect={(data) => { 
+                onSelect={(data) => {
                   setDataFim(data || new Date());
                 }}
                 locale={ptBR}
@@ -109,13 +109,17 @@ export function FiltrosTabelaPedidos() {
           </Popover>
         </div>
 
-        {/* Produto */}
+        {/* PRODUTO */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <FileCode className="w-5 h-5" />
-            Nota Fiscal
+            Produto
           </label>
-          <Input className="bg-white shadow-md shadow-black" value={numeroPedido} onChange={(event) => setNumeroPedido(event.target.value)}/>
+          <Input
+            className="bg-white shadow-md shadow-black"
+            value={numeroPedido}
+            onChange={(event) => setNumeroPedido(event.target.value)}
+          />
           {/* <Select value={produto} onValueChange={setProduto}>
             <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
               <SelectValue placeholder="Todas" />
@@ -132,7 +136,7 @@ export function FiltrosTabelaPedidos() {
           </Select>*/}
         </div>
 
-        {/* Status */}
+        {/* STATUS */}
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <Filter className="w-5 h-5" />
@@ -143,13 +147,11 @@ export function FiltrosTabelaPedidos() {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              {
-                Object.entries(PedidoStatusLabel).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>
-                    {label}
-                  </SelectItem>
-                ))  
-              }
+              {Object.entries(PedidoStatusLabel).map(([key, label]) => (
+                <SelectItem key={key} value={key}>
+                  {label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

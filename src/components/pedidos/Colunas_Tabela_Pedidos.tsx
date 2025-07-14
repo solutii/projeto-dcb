@@ -62,7 +62,7 @@ export const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-export const colunasTabelaContasPagar: ColumnDef<PedidoType>[] = [
+export const colunasTabelaPedidos: ColumnDef<PedidoType>[] = [
   {
     accessorKey: "C5_NUM",
     header: "Pedido nº",
