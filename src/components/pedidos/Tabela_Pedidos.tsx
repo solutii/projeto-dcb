@@ -27,7 +27,7 @@ export function TabelaPedidos({ dados }: TabelaContasPagarProps) {
     <>
       {/* DESKTOP – Tabela */}
       <div className="hidden md:block">
-        <div className="flex flex-col h-[82vh] overflow-hidden rounded-lg bg-white shadow-md shadow-black">
+        <div className="flex flex-col h-[75vh] overflow-hidden rounded-lg bg-white shadow-md shadow-black overflow-y-auto">
           {/* Cabeçalho */}
           <div className="bg-black/80 p-4">
             <h3 className="text-xl font-bold text-white tracking-wide">

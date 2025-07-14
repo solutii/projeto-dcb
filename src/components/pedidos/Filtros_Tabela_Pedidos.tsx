@@ -113,7 +113,7 @@ export function FiltrosTabelaPedidos() {
         <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
             <FileCode className="w-5 h-5" />
-            Nota Fiscal
+            Número do Pedido
           </label>
           <Input className="bg-white shadow-md shadow-black" value={numeroPedido} onChange={(event) => setNumeroPedido(event.target.value)}/>
           {/* <Select value={produto} onValueChange={setProduto}>

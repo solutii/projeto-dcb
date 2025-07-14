@@ -2,37 +2,68 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown, CircleCheck, Clock, PackageOpen, Truck } from "lucide-react";
-import { PedidoType } from "@/types/pedido";
+import { ChevronDown, Circle, CircleCheck, CircleX, Clock, LockKeyhole, PackageOpen, Truck, UnlockKeyholeIcon } from "lucide-react";
+import { PedidoStatusLabel, PedidoType } from "@/types/pedido";
 import { ModalDetalhesPedidoAsync } from "./Modal_Detalhes_Pedido";
 import DownloadXml from "./Download_XML";
 
 export const StatusBadge = ({ status }: { status: string }) => {
   const configs = {
-    "1": {
-      icon: PackageOpen,
-      style: "bg-blue-500 text-white",
-      bgMobile: "bg-blue-50 border-blue-200",
-      textMobile: "text-blue-700",
-    },
-    "2": {
+    
+    "0": {
       icon: Clock,
-      style: "bg-yellow-500 text-black",
-      bgMobile: "bg-yellow-50 border-yellow-200",
-      textMobile: "text-yellow-700",
-    },
-    "3": {
-      icon: Truck,
-      style: "bg-purple-500 text-white",
-      bgMobile: "bg-purple-50 border-purple-200",
-      textMobile: "text-purple-700",
-    },
-    "4": {
-      icon: CircleCheck,
       style: "bg-green-400 text-black",
       bgMobile: "bg-green-50 border-green-200",
       textMobile: "text-green-700",
     },
+    "1": {
+      icon: Clock,
+      style: "bg-purple-500 text-white",
+      bgMobile: "bg-purple-50 border-purple-200",
+      textMobile: "text-purple-700",
+    },  
+    "2": {
+      icon: UnlockKeyholeIcon,
+      style: "bg-blue-500 text-white",
+      bgMobile: "bg-blue-50 border-blue-200",
+      textMobile: "text-blue-700",
+    },
+    "3": {
+      icon: UnlockKeyholeIcon,
+      style: "bg-blue-500 text-white",
+      bgMobile: "bg-blue-50 border-blue-200",
+      textMobile: "text-blue-700",
+    },
+    "4": {
+      icon: CircleX,
+      style: "bg-blue-500 text-white",
+      bgMobile: "bg-blue-50 border-blue-200",
+      textMobile: "text-blue-700",
+    },
+    "5": {
+      icon: Circle,
+      style: "bg-yellow-500 text-white",
+      bgMobile: "bg-yellow-50 border-yellow-200",
+      textMobile: "text-yellow-700",
+    },
+    "6": {
+      icon: Circle,
+      style: "bg-yellow-500 text-white",
+      bgMobile: "bg-yellow-50 border-yellow-200",
+      textMobile: "text-yellow-700",
+    },
+    "7": {
+      icon: CircleCheck,
+      style: "bg-green-500 text-white",
+      bgMobile: "bg-green-50 border-green-200",
+      textMobile: "text-green-700",
+    },
+    "8": {
+      icon: CircleCheck,
+      style: "bg-green-500 text-white",
+      bgMobile: "bg-green-50 border-green-200",
+      textMobile: "text-green-700",
+    }
   };
 
   const config =
@@ -46,7 +77,8 @@ export const StatusBadge = ({ status }: { status: string }) => {
           className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold ${config.style} shadow-lg`}
         >
           <Icon className="w-3 h-3" />
-          {status}
+          {PedidoStatusLabel[status as keyof typeof PedidoStatusLabel]}
+            
         </div>
       </div>
 
