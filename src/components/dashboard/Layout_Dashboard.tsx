@@ -7,24 +7,14 @@ import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_C
 import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_Chart";
 
 // import { TrendingUp, Package, Calendar } from "lucide-react";
-import { SidebarNavegacao } from "../../components/sidebar/Sidebar";
+import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import axios from "axios";
 import { ContasAPagarType } from "@/types/financeiro";
-
-
-const comprasPorProduto = [
-  { produto: "Luvas Nitrílicas", valor: 25400 },
-  { produto: "Seringas 10ml", valor: 18200 },
-  { produto: "Máscaras N95", valor: 22100 },
-  { produto: "Cateteres", valor: 15800 },
-  { produto: "Gazes Estéreis", valor: 12300 },
-];
-
-
+import { ItemPedidoType } from "@/types/pedido";
 
 const contasAnuais = [
   { mes: "Jan", pagas: 12400, aberto: 8200 },
@@ -69,7 +59,56 @@ export function HospitalDashboardLayout() {
         DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
         NOTAFISCAL: notaFiscal
       });
+
+      let contasAPagar = data.dados ?? [] as ContasAPagarType[];
+
+      let totalCompras = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      let comprasPagas = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      let comprasAberto = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      setCardData({
+        totalCompras,
+        comprasPagas,
+        comprasAberto
+      })
+
       return data.dados ?? [] as ContasAPagarType[];
+    },
+    refetchOnWindowFocus: false,
+  })
+
+
+  const {
+    data: itensPedidos,
+    isError: isErrorItensPedidos,
+    isLoading: isLoadingItensPedidos,
+    isFetching: isFetchingItensPedidos
+
+  } = useQuery({
+    queryKey: ['itensPedidos'],
+    queryFn: async () => {
+      const { data } = await axios.post('/api/itens', {
+        FILIAL: "0101 ",
+        CLIENTE: user?.cod,
+        LOJA: user?.loja,
+      });
+
+      let itensPedidos: ItemPedidoType[] = data.dados ?? [];
+
+      console.log("Itens pedidos:", itensPedidos);
+      const mapItens = new Map<string, number>();
+
+      itensPedidos.map((item: ItemPedidoType) => {
+        let valorAtual = mapItens.get(item.C6_PRODUTO) || 0;
+        mapItens.set(item.C6_PRODUTO, valorAtual + item.C6_VALOR);
+      })
+
+      setComprasProProduto(() => 
+        Object.entries(mapItens).map(([produto, valor]) => ({
+          produto,valor
+        }))
+      )
+
+      return itensPedidos;
     },
     refetchOnWindowFocus: false,
   })
@@ -85,19 +124,12 @@ export function HospitalDashboardLayout() {
   { name: "Em aberto", value: 32.6, count: 43 },
   ])
 
+  const [comprasPorProduto, setComprasProProduto] = useState([
+    { produto: "Produto A", valor: 1500 },])
+
   useEffect(() => {
 
-    if (contasAPagar?.length) {
-
-      const totalComprasReducer = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
-
-      setCardData({
-        totalCompras: totalComprasReducer,
-        //comprasPagas: contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0),
-        comprasPagas: 25,
-        //comprasAberto:contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0)
-        comprasAberto:15
-      })
+    if (contasAPagar?.length) {      
     
       setContasAPagarTot([
         { name: "Pagas", value: 67.4, count: 89 },
