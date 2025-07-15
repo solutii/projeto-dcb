@@ -1,6 +1,6 @@
 // components/MenuNavegacao.tsx
 import Link from "next/link";
-import { LayoutDashboard, FileText, ShoppingCart, Receipt } from "lucide-react";
+import { LayoutDashboard, FileText, ShoppingCart } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export function MenuNavegacao() {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CardsMetricas } from "@/components/dashboard/Cards_Metricas_Dashboard";
 import { ComprasPorProdutoChart } from "@/components/dashboard/Compras_Por_Produto_Chart";
 import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_Chart";
@@ -9,7 +9,7 @@ import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_C
 // import { TrendingUp, Package, Calendar } from "lucide-react";
 import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import axios from "axios";
@@ -34,22 +34,22 @@ const contasAnuais = [
 export function DashboardLayout() {
 
 
-  const queryClient = useQueryClient();
+  /* const queryClient = useQueryClient(); */
   const { user } = useAuth();
   const {
     dataInicio,
     dataFim,
     notaFiscal,
-    status,
+    /* status, */
   } = useFiltrosFinanceiro();
   
-  const {
+  /* const {
     data: contasAPagar,
     isError,
     isLoading,
     isFetching
 
-  } = useQuery({
+  } = */ useQuery({
     queryKey: ['contasAPagar'],
     queryFn: async () => {
       const { data } = await axios.post('/api/accounts-payable', {
@@ -60,11 +60,11 @@ export function DashboardLayout() {
         NOTAFISCAL: notaFiscal
       });
 
-      let contasAPagar = data.dados ?? [] as ContasAPagarType[];
+      const contasAPagar = data.dados ?? [] as ContasAPagarType[];
 
-      let totalCompras = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
-      let comprasPagas = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
-      let comprasAberto = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const totalCompras = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const comprasPagas = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const comprasAberto = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
       setCardData({
         totalCompras,
         comprasPagas,
@@ -81,13 +81,13 @@ export function DashboardLayout() {
   })
 
 
-  const {
+  /* const {
     data: itensPedidos,
     isError: isErrorItensPedidos,
     isLoading: isLoadingItensPedidos,
     isFetching: isFetchingItensPedidos
 
-  } = useQuery({
+  } =  */useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => {
       const { data } = await axios.post('/api/itens-pedido', {
@@ -96,18 +96,18 @@ export function DashboardLayout() {
         loja: user?.loja,
       });
 
-      let itensPedidos: ItemPedidoType[] = data.dados ?? [];
+      const itensPedidos: ItemPedidoType[] = data.dados ?? [];
 
       const mapItens = new Map<string, number>();
 
       itensPedidos.map((item: ItemPedidoType) => {
-        let valorAtual = mapItens.get(item.B1_DESC) || 0;
+        const valorAtual = mapItens.get(item.B1_DESC) || 0;
         mapItens.set(item.B1_DESC, valorAtual + item.C6_VALOR);
       })
 
       // Object.entries(mapItens) retorna um array vazio porque mapItens é um Map, não um objeto simples.
       // Para obter as entradas de um Map, use mapItens.entries() ou Array.from(mapItens.entries())
-      let totalComprasProProdutos = Array.from(mapItens.entries()).map(([produto, valor]) => ({
+      const totalComprasProProdutos = Array.from(mapItens.entries()).map(([produto, valor]) => ({
         produto,
         valor
       }))
@@ -128,7 +128,7 @@ export function DashboardLayout() {
   const [contasAPagarTot, setContasAPagarTot] = useState<any>([])
 
   const [comprasPorProduto, setComprasProProduto] = useState([
-    { produto: "Produto A", valor: 1500 },])
+    { produto: "", valor: 0 },])
 
 
   return (

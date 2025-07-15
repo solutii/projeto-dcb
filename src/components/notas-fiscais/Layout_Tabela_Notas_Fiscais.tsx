@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarNavegacao } from "../Sidebar";
+import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { TabelaPedidos } from "./Tabela_Notas_Fiscais";
 import { FiltrosTabelaPedidos } from "./Filtros_Tabela_Notas_Fiscais";
 import { PedidosProps } from "./Colunas_Tabela_Notas_Fiscais";

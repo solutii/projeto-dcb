@@ -2,7 +2,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown, Circle, CircleCheck, CircleX, Clock, LockKeyhole, PackageOpen, Truck, UnlockKeyholeIcon } from "lucide-react";
+import { Circle, CircleCheck, CircleX, Clock, UnlockKeyholeIcon } from "lucide-react";
 import { PedidoStatusLabel, PedidoType } from "@/types/pedido";
 import { ModalDetalhesPedidoAsync } from "./Modal_Detalhes_Pedido";
 import DownloadXml from "./Download_XML";

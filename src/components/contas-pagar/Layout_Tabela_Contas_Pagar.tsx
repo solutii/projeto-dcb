@@ -45,11 +45,11 @@ export function LayoutContasPagar() {
   const vencidas =
     contasAPagar?.filter((n: ContasAPagarType) => n.STATUS === "2").length || 0;
 
-  function filtrarPorStatus(contas: ContasAPagarType[]): ContasAPagarType[] {
+  /* function filtrarPorStatus(contas: ContasAPagarType[]): ContasAPagarType[] {
     return status == "0"
       ? contas
       : contas.filter((cpg) => cpg.STATUS === status);
-  }
+  } */
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["contasAPagar"] });

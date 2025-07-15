@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   FileText,
   ShoppingCart,
-  Receipt,
   Menu,
   X,
 } from "lucide-react";

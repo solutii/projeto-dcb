@@ -1,10 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { PedidoType } from "@/types/pedido";
 import { FileDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
 
 export default function DownloadXml({
     pedido
@@ -57,12 +56,7 @@ export default function DownloadXml({
         }
     })
 
-    const [urlXml, setUrlXml] = useState("")
-    const [loading, setLoading] = useState(false);
-
     const handleXml = async () => {
-
-        setLoading(false) 
 
         toast("Xml", {
           description: "Gerando XML...",

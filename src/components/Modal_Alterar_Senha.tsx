@@ -32,7 +32,6 @@ interface PasswordChangeModalProps {
 const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
 }) => {
   const [formData, setFormData] = useState<PasswordData>({
     currentPassword: "",
@@ -47,7 +46,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting/* , setIsSubmitting */] = useState<boolean>(false);
   const { user } = useAuth(); // Assuming you have a useAuth hook to get the user context
 
   const mutation = useMutation({

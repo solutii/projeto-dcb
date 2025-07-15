@@ -101,6 +101,7 @@ export function ContasPagarMesChart({ data }: { data: Conta[] }) {
             {!screen.isMobile && data.map((entry, index) => (
               
               <Legend
+                key={`legend-${index}`}
                 layout="vertical"
                 verticalAlign="middle"
                 align="right"

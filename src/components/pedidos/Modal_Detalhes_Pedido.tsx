@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Eye, Loader2, ChevronDown } from "lucide-react";
+import { Eye, Loader2 } from "lucide-react";
 import { PedidoType } from "@/types/pedido";
 import { buscarItensPedido, ItemPedido } from "../../lib/pedidoService";
 import { useAuth } from "@/contexts/auth-context";
@@ -41,9 +41,9 @@ export const ModalDetalhesPedidoAsync = ({
 
   const {
     data: itensPedidos,
-    isError: isErrorItensPedidos,
+    /* isError: isErrorItensPedidos,
     isLoading: isLoadingItensPedidos,
-    isFetching: isFetchingItensPedidos
+    isFetching: isFetchingItensPedidos */
 
   } = useQuery({
     queryKey: ['itensPedidos'],
@@ -66,12 +66,12 @@ export const ModalDetalhesPedidoAsync = ({
 
       const filialCorrigida = pedido.C5_FILIAL.padStart(4, "0");
 
-      const itensBrutos = await buscarItensPedido(
+      /* const itensBrutos = await buscarItensPedido(
         pedido.C5_NUM,
         pedido.C5_CLIENTE,
-        filialCorrigida, // ← corrigido aqui
+        filialCorrigida,
         pedido.C5_LOJACLI
-      );
+      ); */
 
       const itensFormatados: ItemPedido[] = itensPedidos?.map((item: any) => ({
         item: item.numeroItem || item.C6_ITEM || "—",

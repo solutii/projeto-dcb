@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/auth-context";
 export function LayoutPedidos() {
   const [pedido, setPedidos] = useState<PedidoType[]>([]);
 
-  const { dataInicio, dataFim, numeroPedido, status } = useFiltrosPedido();
+  const { dataInicio, dataFim/* , numeroPedido, status */ } = useFiltrosPedido();
   const { user } = useAuth();
 
   async function handleAccountsPayableData() {
