@@ -26,7 +26,7 @@ export function LayoutContasPagar() {
   } = useQuery({
     queryKey: ["contasAPagar"],
     queryFn: async () => {
-      const { data } = await api.post("/api/accounts-payable", {
+      const { data } = await axios.post("/api/accounts-payable", {
         CLIENTE: user?.cod,
         LOJA: user?.loja,
         DATAINI: dataInicio.toISOString().split("T")[0].replace(/-/g, ""),
