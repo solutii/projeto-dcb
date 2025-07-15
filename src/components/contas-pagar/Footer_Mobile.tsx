@@ -1,6 +1,6 @@
 "use client";
 
-export function PedidosMobileFooter() {
+export function FooterMobile() {
   return (
     <footer className="fixed bottom-0 left-0 w-full bg-gray-200 backdrop-blur-md z-50 md:hidden">
       {/* Brand Strip */}

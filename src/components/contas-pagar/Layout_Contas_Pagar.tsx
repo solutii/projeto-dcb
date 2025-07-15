@@ -3,14 +3,15 @@
 import axios from "axios";
 import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { TabelaContasPagar } from "./Tabela_Contas_Pagar";
-import { FiltrosTabelaContasPagar } from "./Filtros_Tabela_Contas_Pagar";
-import { CardsTabelaContasPagar } from "./Cards_Tabela_Contas_Pagar";
+import { FiltrosContasPagar } from "./Filtros_Contas_Pagar";
+import { CardsContasPagar } from "./Cards_Contas_Pagar";
 import { useEffect } from "react";
 import { ContasAPagarType } from "@/types/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { PedidosMobileFooter } from "./Mobile_Footer";
+import { FooterMobile } from "./Footer_Mobile";
+import { Loader2 } from "lucide-react";
 
 export function LayoutContasPagar() {
   const queryClient = useQueryClient();
@@ -45,11 +46,11 @@ export function LayoutContasPagar() {
   const vencidas =
     contasAPagar?.filter((n: ContasAPagarType) => n.STATUS === "2").length || 0;
 
-  function filtrarPorStatus(contas: ContasAPagarType[]): ContasAPagarType[] {
-    return status == "0"
-      ? contas
-      : contas.filter((cpg) => cpg.STATUS === status);
-  }
+  // function filtrarPorStatus(contas: ContasAPagarType[]): ContasAPagarType[] {
+  //   return status == "0"
+  //     ? contas
+  //     : contas.filter((cpg) => cpg.STATUS === status);
+  // }
 
   useEffect(() => {
     console.log("passou por aqui");
@@ -58,8 +59,11 @@ export function LayoutContasPagar() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Carregando...
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 z-50">
+        <Loader2 className="w-16 h-16 text-emerald-600 animate-spin" />
+        <p className="mt-4 text-lg font-semibold text-emerald-700 animate-pulse">
+          Carregando contas a pagar, aguarde...
+        </p>
       </div>
     );
   }
@@ -75,8 +79,8 @@ export function LayoutContasPagar() {
         <div className="flex-shrink-0 bg-white">
           <div className="px-4 md:px-6 lg:px-8 py-4">
             <div className="space-y-4">
-              <FiltrosTabelaContasPagar />
-              <CardsTabelaContasPagar
+              <FiltrosContasPagar />
+              <CardsContasPagar
                 total={total}
                 pagas={pagas}
                 pendentes={pendentes}
@@ -87,7 +91,7 @@ export function LayoutContasPagar() {
           </div>
         </div>
       </main>
-      <PedidosMobileFooter />
+      <FooterMobile />
     </div>
   );
 }

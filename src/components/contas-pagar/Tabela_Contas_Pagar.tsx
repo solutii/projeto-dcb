@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { DollarSign, AlertTriangle, AlertOctagon } from "lucide-react";
 import { colunasTabelaContasPagar } from "./Colunas_Tabela_Contas_Pagar";
-import { MobileTable } from "./Mobile_Table";
+import { TabelaMobile } from "./Tabela_Mobile";
 import { ContasAPagarType } from "@/types/financeiro";
 
 interface TabelaContasPagarProps {
@@ -30,14 +30,13 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
 
   return (
     <>
-      {/* TABELA DESKTOP */}
+      {/* ========================== TABELA DESKTOP ========================== */}
       <div className="hidden md:block">
         <div className="flex flex-col h-[56vh] overflow-hidden rounded-lg bg-white shadow-md shadow-black">
-          {/* Cabeçalho da tabela */}
           {/* Cabeçalho */}
           <div className="bg-black/80 p-4">
-            <h3 className="text-xl font-bold text-white tracking-wide">
-              Pedidos
+            <h3 className="text-2xl font-semibold text-white tracking-wide italic">
+              Contas a Pagar
             </h3>
           </div>
 
@@ -45,23 +44,19 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {naoTemDados ? (
               <div className="flex justify-center items-center h-full p-10">
-                <p className="text-gray-500 italic text-lg">
+                <p className="text-gray-600 italic text-lg">
                   Nenhum pedido encontrado no período selecionado.
                 </p>
               </div>
             ) : (
-              <table className="w-full border-separate border-spacing-0 text-sm">
+              <table className="w-full border-separate border-spacing-0">
                 <thead className="sticky top-0 z-10">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
-                      {headerGroup.headers.map((header, index) => (
+                      {headerGroup.headers.map((header) => (
                         <th
                           key={header.id}
-                          className={`p-3 bg-teal-500 text-black font-extrabold text-left ${
-                            index === 0 ? "pl-20" : "text-center"
-                          } ${
-                            header.isPlaceholder ? "bg-gray-200" : "bg-gray-100"
-                          } border-b border-gray-200`}
+                          className="p-4 bg-teal-500 text-black font-extrabold text-center text-xl italic tracking-wider"
                         >
                           <div className="flex items-center space-x-2">
                             {header.isPlaceholder
@@ -77,24 +72,17 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
                   ))}
                 </thead>
 
-                <tbody className="divide-y divide-gray-200">
+                <tbody>
                   {table.getRowModel().rows.map((row, rowIndex) => (
-                    <tr
-                      key={row.id}
-                      className={`group transition-all duration-200 ease-in-out hover:bg-blue-100 ${
-                        rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
-                      } cursor-pointer`}
-                    >
-                      {row.getVisibleCells().map((cell, cellIndex) => (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className={`p-2 text-gray-800 ${
-                            cellIndex === 0
-                              ? "font-semibold text-left pl-20"
-                              : "text-center"
-                          } ${rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}`}
+                          className={`p-4 text-gray-800 ${
+                            rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
+                          }`}
                         >
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center">
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
@@ -110,10 +98,9 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
           </div>
         </div>
       </div>
-      {/* ------------------------------------------------------------ */}
 
-      {/* TABELA MOBILE */}
-      <div className="block md:hidden mt-4 space-y-5 overflow-y-auto max-h-[75vh] px-2 pb-12 custom-scrollbar">
+      {/* ========================== TABELA MOBILE ========================== */}
+      <div className="block md:hidden space-y-5 px-2">
         {naoTemDados ? (
           <div className="text-center p-4">
             <p className="text-gray-500 italic text-base">
@@ -123,27 +110,29 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
         ) : (
           table
             .getRowModel()
-            .rows.map((row) => <MobileTable key={row.id} row={row} />)
+            .rows.map((row) => <TabelaMobile key={row.id} row={row} />)
         )}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* ========================== CARDS DE TOTAIS ========================== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-24">
         {/* Card Valor Total */}
-        <div className="bg-white rounded-xl shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
+        <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-green-500"></div>
           <div className="p-3 sm:p-4">
             <div className="flex flex-col gap-2">
-              <p className="font-semibold text-gray-800 italic tracking-wide">
+              <p className="font-semibold text-base text-gray-800 italic tracking-wider">
                 VALOR TOTAL
               </p>
               <div className="flex justify-between items-center">
-                <p className="text-base sm:text-lg font-bold text-green-700 italic">
+                <p className="text-base sm:text-lg font-bold text-gray-800 italic tracking-wider">
                   R${" "}
                   {totalValor.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
+                    style: "currency",
+                    currency: "BRL",
                   })}
                 </p>
-                <div className="p-2 rounded-lg bg-green-500 text-black shadow">
+                <div className="p-4 rounded-lg bg-green-500 text-black shadow-md shadow-black">
                   <DollarSign className="w-4 h-4" strokeWidth={2} />
                 </div>
               </div>
@@ -152,21 +141,22 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
         </div>
 
         {/* Card Juros */}
-        <div className="bg-white rounded-xl shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
+        <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-yellow-500"></div>
           <div className="p-3 sm:p-4">
             <div className="flex flex-col gap-2">
-              <p className="font-semibold text-gray-800 italic tracking-wide">
+              <p className="font-semibold text-base text-gray-800 italic tracking-wider">
                 JUROS ACUMULADOS
               </p>
               <div className="flex justify-between items-center">
-                <p className="text-base sm:text-lg font-bold text-yellow-700 italic">
+                <p className="text-base sm:text-lg font-bold text-red-500 italic tracking-wider">
                   R${" "}
                   {totalJuros.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
+                    style: "currency",
+                    currency: "BRL",
                   })}
                 </p>
-                <div className="p-2 rounded-lg bg-yellow-500 text-black shadow">
+                <div className="p-4 rounded-lg bg-yellow-500 text-black shadow-md shadow-black">
                   <AlertTriangle className="w-4 h-4" strokeWidth={2} />
                 </div>
               </div>
@@ -175,21 +165,22 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
         </div>
 
         {/* Card Multa */}
-        <div className="bg-white rounded-xl shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
+        <div className="bg-white rounded-lg shadow-md shadow-black overflow-hidden relative group text-xs sm:text-sm">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-red-500"></div>
           <div className="p-3 sm:p-4">
             <div className="flex flex-col gap-2">
-              <p className="font-semibold text-gray-800 italic tracking-wide">
+              <p className="font-semibold text-base text-gray-800 italic tracking-wider">
                 MULTAS APLICADAS
               </p>
               <div className="flex justify-between items-center">
-                <p className="text-base sm:text-lg font-bold text-red-700 italic">
+                <p className="text-base sm:text-lg font-bold text-red-500 italic tracking-wider">
                   R${" "}
                   {totalMulta.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
+                    style: "currency",
+                    currency: "BRL",
                   })}
                 </p>
-                <div className="p-2 rounded-lg bg-red-500 text-white shadow">
+                <div className="p-4 rounded-lg bg-red-500 text-black shadow-md shadow-black">
                   <AlertOctagon className="w-4 h-4" strokeWidth={2} />
                 </div>
               </div>

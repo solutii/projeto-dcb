@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 
-export function FiltrosTabelaContasPagar() {
+export function FiltrosContasPagar() {
   const {
     dataInicio,
     setDataInicio,
@@ -53,7 +53,7 @@ export function FiltrosTabelaContasPagar() {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {/* DATA INICIAL */}
         <div className="col-span-1 flex flex-col">
-          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
+          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1 tracking-wider">
             <CalendarDays className="w-5 h-5 " />
             Data Inicial
           </label>
@@ -61,7 +61,7 @@ export function FiltrosTabelaContasPagar() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-semibold text-gray-800 cursor-pointer italic shadow-md shadow-black hover:shadow-lg hover:shadow-black"
+                className="text-lg w-full justify-start text-left font-semibold text-gray-800 cursor-pointer italic shadow-md shadow-black hover:shadow-lg hover:shadow-black tracking-wider"
               >
                 {dataInicio
                   ? format(dataInicio, "dd/MM/yyyy", { locale: ptBR })
@@ -85,7 +85,7 @@ export function FiltrosTabelaContasPagar() {
 
         {/* DATA FINAL */}
         <div className="col-span-1 flex flex-col">
-          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
+          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1 tracking-wider">
             <CalendarDays className="w-5 h-5" />
             Data Final
           </label>
@@ -93,7 +93,7 @@ export function FiltrosTabelaContasPagar() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-semibold text-gray-800 cursor-pointer italic shadow-md shadow-black hover:shadow-lg hover:shadow-black"
+                className="text-lg w-full justify-start text-left font-semibold text-gray-800 cursor-pointer italic shadow-md shadow-black hover:shadow-lg hover:shadow-black tracking-wider"
               >
                 {dataFim
                   ? format(dataFim, "dd/MM/yyyy", { locale: ptBR })
@@ -118,12 +118,12 @@ export function FiltrosTabelaContasPagar() {
 
         {/* NOTA FISCAL */}
         <div className="col-span-1 flex flex-col">
-          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
+          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1 tracking-wider">
             <FileCode className="w-5 h-5" />
             Nota Fiscal
           </label>
           <Input
-            className="bg-white shadow-md shadow-black"
+            className="bg-white shadow-md shadow-black tracking-wider text-lg"
             value={notaFiscal}
             onChange={(event) => setNotaFiscal(event.target.value)}
           />
@@ -131,12 +131,12 @@ export function FiltrosTabelaContasPagar() {
 
         {/* STATUS */}
         <div className="col-span-1 flex flex-col">
-          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1">
+          <label className="text-base font-semibold text-gray-800 italic mb-1 flex items-center gap-1 tracking-wider">
             <Filter className="w-5 h-5" />
             Status
           </label>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
+            <SelectTrigger className="w-full cursor-pointer text-gray-800 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black tracking-wider text-lg">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">

@@ -27,26 +27,28 @@ function CardResumo({ titulo, valor, cor, Icon }: CardsProps) {
 
   return (
     <div
-      className={`rounded-xl p-3 sm:p-4 shadow-md shadow-black ${cor} text-xs sm:text-sm`}
+      className={`rounded-lg p-4 sm:p-4 shadow-md shadow-black ${cor} text-xs sm:text-sm`}
     >
       <div className="flex items-center justify-between">
+        
         <div className="flex flex-col mb-1 gap-1">
-          <span className="font-medium text-gray-800 italic">{titulo}</span>
-          <span className="text-lg sm:text-xl font-bold text-gray-900 italic">
+          <span className="font-semibold text-gray-800 italic text-base uppercase tracking-wider">{titulo}</span>
+          <span className="text-lg sm:text-xl font-extrabold text-gray-800 italic tracking-wider">
             {valor}
           </span>
         </div>
+
         <div
           className={`p-2 sm:p-3 rounded-lg ${bgIcon} shadow-md shadow-black`}
         >
-          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+          <Icon className="w-5 h-5 sm:w-5 sm:h-5" />
         </div>
       </div>
     </div>
   );
 }
 
-export function CardsTabelaContasPagar({
+export function CardsContasPagar({
   total,
   pagas,
   pendentes,
