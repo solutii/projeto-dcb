@@ -3,6 +3,7 @@ import { X, Eye, EyeOff, Lock, Check, AlertCircle } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "@/contexts/auth-context";
+import api from "../axios";
 
 interface PasswordData {
   currentPassword: string;
