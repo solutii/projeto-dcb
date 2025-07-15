@@ -31,7 +31,7 @@ const contasAnuais = [
   { mes: "Dez", pagas: 25600, aberto: 11800 },
 ];
 
-export function HospitalDashboardLayout() {
+export function DashboardLayout() {
 
 
   const queryClient = useQueryClient();
@@ -70,6 +70,10 @@ export function HospitalDashboardLayout() {
         comprasPagas,
         comprasAberto
       })
+      setContasAPagarTot([
+        { name: "Pagas", value: comprasPagas??0},
+        { name: "Em aberto", value: comprasAberto??0},
+      ])
 
       return data.dados ?? [] as ContasAPagarType[];
     },
@@ -86,27 +90,29 @@ export function HospitalDashboardLayout() {
   } = useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => {
-      const { data } = await axios.post('/api/itens', {
-        FILIAL: "0101 ",
-        CLIENTE: user?.cod,
-        LOJA: user?.loja,
+      const { data } = await axios.post('/api/itens-pedido', {
+        filial: "0101 ",
+        cliente: user?.cod,
+        loja: user?.loja,
       });
 
       let itensPedidos: ItemPedidoType[] = data.dados ?? [];
 
-      console.log("Itens pedidos:", itensPedidos);
       const mapItens = new Map<string, number>();
 
       itensPedidos.map((item: ItemPedidoType) => {
-        let valorAtual = mapItens.get(item.C6_PRODUTO) || 0;
-        mapItens.set(item.C6_PRODUTO, valorAtual + item.C6_VALOR);
+        let valorAtual = mapItens.get(item.B1_DESC) || 0;
+        mapItens.set(item.B1_DESC, valorAtual + item.C6_VALOR);
       })
 
-      setComprasProProduto(() => 
-        Object.entries(mapItens).map(([produto, valor]) => ({
-          produto,valor
-        }))
-      )
+      // Object.entries(mapItens) retorna um array vazio porque mapItens é um Map, não um objeto simples.
+      // Para obter as entradas de um Map, use mapItens.entries() ou Array.from(mapItens.entries())
+      let totalComprasProProdutos = Array.from(mapItens.entries()).map(([produto, valor]) => ({
+        produto,
+        valor
+      }))
+
+      setComprasProProduto(totalComprasProProdutos)
 
       return itensPedidos;
     },
@@ -119,28 +125,11 @@ export function HospitalDashboardLayout() {
     comprasAberto:0,
   })
 
-  const [contasAPagarTot, setContasAPagarTot] = useState([
-  { name: "Pagas", value: 67.4, count: 89 },
-  { name: "Em aberto", value: 32.6, count: 43 },
-  ])
+  const [contasAPagarTot, setContasAPagarTot] = useState<any>([])
 
   const [comprasPorProduto, setComprasProProduto] = useState([
     { produto: "Produto A", valor: 1500 },])
 
-  useEffect(() => {
-
-    if (contasAPagar?.length) {      
-    
-      setContasAPagarTot([
-        { name: "Pagas", value: 67.4, count: 89 },
-        { name: "Em aberto", value: 32.6, count: 43 },
-      ])
-    
-    
-    }
-
-
-  }, contasAPagar)
 
   return (
     <div className="flex h-screen">

@@ -52,7 +52,6 @@ export function LayoutContasPagar() {
   }
 
   useEffect(() => {
-    console.log("passou por aqui");
     queryClient.invalidateQueries({ queryKey: ["contasAPagar"] });
   }, [dataInicio, dataFim, notaFiscal, status, queryClient]);
 

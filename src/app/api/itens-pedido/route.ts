@@ -2,11 +2,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  // Pegar parâmetros da query string
-  const url = new URL(request.url);
-  const cliente = url.searchParams.get("cliente");
-  const filial = url.searchParams.get("filial");
-  const loja = url.searchParams.get("loja");
+  const { cliente, filial, loja } = await request.json();
 
   const apiUrl = process.env.API_URL || "http://localhost:8076/REST";
   const basicAuth = process.env.BASIC_AUTH || "";
@@ -16,11 +12,12 @@ export async function POST(request: Request) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Basic ${Buffer.from(basicAuth).toString("base64")}`,
+      "tenantid": "01,0101"
     },
     body: JSON.stringify({
-      CLIENTE: cliente || "",
-      FILIAL: filial || "",
-      LOJA: loja || "",
+      CLIENTE: cliente,
+      FILIAL: filial,
+      LOJA: loja,
     }),
   });
 

@@ -25,7 +25,6 @@ export default function LoginPage() {
       const userData = await login(email, password); // agora retorna User | null
 
       if (userData) {
-        console.log("Login bem-sucedido:", userData);
         toast("Login realizado com sucesso", {
           description: "Bem-vindo(a) de volta!",
           duration: 3000,
@@ -35,8 +34,6 @@ export default function LoginPage() {
             color: "#fff",
           },
         });
-
-        console.log("Usuário autenticado. Redirecionando para /dashboard...");
         router.push("/dashboard");
       } else {
         toast("Erro ao realizar login", {

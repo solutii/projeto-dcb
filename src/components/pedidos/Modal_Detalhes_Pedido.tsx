@@ -21,6 +21,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Eye, Loader2, ChevronDown } from "lucide-react";
 import { PedidoType } from "@/types/pedido";
 import { buscarItensPedido, ItemPedido } from "../../lib/pedidoService";
+import { useAuth } from "@/contexts/auth-context";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 interface ModalDetalhesPedidoAsyncProps {
   pedido: PedidoType;
@@ -34,20 +37,32 @@ export const ModalDetalhesPedidoAsync = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { user } = useAuth()
+
+  const {
+    data: itensPedidos,
+    isError: isErrorItensPedidos,
+    isLoading: isLoadingItensPedidos,
+    isFetching: isFetchingItensPedidos
+
+  } = useQuery({
+    queryKey: ['itensPedidos'],
+    queryFn: async () => { 
+      const response = await axios.post('/api/itens-pedido', {
+        filial: "0101 ",
+        cliente: user?.cod,
+        loja: user?.loja,
+      })
+
+      return response.data;
+    },
+    refetchOnWindowFocus: false,
+  })
+
   const carregarItens = async () => {
     try {
       setLoading(true);
       setError(null);
-
-      console.log("==== Debug: carregando itens para pedido ====");
-      console.log("Pedido recebido:", pedido);
-
-      console.log("Parâmetros usados para buscar itens:", {
-        numeroPedido: pedido.C5_NUM,
-        cliente: pedido.C5_CLIENTE,
-        filial: pedido.C5_FILIAL, // <- corrigido
-        loja: pedido.C5_LOJACLI,
-      });
 
       const filialCorrigida = pedido.C5_FILIAL.padStart(4, "0");
 
@@ -58,9 +73,7 @@ export const ModalDetalhesPedidoAsync = ({
         pedido.C5_LOJACLI
       );
 
-      console.log("Itens brutos recebidos do service:", itensBrutos);
-
-      const itensFormatados: ItemPedido[] = itensBrutos.map((item: any) => ({
+      const itensFormatados: ItemPedido[] = itensPedidos?.map((item: any) => ({
         item: item.numeroItem || item.C6_ITEM || "—",
         codigoProduto: item.codigoProduto || item.C6_PRODUTO || "—",
         quantidade:
@@ -69,8 +82,6 @@ export const ModalDetalhesPedidoAsync = ({
           Number(item.valorUnitario) || Number(item.precoUnitario) || 0,
         total: Number(item.total) || Number(item.valorTotal) || 0,
       }));
-
-      console.log("Itens formatados para exibição:", itensFormatados);
 
       setItens(itensFormatados);
     } catch (err) {

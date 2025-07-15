@@ -31,7 +31,6 @@ export async function POST(request: Request) {
     });
 
     const pedidosData = await pedidosRes.json();
-    console.log("Pedidos Data:", pedidosData);
 
     if (!pedidosRes.ok || !pedidosData.dados) {
       return NextResponse.json(
@@ -53,7 +52,6 @@ export async function POST(request: Request) {
     });
 
     const itensData = await itensRes.json();
-    console.log("Itens Data:", itensData);
 
     if (!itensRes.ok || !itensData.dados) {
       return NextResponse.json(

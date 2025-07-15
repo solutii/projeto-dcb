@@ -72,13 +72,6 @@ export function ContasPagarMesChart({ data }: { data: Conta[] }) {
                   fill={COLORS[index % COLORS.length]}
                   stroke="#fff"
                   strokeWidth={2}
-                  style={{
-                    filter: `drop-shadow(0px 2px 4px ${
-                      COLORS[index % COLORS.length]
-                    }33)`,
-                    cursor: "pointer",
-                    transition: "opacity 0.3s",
-                  }}
                 />
               ))}
               <Label
@@ -105,24 +98,24 @@ export function ContasPagarMesChart({ data }: { data: Conta[] }) {
               }
               itemStyle={{ fontWeight: "bold" }}
             />
-            {!screen.isMobile && (
+            {!screen.isMobile && data.map((entry, index) => (
+              
               <Legend
                 layout="vertical"
                 verticalAlign="middle"
                 align="right"
                 iconSize={screen.legendIconSize}
                 iconType="circle"
-                formatter={(value, entry, index) => (
-                  <span className={`text-gray-600 ${screen.legendFontSize}`}>
-                    {value} - {Math.round((data[index].value / total) * 100)}%
-                  </span>
-                )}
                 wrapperStyle={{
                   fontSize: screen.legendFontSize,
                   paddingLeft: "10px",
                 }}
-              />
-            )}
+              >
+                 <span className={`text-gray-600 ${screen.legendFontSize}`}>
+                    {data[index].name} - {Math.round((data[index].value / total) * 100)}%
+                  </span>
+              </Legend>
+            ))}
           </PieChart>
         </ResponsiveContainer>
       </div>
