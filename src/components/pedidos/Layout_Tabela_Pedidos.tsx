@@ -9,6 +9,7 @@ import axios from "axios";
 import { PedidosMobileFooter } from "./Pedidos_Mobile_Footer ";
 import { useFiltrosPedido } from "@/contexts/filtros/pedidos";
 import { useAuth } from "@/contexts/auth-context";
+import api from "../axios";
 
 export function LayoutPedidos() {
   const [pedido, setPedidos] = useState<PedidoType[]>([]);
@@ -17,7 +18,7 @@ export function LayoutPedidos() {
   const { user } = useAuth();
 
   async function handleAccountsPayableData() {
-    const retorno = await axios.post("/api/order", {
+    const retorno = await api.post("/api/order", {
       CLIENTE: user?.cod,
       LOJA: user?.loja,
       DATAINI: dataInicio,

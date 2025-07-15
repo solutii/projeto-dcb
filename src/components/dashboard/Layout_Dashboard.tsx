@@ -12,9 +12,9 @@ import { FiltrosDashboard } from "./Filtros_Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useAuth } from "@/contexts/auth-context";
-import axios from "axios";
 import { ContasAPagarType } from "@/types/financeiro";
 import { ItemPedidoType } from "@/types/pedido";
+import api from "../axios";
 
 const contasAnuais = [
   { mes: "Jan", pagas: 12400, aberto: 8200 },
@@ -52,7 +52,7 @@ export function DashboardLayout() {
   } = */ useQuery({
     queryKey: ['contasAPagar'],
     queryFn: async () => {
-      const { data } = await axios.post('/api/accounts-payable', {
+      const { data } = await api.post('/api/accounts-payable', {
         CLIENTE: user?.cod,
         LOJA: user?.loja,
         DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
@@ -90,7 +90,7 @@ export function DashboardLayout() {
   } =  */useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => {
-      const { data } = await axios.post('/api/itens-pedido', {
+      const { data } = await api.post('/api/itens-pedido', {
         filial: "0101 ",
         cliente: user?.cod,
         loja: user?.loja,

@@ -3,6 +3,7 @@ import { X, Eye, EyeOff, Lock, Check, AlertCircle } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "@/contexts/auth-context";
+import api from "./axios";
 // Interfaces
 interface PasswordData {
   currentPassword: string;
@@ -51,7 +52,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
 
   const mutation = useMutation({
     mutationFn: async (passwordData: PasswordData) => 
-      axios.post("/api/auth/change-password",{
+      api.post("/api/auth/change-password",{
         LOGIN: user?.cgc,
         SENHA: passwordData.newPassword
       })

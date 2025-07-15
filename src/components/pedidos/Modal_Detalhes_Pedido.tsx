@@ -24,6 +24,7 @@ import { buscarItensPedido, ItemPedido } from "../../lib/pedidoService";
 import { useAuth } from "@/contexts/auth-context";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import api from "../axios";
 
 interface ModalDetalhesPedidoAsyncProps {
   pedido: PedidoType;
@@ -48,7 +49,7 @@ export const ModalDetalhesPedidoAsync = ({
   } = useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => { 
-      const response = await axios.post('/api/itens-pedido', {
+      const response = await api.post('/api/itens-pedido', {
         filial: "0101 ",
         cliente: user?.cod,
         loja: user?.loja,
