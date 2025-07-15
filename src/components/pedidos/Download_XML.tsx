@@ -1,10 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { PedidoType } from "@/types/pedido";
 import { FileDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
+import api from "../axios";
 
 export default function DownloadXml({ pedido }: { pedido: PedidoType }) {
   const mutation = useMutation({

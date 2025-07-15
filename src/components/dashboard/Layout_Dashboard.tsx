@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CardsMetricas } from "@/components/dashboard/Cards_Metricas_Dashboard";
 import { ComprasPorProdutoChart } from "@/components/dashboard/Compras_Por_Produto_Chart";
 import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_Chart";
@@ -9,12 +9,12 @@ import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_C
 // import { TrendingUp, Package, Calendar } from "lucide-react";
 import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useAuth } from "@/contexts/auth-context";
-import axios from "axios";
 import { ContasAPagarType } from "@/types/financeiro";
 import { ItemPedidoType } from "@/types/pedido";
+import api from "../axios";
 
 const contasAnuais = [
   { mes: "Jan", pagas: 12400, aberto: 8200 },
@@ -31,28 +31,28 @@ const contasAnuais = [
   { mes: "Dez", pagas: 25600, aberto: 11800 },
 ];
 
-export function HospitalDashboardLayout() {
+export function DashboardLayout() {
 
 
-  const queryClient = useQueryClient();
+  /* const queryClient = useQueryClient(); */
   const { user } = useAuth();
   const {
     dataInicio,
     dataFim,
     notaFiscal,
-    status,
+    /* status, */
   } = useFiltrosFinanceiro();
   
-  const {
+  /* const {
     data: contasAPagar,
     isError,
     isLoading,
     isFetching
 
-  } = useQuery({
+  } = */ useQuery({
     queryKey: ['contasAPagar'],
     queryFn: async () => {
-      const { data } = await axios.post('/api/accounts-payable', {
+      const { data } = await api.post('/api/accounts-payable', {
         CLIENTE: user?.cod,
         LOJA: user?.loja,
         DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
@@ -60,16 +60,20 @@ export function HospitalDashboardLayout() {
         NOTAFISCAL: notaFiscal
       });
 
-      let contasAPagar = data.dados ?? [] as ContasAPagarType[];
+      const contasAPagar = data.dados ?? [] as ContasAPagarType[];
 
-      let totalCompras = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
-      let comprasPagas = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
-      let comprasAberto = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const totalCompras = contasAPagar?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const comprasPagas = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "3")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
+      const comprasAberto = contasAPagar?.filter((item: ContasAPagarType) => item.STATUS === "1")?.reduce((acc: number, item: ContasAPagarType) => acc + item.E1_VALOR, 0);
       setCardData({
         totalCompras,
         comprasPagas,
         comprasAberto
       })
+      setContasAPagarTot([
+        { name: "Pagas", value: comprasPagas??0},
+        { name: "Em aberto", value: comprasAberto??0},
+      ])
 
       return data.dados ?? [] as ContasAPagarType[];
     },
@@ -77,36 +81,38 @@ export function HospitalDashboardLayout() {
   })
 
 
-  const {
+  /* const {
     data: itensPedidos,
     isError: isErrorItensPedidos,
     isLoading: isLoadingItensPedidos,
     isFetching: isFetchingItensPedidos
 
-  } = useQuery({
+  } =  */useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => {
-      const { data } = await axios.post('/api/itens', {
-        FILIAL: "0101 ",
-        CLIENTE: user?.cod,
-        LOJA: user?.loja,
+      const { data } = await api.post('/api/itens-pedido', {
+        filial: "0101 ",
+        cliente: user?.cod,
+        loja: user?.loja,
       });
 
-      let itensPedidos: ItemPedidoType[] = data.dados ?? [];
+      const itensPedidos: ItemPedidoType[] = data.dados ?? [];
 
-      console.log("Itens pedidos:", itensPedidos);
       const mapItens = new Map<string, number>();
 
       itensPedidos.map((item: ItemPedidoType) => {
-        let valorAtual = mapItens.get(item.C6_PRODUTO) || 0;
-        mapItens.set(item.C6_PRODUTO, valorAtual + item.C6_VALOR);
+        const valorAtual = mapItens.get(item.B1_DESC) || 0;
+        mapItens.set(item.B1_DESC, valorAtual + item.C6_VALOR);
       })
 
-      setComprasProProduto(() => 
-        Object.entries(mapItens).map(([produto, valor]) => ({
-          produto,valor
-        }))
-      )
+      // Object.entries(mapItens) retorna um array vazio porque mapItens é um Map, não um objeto simples.
+      // Para obter as entradas de um Map, use mapItens.entries() ou Array.from(mapItens.entries())
+      const totalComprasProProdutos = Array.from(mapItens.entries()).map(([produto, valor]) => ({
+        produto,
+        valor
+      }))
+
+      setComprasProProduto(totalComprasProProdutos)
 
       return itensPedidos;
     },
@@ -119,28 +125,11 @@ export function HospitalDashboardLayout() {
     comprasAberto:0,
   })
 
-  const [contasAPagarTot, setContasAPagarTot] = useState([
-  { name: "Pagas", value: 67.4, count: 89 },
-  { name: "Em aberto", value: 32.6, count: 43 },
-  ])
+  const [contasAPagarTot, setContasAPagarTot] = useState<any>([])
 
   const [comprasPorProduto, setComprasProProduto] = useState([
-    { produto: "Produto A", valor: 1500 },])
+    { produto: "", valor: 0 },])
 
-  useEffect(() => {
-
-    if (contasAPagar?.length) {      
-    
-      setContasAPagarTot([
-        { name: "Pagas", value: 67.4, count: 89 },
-        { name: "Em aberto", value: 32.6, count: 43 },
-      ])
-    
-    
-    }
-
-
-  }, contasAPagar)
 
   return (
     <div className="flex h-screen">

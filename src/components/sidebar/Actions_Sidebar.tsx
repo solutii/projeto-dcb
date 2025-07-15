@@ -39,8 +39,6 @@ export function SidebarActions({
         const errorData = await response.json();
         throw new Error(errorData.message || "Erro ao alterar senha");
       }
-
-      console.log("Senha alterada com sucesso!");
     } catch (error) {
       throw error;
     }
