@@ -5,7 +5,7 @@ interface Props {
   row: Row<PedidoType>;
 }
 
-export function PedidosMobileTable({ row }: Props) {
+export function TabelaMobile({ row }: Props) {
   const allCells = row.getAllCells();
 
   const contentCells = allCells.filter((cell) => cell.column.id !== "acoes");
@@ -16,7 +16,7 @@ export function PedidosMobileTable({ row }: Props) {
       {contentCells.map((cell) => (
         <div key={cell.id}>
           {/* TÍTULO */}
-          <p className="text-xs text-gray-700 italic font-semibold uppercase tracking-wide">
+          <p className="text-xs text-gray-800 italic font-semibold uppercase tracking-wide">
             {cell.column.columnDef.header as string}
           </p>
           {/* VALOR */}

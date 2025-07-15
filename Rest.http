@@ -37,6 +37,7 @@ Content-Type: application/json
   "DATAINI": "20200101",
   "DATAFIM": "20250731",
   "FILIAL": "0101",
-  "LOJA": "01"
+  "LOJA": "01",
+  "NUMERO_PEDIDO": "072094"
 }
 

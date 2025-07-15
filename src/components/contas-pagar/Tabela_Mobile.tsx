@@ -5,14 +5,14 @@ interface Props {
   row: Row<ContasAPagarType>;
 }
 
-export function MobileCard({ row }: Props) {
+export function TabelaMobile({ row }: Props) {
   const allCells = row.getAllCells();
 
   const contentCells = allCells.filter((cell) => cell.column.id !== "acoes");
   const actionCell = allCells.find((cell) => cell.column.id === "acoes");
 
   return (
-    <div className="bg-white rounded-lg shadow-sm shadow-black p-2 border border-gray-200 space-y-2">
+    <div className="bg-white rounded-lg shadow-sm shadow-black p-2 border border-gray-200 space-y-2 mb-6">
       {contentCells.map((cell) => (
         <div key={cell.id}>
           {/* TÍTULO */}

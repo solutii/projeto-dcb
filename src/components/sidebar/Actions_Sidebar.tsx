@@ -3,7 +3,7 @@
 import { Key, LogOut } from "lucide-react";
 import { logoutClient } from "@/lib/logout";
 import { useState } from "react";
-import ModalAlterarSenha from "../Modal_Alterar_Senha";
+import ModalAlterarSenha from "./Modal_Alterar_Senha";
 
 interface SidebarActionsProps {
   isCollapsed: boolean;
