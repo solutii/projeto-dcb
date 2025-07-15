@@ -1,14 +1,18 @@
+"use client";
+
 import { useMutation } from "@tanstack/react-query";
 import { PedidoType } from "@/types/pedido";
 import { FileDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import api from "../axios";
+import { AxiosError } from "axios";
+import { useState } from "react";
 
 export default function DownloadXml({ pedido }: { pedido: PedidoType }) {
   const mutation = useMutation({
     mutationFn: async () =>
-      axios.post(`/api/coleta-xml`, {
+      api.post(`/api/coleta-xml`, {
         NUMERO: pedido.C5_NUM,
         FILIAL: "0101",
       }),

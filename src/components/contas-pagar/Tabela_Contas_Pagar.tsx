@@ -22,11 +22,11 @@ export function TabelaContasPagar({ dados }: TabelaContasPagarProps) {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const naoTemDados = dados.length === 0;
+  const naoTemDados = dados?.length === 0;
 
-  const totalValor = dados.reduce((acc, item) => acc + item.E1_VALOR, 0);
-  const totalJuros = dados.reduce((acc, item) => acc + item.E1_JUROS, 0);
-  const totalMulta = dados.reduce((acc, item) => acc + item.E1_MULTA, 0);
+  const totalValor = dados?.reduce((acc, item) => acc + item.E1_VALOR, 0);
+  const totalJuros = dados?.reduce((acc, item) => acc + item.E1_JUROS, 0);
+  const totalMulta = dados?.reduce((acc, item) => acc + item.E1_MULTA, 0);
 
   return (
     <>

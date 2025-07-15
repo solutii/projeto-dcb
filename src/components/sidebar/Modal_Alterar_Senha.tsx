@@ -52,7 +52,7 @@ const ModalAlterarSenha: React.FC<PasswordChangeModalProps> = ({
 
   const mutation = useMutation({
     mutationFn: async (passwordData: PasswordData) =>
-      axios.post("/api/auth/change-password", {
+      api.post("/api/auth/change-password", {
         LOGIN: user?.cgc,
         SENHA: passwordData.newPassword,
       }),

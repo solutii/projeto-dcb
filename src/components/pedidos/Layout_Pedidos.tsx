@@ -5,11 +5,11 @@ import { TabelaPedidos } from "./Tabela_Pedidos";
 import { FiltrosPedidos } from "./Filtros_Pedidos";
 import { PedidoType } from "@/types/pedido";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { FooterMobile } from "./Footer_Mobile ";
 import { useFiltrosPedido } from "@/contexts/filtros/pedidos";
 import { useAuth } from "@/contexts/auth-context";
 import { Loader2 } from "lucide-react";
+import api from "../axios";
 
 export function LayoutPedidos() {
   const [pedido, setPedidos] = useState<PedidoType[]>([]);
@@ -23,7 +23,7 @@ export function LayoutPedidos() {
     async function handleAccountsPayableData() {
       try {
         setIsLoading(true);
-        const retorno = await axios.post("/api/order", {
+        const retorno = await api.post("/api/order", {
           CLIENTE: user?.cod,
           LOJA: user?.loja,
           DATAINI: dataInicio,

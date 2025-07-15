@@ -12,6 +12,7 @@ import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FooterMobile } from "./Footer_Mobile";
 import { Loader2 } from "lucide-react";
+import api from "../axios";
 
 export function LayoutContasPagar() {
   const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ export function LayoutContasPagar() {
   } = useQuery({
     queryKey: ["contasAPagar"],
     queryFn: async () => {
-      const { data } = await axios.post("/api/accounts-payable", {
+      const { data } = await api.post("/api/accounts-payable", {
         CLIENTE: user?.cod,
         LOJA: user?.loja,
         DATAINI: dataInicio.toISOString().split("T")[0].replace(/-/g, ""),
