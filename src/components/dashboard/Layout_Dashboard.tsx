@@ -144,9 +144,9 @@ export function DashboardLayout() {
         <div className="flex-shrink-0 bg-white">
           <div className="px-4 md:px-6 lg:px-8 py-4">
             <div className="space-y-6">
-              {/* <FiltrosDashboard  periodo={periodo} setPeriodo={setPeriodo}/> */}
+              <FiltrosDashboard  periodo={periodo} setPeriodo={setPeriodo}/>
               <CardsMetricas cardData={cardData} />
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-3 sm:gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-3 sm:gap-4 lg:gap-6 pb-24">
                 <ComprasPorProdutoChart data={comprasPorProduto} />
 
                 <ContasPagarMesChart data={contasAPagarTot} />

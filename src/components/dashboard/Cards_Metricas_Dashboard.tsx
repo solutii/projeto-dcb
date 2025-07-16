@@ -1,4 +1,3 @@
-// StatCardsGrid.tsx
 import React from "react";
 import { ShoppingCart, CheckCircle, Clock } from "lucide-react";
 
@@ -25,37 +24,27 @@ function StatCard({
   colorIcon,
   bgColorIcon,
   textColor,
-  total = value,
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md shadow-black p-6 border border-slate-200 group">
-      <div className="flex items-center justify-between">
+    <div className="bg-white rounded-lg shadow-md shadow-black p-4 sm:p-5 md:p-6 border border-slate-200 group max-w-sm w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* Ícone */}
         <div
-          className={`p-3 rounded-xl ${bgColorIcon} transition-transform group-hover:rotate-12`}
+          className={`p-2 sm:p-3 rounded-xl ${bgColorIcon} transition-transform md:group-hover:rotate-12`}
         >
-          <Icon className={`w-7 h-7 ${colorIcon}`} />
+          <Icon className={`w-6 h-6 sm:w-7 sm:h-7 ${colorIcon}`} />
         </div>
-        <div className="text-right">
-          <p className="text-base font-bold text-gray-800 uppercase italic tracking-wider">
+
+        {/* Título e Valor */}
+        <div className="text-left sm:text-right">
+          <p className="text-sm sm:text-base font-bold text-gray-800 uppercase italic tracking-wider">
             {title}
           </p>
-          <p className={`text-3xl font-extrabold ${textColor}`}>
+          <p className={`text-2xl sm:text-3xl font-extrabold ${textColor}`}>
             {formatCurrency(value)}
           </p>
         </div>
       </div>
-      {/* <div className="mt-6">
-        <div className="flex justify-between text-sm font-semibold italic text-gray-800 mb-1">
-          <span>Progresso</span>
-          <span>{Math.round((value / total) * 100)}%</span>
-        </div>
-        <div className="w-full bg-gray-300 rounded-full h-2.5">
-          <div
-            className={`h-2.5 rounded-full ${bgColorIcon} transition-all duration-700 ease-out`}
-            style={{ width: `${Math.min((value / total) * 100, 100)}%` }}
-          />
-        </div>
-      </div> */}
     </div>
   );
 }
@@ -70,7 +59,7 @@ interface StatCardsGridProps {
 
 export function CardsMetricas({ cardData }: StatCardsGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 justify-items-center">
       <StatCard
         title="Valor Total de Compras"
         value={cardData.totalCompras}
