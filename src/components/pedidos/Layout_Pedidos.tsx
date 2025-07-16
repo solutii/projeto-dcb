@@ -68,7 +68,11 @@ export function LayoutPedidos() {
                   </p>
                 </div>
               ) : (
-                <TabelaPedidos dados={pedido} />
+                <TabelaPedidos dados={
+                  pedido
+                  ?.filter(pedido => pedido.C5_NUM.includes(numeroPedido))
+                  ?.filter(pedido => status === " " || pedido.STATUS === status)
+                } />
               )}
             </div>
           </div>

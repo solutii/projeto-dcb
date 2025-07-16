@@ -44,7 +44,7 @@ function StatCard({
           </p>
         </div>
       </div>
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <div className="flex justify-between text-sm font-semibold italic text-gray-800 mb-1">
           <span>Progresso</span>
           <span>{Math.round((value / total) * 100)}%</span>
@@ -55,7 +55,7 @@ function StatCard({
             style={{ width: `${Math.min((value / total) * 100, 100)}%` }}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

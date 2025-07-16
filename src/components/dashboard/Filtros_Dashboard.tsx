@@ -19,11 +19,11 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-export function FiltrosDashboard() {
-  const [dataInicio, setDataInicio] = useState<Date | undefined>(undefined);
-  const [dataFim, setDataFim] = useState<Date | undefined>(undefined);
-  const [produto, setProduto] = useState("");
-  const [status, setStatus] = useState("");
+export function FiltrosDashboard({
+  periodo,setPeriodo
+} : { periodo: string, setPeriodo: (value: string) => void }) {
+  
+  
 
   return (
     <div className="space-y-4">
@@ -37,7 +37,7 @@ export function FiltrosDashboard() {
       {/* Campos de Filtro */}
       <div className="grid grid-cols-6 gap-4">
         {/* Data Inicial */}
-        <div className="col-span-1 flex flex-col">
+        {/* <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
             <CalendarDays className="w-5 h-5 " />
             Data Inicial
@@ -66,10 +66,10 @@ export function FiltrosDashboard() {
               />
             </PopoverContent>
           </Popover>
-        </div>
+        </div> */}
 
         {/* Data Final */}
-        <div className="col-span-1 flex flex-col">
+        {/* <div className="col-span-1 flex flex-col">
           <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
             <CalendarDays className="w-5 h-5" />
             Data Final
@@ -98,29 +98,7 @@ export function FiltrosDashboard() {
               />
             </PopoverContent>
           </Popover>
-        </div>
-
-        {/* Produto */}
-        <div className="col-span-1 flex flex-col">
-          <label className="text-base font-semibold text-gray-600 italic mb-1 flex items-center gap-1">
-            <FileCode className="w-5 h-5" />
-            Nota Fiscal
-          </label>
-          <Select value={produto} onValueChange={setProduto}>
-            <SelectTrigger className="w-full cursor-pointer text-gray-600 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent className="bg-white shadow-md shadow-black">
-              <SelectItem value="all">Todas</SelectItem>
-              <SelectItem value="Luvas Nitrílicas">Luvas Nitrílicas</SelectItem>
-              <SelectItem value="Seringas 10ml">Seringas 10ml</SelectItem>
-              <SelectItem value="Máscaras N95">Máscaras N95</SelectItem>
-              <SelectItem value="Cateteres">Cateteres</SelectItem>
-              <SelectItem value="Gazes Estéreis">Gazes Estéreis</SelectItem>
-              <SelectItem value="Termômetros">Termômetros</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        </div> */}
 
         {/* Status */}
         <div className="col-span-1 flex flex-col">
@@ -128,14 +106,15 @@ export function FiltrosDashboard() {
             <Filter className="w-5 h-5" />
             Status
           </label>
-          <Select value={status} onValueChange={setStatus}>
+          <Select value={periodo} onValueChange={setPeriodo}>
             <SelectTrigger className="w-full cursor-pointer text-gray-600 font-semibold italic shadow-md shadow-black hover:shadow-lg hover:shadow-black">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-md shadow-black">
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="Pagas">Pagas</SelectItem>
-              <SelectItem value="Em Aberto">Em Aberto</SelectItem>
+              <SelectItem value="0">Todos</SelectItem>
+              <SelectItem value="30">30 dias</SelectItem>
+              <SelectItem value="60">60 dias</SelectItem>
+              <SelectItem value="90">90 dias</SelectItem>
             </SelectContent>
           </Select>
         </div>

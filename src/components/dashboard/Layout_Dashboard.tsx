@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardsMetricas } from "@/components/dashboard/Cards_Metricas_Dashboard";
 import { ComprasPorProdutoChart } from "@/components/dashboard/Compras_Por_Produto_Chart";
 import { ContasPagarMesChart } from "@/components/dashboard/Contas_A_Pagar_Mes_Chart";
@@ -9,55 +9,52 @@ import { ContasPagarAnoChart } from "@/components/dashboard/Contas_A_Pagar_Ano_C
 // import { TrendingUp, Package, Calendar } from "lucide-react";
 import { SidebarNavegacao } from "../sidebar/Sidebar";
 import { FiltrosDashboard } from "./Filtros_Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFiltrosFinanceiro } from "@/contexts/filtros/financeiro";
 import { useAuth } from "@/contexts/auth-context";
 import { ContasAPagarType } from "@/types/financeiro";
 import { ItemPedidoType } from "@/types/pedido";
 import api from "../axios";
 
-const contasAnuais = [
-  { mes: "Jan", pagas: 12400, aberto: 8200 },
-  { mes: "Fev", pagas: 15200, aberto: 6800 },
-  { mes: "Mar", pagas: 18600, aberto: 9400 },
-  { mes: "Abr", pagas: 16800, aberto: 7200 },
-  { mes: "Mai", pagas: 21200, aberto: 11800 },
-  { mes: "Jun", pagas: 19400, aberto: 8600 },
-  { mes: "Jul", pagas: 22800, aberto: 12400 },
-  { mes: "Ago", pagas: 20600, aberto: 9800 },
-  { mes: "Set", pagas: 24200, aberto: 13600 },
-  { mes: "Out", pagas: 23800, aberto: 10200 },
-  { mes: "Nov", pagas: 26400, aberto: 15400 },
-  { mes: "Dez", pagas: 25600, aberto: 11800 },
-];
-
 export function DashboardLayout() {
 
 
   /* const queryClient = useQueryClient(); */
   const { user } = useAuth();
-  const {
-    dataInicio,
-    dataFim,
-    notaFiscal,
-    /* status, */
-  } = useFiltrosFinanceiro();
+  const queryClient = useQueryClient();
+  const [periodo, setPeriodo] = useState<string>("");
   
-  /* const {
+  const {
     data: contasAPagar,
     isError,
     isLoading,
     isFetching
 
-  } = */ useQuery({
+  } = useQuery({
     queryKey: ['contasAPagar'],
     queryFn: async () => {
+
+      let DataIni = new Date();
+      let DataFim = new Date();
+
+      if (periodo === "30") {
+        DataIni.setDate(DataIni.getDate() - 30);
+      } else if (periodo === "60") {
+        DataIni.setDate(DataIni.getDate() - 60);
+      } else if (periodo === "90") {
+        DataIni.setDate(DataIni.getDate() - 90);
+      } else {
+        //dois anos
+        DataIni.setFullYear(DataIni.getFullYear() - 2);
+      }
+
+
       const { data } = await api.post('/api/accounts-payable', {
         CLIENTE: user?.cod,
         LOJA: user?.loja,
-        DATAINI: dataInicio.toISOString().split('T')[0].replace(/-/g, ''),
-        DATAFIM: dataFim.toISOString().split('T')[0].replace(/-/g, ''),
-        NOTAFISCAL: notaFiscal
+        DATAINI: DataIni.toISOString().split('T')[0].replace(/-/g, ''),
+        DATAFIM: DataFim.toISOString().split('T')[0].replace(/-/g, ''),
+        NOTAFISCAL: ""
       });
 
       const contasAPagar = data.dados ?? [] as ContasAPagarType[];
@@ -81,19 +78,20 @@ export function DashboardLayout() {
   })
 
 
-  /* const {
+  const {
     data: itensPedidos,
     isError: isErrorItensPedidos,
     isLoading: isLoadingItensPedidos,
     isFetching: isFetchingItensPedidos
 
-  } =  */useQuery({
+  } = useQuery({
     queryKey: ['itensPedidos'],
     queryFn: async () => {
       const { data } = await api.post('/api/itens-pedido', {
         filial: "0101 ",
         cliente: user?.cod,
         loja: user?.loja,
+
       });
 
       const itensPedidos: ItemPedidoType[] = data.dados ?? [];
@@ -131,6 +129,11 @@ export function DashboardLayout() {
     { produto: "", valor: 0 },])
 
 
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['contasAPagar']});
+
+  }, [periodo]);
+
   return (
     <div className="flex h-screen">
       {/* Sidebar fixa */}
@@ -141,14 +144,14 @@ export function DashboardLayout() {
         <div className="flex-shrink-0 bg-white">
           <div className="px-4 md:px-6 lg:px-8 py-4">
             <div className="space-y-6">
-              <FiltrosDashboard />
+              {/* <FiltrosDashboard  periodo={periodo} setPeriodo={setPeriodo}/> */}
               <CardsMetricas cardData={cardData} />
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-3 sm:gap-4 lg:gap-6">
                 <ComprasPorProdutoChart data={comprasPorProduto} />
 
                 <ContasPagarMesChart data={contasAPagarTot} />
 
-                <ContasPagarAnoChart data={contasAnuais} />
+                {/* <ContasPagarAnoChart data={contasAnuais} /> */}
               </div>
             </div>
           </div>

@@ -20,6 +20,10 @@ export function ComprasPorProdutoChart({
   data: { produto: string; valor: number }[];
 }) {
   const screen = useScreenSize();
+  data = data.map((item) => ({
+    ...item,
+    produto: item.produto.length > 20 ? item.produto.substring(0, 20) + "..." : item.produto,
+  }));
 
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -30,7 +34,7 @@ export function ComprasPorProdutoChart({
   const colors = ["#00E096", "#00C897", "#00B4A0", "#00A0A8", "#008CAB"];
 
   return (
-    <div className="bg-white p-4 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[540px] flex flex-col">
+    <div className="bg-white p-4 sm:p-4 lg:p-6 rounded-lg shadow-md shadow-black border border-slate-200 h-[400px] sm:h-[450px] lg:h-[640px] flex flex-col">
       <div className="mb-2 sm:mb-0">
         <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 uppercase italic tracking-wider">
           Compras por Produto
@@ -112,7 +116,7 @@ export function ComprasPorProdutoChart({
                 style={{ backgroundColor: colors[index % colors.length] }}
               />
               <span className="text-xs sm:text-sm text-gray-600 truncate">
-                {item.produto}
+                {item.produto.substring(0, 20)} {item.produto.length > 20 ? "..." : ""}
               </span>
             </div>
           ))}
