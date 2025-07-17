@@ -151,7 +151,7 @@ export default function LoginPage() {
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-white/90 uppercase tracking-wide">
-                      E-mail
+                      CNPJ
                     </label>
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
